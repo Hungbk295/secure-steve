@@ -30,11 +30,16 @@ function Sidebar() {
   }, [location.pathname]);
 
   const handleToggleExpand = (itemId: string) => {
-    setExpandedMenus((prev) =>
-      prev.includes(itemId)
-        ? prev.filter((id) => id !== itemId)
-        : [...prev, itemId]
-    );
+    setExpandedMenus((prev) => {
+      if (prev.includes(itemId)) {
+        // If clicking on already expanded item, just close it
+        return prev.filter((id) => id !== itemId);
+      } else {
+        // If opening a new item, close all others and open this one
+        // This implements the auto-collapse behavior like albus-fe
+        return [itemId];
+      }
+    });
   };
 
   const handleToggleCollapse = () => {
@@ -48,11 +53,11 @@ function Sidebar() {
   return (
     <div
       className={cn(
-        "security-sidebar h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300",
+        "security-sidebar h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300 align-center",
         isCollapsed ? "w-[88px]" : "w-[220px]"
       )}
     >
-      <div className="security-logo-section p-4 border-b border-gray-200">
+      <div className="security-logo-section p-6 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center mr-3">
@@ -67,22 +72,27 @@ function Sidebar() {
               </div>
             )}
           </div>
-
-          <button
-            onClick={handleToggleCollapse}
-            className="p-1.5 rounded-md hover:bg-gray-100 transition-colors duration-200"
-            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            <i
-              className={cn(
-                "text-gray-500 text-lg transition-transform duration-200",
-                isCollapsed ? "ri-menu-unfold-line" : "ri-menu-fold-line"
-              )}
-            />
-          </button>
         </div>
       </div>
 
+      <div
+        className={` pt-2 ${
+          isCollapsed ? "m-auto" : "ml-auto mr-4 float-right"
+        }`}
+      >
+        <button
+          onClick={handleToggleCollapse}
+          className="p-1.5 rounded-md hover:bg-gray-100 transition-colors duration-200"
+          title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          <i
+            className={cn(
+              "text-gray-500 text-lg transition-transform duration-200",
+              isCollapsed ? "ri-menu-unfold-line" : "ri-menu-fold-line"
+            )}
+          />
+        </button>
+      </div>
       <div className="security-navigation flex-1 overflow-y-auto py-2">
         {menuItems.map((item) => {
           const isActive =

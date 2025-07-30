@@ -39,7 +39,7 @@ function SecurityUserSection({
         title="Log out"
       >
         <i className="ri-logout-box-line mr-2" />
-        {!isCollapsed && "Log out"}
+        {isCollapsed ? "Log out" : ""}
       </button>
     </div>
   );

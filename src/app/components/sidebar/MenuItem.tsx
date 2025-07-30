@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/libs/utils";
 import { MenuItem as MenuItemType } from "@/utils/sidebar";
+import MenuPopover from "./MenuPopover";
 
 interface MenuItemProps {
   item: MenuItemType;
@@ -21,6 +23,9 @@ function MenuItem({
 }: MenuItemProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const [showPopover, setShowPopover] = useState(false);
+  const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0 });
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const handleClick = () => {
     if (item.children && item.children.length > 0) {
@@ -34,16 +39,55 @@ function MenuItem({
     navigate(childRoute);
   };
 
+  useEffect(() => {
+    return () => {
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+      }
+    };
+  }, [hoverTimeout]);
+
+  const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (isCollapsed) {
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+      }
+
+      const rect = event.currentTarget.getBoundingClientRect();
+      setPopoverPosition({
+        top: rect.top,
+        left: rect.right + 8,
+      });
+
+      const timeout = setTimeout(() => {
+        setShowPopover(true);
+      }, 300);
+      setHoverTimeout(timeout);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (isCollapsed) {
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+        setHoverTimeout(null);
+      }
+      setShowPopover(false);
+    }
+  };
+
   return (
-    <div className="security-menu-item">
+    <div className="security-menu-item relative">
       <div
         className={cn(
-          "flex items-center px-4 py-2 cursor-pointer transition-colors duration-200 group",
+          "flex items-center px-8 py-2 cursor-pointer transition-colors duration-200 group",
           "hover:bg-gray-50",
           isActive && "text-blue-600 font-medium",
           isChildActive && "text-blue-600"
         )}
         onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         {item.icon && (
           <div
@@ -102,6 +146,21 @@ function MenuItem({
             })}
           </div>
         )}
+
+      {/* Popover for collapsed state */}
+      {showPopover && isCollapsed && (
+        <div
+          className="fixed z-50"
+          style={{
+            top: popoverPosition.top,
+            left: popoverPosition.left,
+          }}
+          onMouseEnter={() => setShowPopover(true)}
+          onMouseLeave={() => setShowPopover(false)}
+        >
+          <MenuPopover item={item} onClose={() => setShowPopover(false)} />
+        </div>
+      )}
     </div>
   );
 }
