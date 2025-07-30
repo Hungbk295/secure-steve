@@ -1,16 +1,15 @@
 import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import URL from "@/constants/url";
 import { useAppSelector } from "@/store";
 import { selectAccessToken, selectIsLogin } from "@/store/authSlide";
 import { instanceAxios } from "@/utils/request";
+import ROUTES from "@/constants/routes";
 
 interface PrivateLayoutProps {
   children: React.ReactNode;
 }
 
 export default function PrivateLayout({ children }: PrivateLayoutProps) {
-  // TODO: apply later
   const isLogin = useAppSelector(selectIsLogin);
   const token = useAppSelector(selectAccessToken);
 
@@ -26,5 +25,5 @@ export default function PrivateLayout({ children }: PrivateLayoutProps) {
     return children;
   }
 
-  return <Navigate to={URL.SignIn} replace />;
+  return <Navigate to={ROUTES.Login} replace />;
 }

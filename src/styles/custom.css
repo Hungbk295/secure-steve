@@ -7,6 +7,58 @@
   z-index: 11 !important;
 }
 
+.sidebar-expanded,
+.sidebar-collapsed {
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+}
+
+.hidden-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.security-sidebar {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.security-menu-item {
+  position: relative;
+}
+
+.security-menu-item:hover .group {
+  background-color: #f9fafb;
+}
+
+.security-navigation {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.security-navigation::-webkit-scrollbar {
+  display: none;
+}
+
+/* Security Layout Styles */
+.security-layout {
+  min-height: 100vh;
+}
+
+.security-main-content {
+  background-color: #f9fafb;
+}
+
+.security-header {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.security-page-content {
+  max-width: 100%;
+}
+
 .ant-menu .ant-menu-item,
 .ant-menu .ant-menu-submenu-title {
   transition: border-color 0.3s, background 0.3s,

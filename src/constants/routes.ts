@@ -1,10 +1,44 @@
-const URL = {
+const ROUTES = {
   Home: "/",
   SignIn: "/sign-in",
   SignInMaster: "/sign-in/master",
   ResetPassword: "/reset-password",
   SignUp: "/sign-up",
+  Login: "/sign-in",
+  Logout: "/logout",
   Forbidden: "/forbidden",
+  Dashboard: "/dashboard",
+  Analyze: {
+    Detection: "/analyze/detection",
+    Action: "/analyze/action",
+  },
+  Policy: {
+    SystemSettings: "/policy/system-settings",
+    AdminPolicy: "/policy/admin-policy",
+    UserPolicy: "/policy/user-policy",
+    BlacklistWhitelist: "/policy/blacklist-whitelist",
+  },
+  History: {
+    BlacklistWhitelist: "/history/blacklist-whitelist",
+    Inspection: "/history/inspection",
+    Action: "/history/action",
+    PolicyChanges: "/history/policy-changes",
+    AiLearning: "/history/ai-learning",
+    Authority: "/history/authority",
+  },
+  Alarm: {
+    Notifications: "/alarm/notifications",
+    Schedule: "/alarm/schedule",
+  },
+  Report: {
+    List: "/report/list",
+    Regular: "/report/regular",
+  },
+  User: {
+    ChangeInfo: "/user/change-info",
+    Permissions: "/user/permissions",
+  },
+  PersonalSettings: "/user/change-info",
   ShoppingOffer: {
     Promotion: "/shopping-offer/promotion",
     SearchRule: "/shopping-offer/search-rule",
@@ -30,15 +64,10 @@ const URL = {
     CreateLunaAdmin: "/account/luna-admin/create",
     DetailLunaAdmin: "/account/luna-admin/detail/:id",
   },
-  Report: {
-    Reservation: "/report/reservation",
-    ApiCall: "/report/api-call",
-  },
   UsageAndBilling: {
     AccountBilling: "/usage-billing/account-billing",
     AirlineBilling: "/usage-billing/airline-billing",
   },
-  PersonalSettings: "/personal-settings",
 };
 
-export default URL;
+export default ROUTES;

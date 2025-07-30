@@ -1,133 +1,112 @@
 import { useEffect, useState } from "react";
-import { Avatar, Menu, Layout, Popover } from "antd";
-import { useLocation, useNavigate } from "react-router-dom";
-import LogoAlbusWithText from "@/assets/svgs/albus-logo-txt-black.svg";
-import LogoAlbus from "@/assets/svgs/albus-logo.svg";
+import { useLocation } from "react-router-dom";
 import { cn } from "@/libs/utils";
-import { getSideBarListByAction } from "@/utils/sidebar";
-import { DynamicKeyObject } from "@/interfaces/app";
-import { getSelectedKeySidebar } from "@/utils/app";
-import PopUser from "@/app/components/sidebar/PopUser";
-import { actionUpdateNavCollapsed } from "@/store/appSlide";
-import { useAppDispatch, useAppSelector } from "@/store";
-import URL from "@/constants/url";
-import { selectPersonalInfo } from "@/store/personalSlice";
-const { Sider } = Layout;
+import { getMenuItems, findActiveMenuItem } from "@/utils/sidebar";
+import MenuItem from "./MenuItem";
+import UserSection from "./UserSection";
 
-interface SidebarProps {
-  collapsed: boolean;
-}
-
-function Sidebar(props: SidebarProps) {
-  const { collapsed } = props;
+function Sidebar() {
   const location = useLocation();
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const [activeKey, setActiveKey] = useState<DynamicKeyObject>({
-    parentKey: "",
-    childKey: "",
-  });
-  const [isOpenPopover, setIsOpenPopover] = useState(false);
-  const personalInfo = useAppSelector(selectPersonalInfo);
+  const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const [activeMenuInfo, setActiveMenuInfo] = useState<{
+    parentId?: string;
+    childId?: string;
+  }>({});
 
-  function toggleCollapsed() {
-    dispatch(actionUpdateNavCollapsed(!collapsed));
-  }
-
-  function onClickMenuItem(item: DynamicKeyObject) {
-    const { key } = item;
-    navigate(key);
-  }
+  const menuItems = getMenuItems();
 
   useEffect(() => {
-    if (!location.pathname) return;
+    const activeInfo = findActiveMenuItem(location.pathname);
+    setActiveMenuInfo(activeInfo);
 
-    const pathName = location.pathname;
-    const { parentKey = "", childKey = "" } = getSelectedKeySidebar(pathName);
-    setActiveKey({ parentKey, childKey });
+    if (activeInfo.parentId && activeInfo.childId) {
+      setExpandedMenus((prev) =>
+        prev.includes(activeInfo.parentId!)
+          ? prev
+          : [...prev, activeInfo.parentId!]
+      );
+    }
   }, [location.pathname]);
 
+  const handleToggleExpand = (itemId: string) => {
+    setExpandedMenus((prev) =>
+      prev.includes(itemId)
+        ? prev.filter((id) => id !== itemId)
+        : [...prev, itemId]
+    );
+  };
+
+  const handleToggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+
+    if (!isCollapsed) {
+      setExpandedMenus([]);
+    }
+  };
+
   return (
-    <Sider
-      collapsible
-      theme="light"
-      collapsed={collapsed}
-      width={256}
-      trigger={null}
+    <div
       className={cn(
-        "border-r border-border-100 max-h-screen overflow-y-auto flex flex-col !sticky top-0 left-0 hidden-scrollbar",
-        collapsed ? "sidebar-collapsed" : "sidebar-expanded"
+        "security-sidebar h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300",
+        isCollapsed ? "w-[88px]" : "w-[220px]"
       )}
     >
-      <div
-        className={cn(
-          "flex pt-10 pb-2 flex-col gap-4",
-          collapsed ? "items-center" : "px-8"
-        )}
-      >
-        {collapsed ? <LogoAlbus /> : <LogoAlbusWithText />}
-        <div className="text-end">
-          <i
-            className={cn(
-              "ri-arrow-drop-left-line text-2xl bg-grey-5 text-grey-40 rounded-full cursor-pointer",
-              collapsed ? "ri-arrow-drop-right-line" : ""
-            )}
-            onClick={toggleCollapsed}
-          />
-        </div>
-      </div>
-      <Menu
-        key={`${activeKey.parentKey}-${activeKey.childKey}`}
-        defaultSelectedKeys={[activeKey.childKey]}
-        defaultOpenKeys={[activeKey.parentKey]}
-        mode="inline"
-        items={getSideBarListByAction(collapsed, activeKey.parentKey)}
-        onClick={onClickMenuItem}
-      />
-      <div
-        className={cn(
-          "flex-1 flex items-end pt-6 pb-10",
-          collapsed ? "" : "px-8"
-        )}
-      >
-        <div
-          className="w-full"
-          onMouseEnter={() => setIsOpenPopover(true)}
-          onMouseLeave={() => setIsOpenPopover(false)}
-        >
-          <Popover
-            arrow={false}
-            placement="rightBottom"
-            rootClassName="custom-popover-content"
-            content={<PopUser onClose={() => setIsOpenPopover(false)} />}
-            open={isOpenPopover}
-          >
-            <div
-              className={cn(
-                "flex items-center gap-2 px-2 py-2 hover:bg-primary-5 cursor-pointer rounded-[8px] w-fit",
-                collapsed ? "justify-center" : "",
-                location.pathname.includes(URL.PersonalSettings) &&
-                  "bg-primary-5"
-              )}
-            >
-              <div className="w-10">
-                <Avatar size={40}>USER</Avatar>
-              </div>
-              {!collapsed && (
-                <div className="!w-[145px]">
-                  <p className="text-grey-80 font-medium text-sm">
-                  {personalInfo.firstName ?? "User"} {personalInfo.lastName ?? "Name"}
-                  </p>
-                  <p className="text-grey-40 text-xs break-all">
-                    {personalInfo.username}
-                  </p>
-                </div>
-              )}
+      <div className="security-logo-section p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center mr-3">
+              <i className="ri-shield-check-line text-white text-lg" />
             </div>
-          </Popover>
+            {!isCollapsed && (
+              <div>
+                <h1 className="text-sm font-semibold text-gray-900">
+                  Security
+                </h1>
+                <p className="text-xs text-gray-500">Dashboard</p>
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={handleToggleCollapse}
+            className="p-1.5 rounded-md hover:bg-gray-100 transition-colors duration-200"
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            <i
+              className={cn(
+                "text-gray-500 text-lg transition-transform duration-200",
+                isCollapsed ? "ri-menu-unfold-line" : "ri-menu-fold-line"
+              )}
+            />
+          </button>
         </div>
       </div>
-    </Sider>
+
+      <div className="security-navigation flex-1 overflow-y-auto py-2">
+        {menuItems.map((item) => {
+          const isActive =
+            activeMenuInfo.parentId === item.id && !activeMenuInfo.childId;
+          const isChildActive =
+            activeMenuInfo.parentId === item.id && !!activeMenuInfo.childId;
+          const isExpanded = expandedMenus.includes(item.id);
+
+          return (
+            <MenuItem
+              key={item.id}
+              item={item}
+              isActive={isActive}
+              isChildActive={isChildActive}
+              isExpanded={isExpanded}
+              isCollapsed={isCollapsed}
+              onToggleExpand={handleToggleExpand}
+            />
+          );
+        })}
+      </div>
+
+      <UserSection />
+    </div>
   );
 }
 

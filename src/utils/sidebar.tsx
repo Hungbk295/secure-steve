@@ -1,217 +1,189 @@
-import IconTipping from "@/assets/svgs/tipping.svg";
-import IconAggregatorLine from "@/assets/svgs/aggregator-line.svg";
-import IconHomeSelected from "@/assets/svgs/home-selected.svg";
-import IconTippingSelected from "@/assets/svgs/tipping-selected.svg";
-import IconAggregatorLineSelected from "@/assets/svgs/aggregator-line-selected.svg";
-import { cn } from "@/libs/utils";
-import { EUserRole } from "@/interfaces/app";
-import { store } from "@/store";
-import { MAPPED_ROLE_PERMISSION } from "@/constants/sidebar";
-import URL from "@/constants/url";
+import { ReactNode } from "react";
+import ROUTES from "@/constants/routes";
 
-export function getSideBarListByAction(
-  collapsed: boolean = false,
-  parentPathSelected: string = "/"
-) {
-  function isSelected(path: string) {
-    return path === parentPathSelected;
-  }
-  const userRole = store.getState().auth.infoLogin.role;
-
-  const sidebarList = [
-    {
-      id: 1,
-      label: "Home",
-      key: "/",
-      permission: MAPPED_ROLE_PERMISSION[EUserRole.USER],
-      icon:
-        !collapsed && isSelected("/") ? (
-          <IconHomeSelected />
-        ) : (
-          <i className={cn("!text-[20px] text-grey-80 ri-home-5-line")} />
-        ),
-    },
-    {
-      id: 2,
-      label: "Shopping offer",
-      key: "/shopping-offer",
-      disable: true,
-      permission: MAPPED_ROLE_PERMISSION[EUserRole.USER],
-      icon:
-        !collapsed && isSelected("/shopping-offer") ? (
-          <IconTippingSelected />
-        ) : (
-          <IconTipping />
-        ),
-      children: [
-        {
-          id: 21,
-          label: "Promotion",
-          key: URL.ShoppingOffer.Promotion,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.USER],
-        },
-        {
-          id: 22,
-          label: "Search Rule",
-          key: URL.ShoppingOffer.SearchRule,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.MASTER],
-        },
-      ],
-    },
-    {
-      id: 3,
-      label: "Aggregator",
-      key: "/aggregator",
-      disable: true,
-      permission: MAPPED_ROLE_PERMISSION[EUserRole.USER],
-      icon:
-        !collapsed && isSelected("/aggregator") ? (
-          <IconAggregatorLineSelected />
-        ) : (
-          <IconAggregatorLine />
-        ),
-      children: [
-        {
-          id: 31,
-          label: "Provider/Airline",
-          key: URL.Aggregator.ProviderAirline,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.MASTER],
-        },
-        {
-          id: 32,
-          label: "HALO Credential",
-          key: URL.Aggregator.HaloCredential,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.USER],
-        },
-        {
-          id: 33,
-          label: "Airline Profile",
-          key: URL.Aggregator.AirlineProfile,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.USER],
-        },
-        {
-          id: 34,
-          label: "HALO Airline Control",
-          key: URL.Aggregator.HaloAirlineControl,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.MASTER],
-        },
-      ],
-    },
-    {
-      id: 4,
-      label: "Account",
-      key: "/account",
-      disable: true,
-      permission: MAPPED_ROLE_PERMISSION[EUserRole.ADMIN],
-      icon: (
-        <i
-          className={cn(
-            "!text-[20px] text-grey-80",
-            !collapsed && isSelected("/account")
-              ? "ri-user-settings-fill"
-              : "ri-user-settings-line"
-          )}
-        />
-      ),
-      children: [
-        {
-          id: 41,
-          label: "Customer Account",
-          key: URL.Account.CustomerAccount,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.ADMIN],
-        },
-        {
-          id: 42,
-          label: "ALBUS Admin/User",
-          key: URL.Account.AlbusAdminUser,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.ADMIN],
-        },
-        {
-          id: 43,
-          label: "LUNA Admin",
-          key: URL.Account.LunaAdmin,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.ADMIN],
-        },
-        {
-          id: 44,
-          label: "ALBUS Master",
-          key: URL.Account.AlbusMaster,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.MASTER],
-        },
-      ],
-    },
-    {
-      id: 5,
-      label: "Usage & Billing",
-      key: "/usage-billing",
-      disable: true,
-      permission: MAPPED_ROLE_PERMISSION[EUserRole.USER],
-      icon: (
-        <i
-          className={cn(
-            "!text-[20px] text-grey-80",
-            !collapsed && isSelected("/usage-billing")
-              ? "ri-money-dollar-circle-fill"
-              : "ri-money-dollar-circle-line"
-          )}
-        />
-      ),
-      children: [
-        {
-          id: 51,
-          label: "Account Billing",
-          key: URL.UsageAndBilling.AccountBilling,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.USER],
-        },
-        {
-          id: 52,
-          label: "Airline Billing",
-          key: URL.UsageAndBilling.AirlineBilling,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.MASTER],
-        },
-      ],
-    },
-    {
-      id: 6,
-      label: "Report",
-      key: "/report",
-      disable: true,
-      permission: MAPPED_ROLE_PERMISSION[EUserRole.USER],
-      icon: (
-        <i
-          className={cn(
-            "!text-[20px] text-grey-80",
-            !collapsed && isSelected("/report")
-              ? "ri-article-fill"
-              : "ri-article-line"
-          )}
-        />
-      ),
-      children: [
-        {
-          id: 61,
-          label: "Reservation",
-          key: URL.Report.Reservation,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.USER],
-        },
-        {
-          id: 62,
-          label: "API Call",
-          key: URL.Report.ApiCall,
-          permission: MAPPED_ROLE_PERMISSION[EUserRole.MASTER],
-        },
-      ],
-    },
-  ];
-
-  const filteredSidebarList = sidebarList.filter((item) => {
-    const hasPermission = item.permission <= MAPPED_ROLE_PERMISSION[userRole];
-    if (hasPermission && item.children) {
-      item.children = item.children.filter(
-        (child) => child.permission <= MAPPED_ROLE_PERMISSION[userRole]
-      );
-    }
-    return hasPermission;
-  });
-  return filteredSidebarList;
+export interface MenuItem {
+  id: string;
+  label: string;
+  route: string;
+  icon?: ReactNode;
+  children?: MenuItem[];
+  permission?: string[];
 }
+
+export const getMenuItems = (): MenuItem[] => [
+  {
+    id: "home",
+    label: "Home",
+    route: ROUTES.Home,
+    icon: <i className="ri-home-5-line text-lg" />,
+  },
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    route: ROUTES.Dashboard,
+    icon: <i className="ri-dashboard-line text-lg" />,
+  },
+  {
+    id: "analyze",
+    label: "Analyze",
+    route: "/analyze",
+    icon: <i className="ri-search-line text-lg" />,
+    children: [
+      {
+        id: "detection",
+        label: "Detection",
+        route: ROUTES.Analyze.Detection,
+      },
+      {
+        id: "action",
+        label: "Action",
+        route: ROUTES.Analyze.Action,
+      },
+    ],
+  },
+  {
+    id: "policy",
+    label: "Policy",
+    route: "/policy",
+    icon: <i className="ri-settings-3-line text-lg" />,
+    children: [
+      {
+        id: "system-settings",
+        label: "System Settings",
+        route: ROUTES.Policy.SystemSettings,
+      },
+      {
+        id: "admin-policy",
+        label: "Administrator Policy Settings",
+        route: ROUTES.Policy.AdminPolicy,
+      },
+      {
+        id: "user-policy",
+        label: "User Policy Settings",
+        route: ROUTES.Policy.UserPolicy,
+      },
+      {
+        id: "blacklist-whitelist",
+        label: "Black / Whitelist",
+        route: ROUTES.Policy.BlacklistWhitelist,
+      },
+    ],
+  },
+  {
+    id: "history",
+    label: "History",
+    route: "/history",
+    icon: <i className="ri-history-line text-lg" />,
+    children: [
+      {
+        id: "history-blacklist",
+        label: "Black / Whitelist",
+        route: ROUTES.History.BlacklistWhitelist,
+      },
+      {
+        id: "inspection-history",
+        label: "Inspection history",
+        route: ROUTES.History.Inspection,
+      },
+      {
+        id: "action-history",
+        label: "Action history",
+        route: ROUTES.History.Action,
+      },
+      {
+        id: "policy-changes",
+        label: "History of policy changes",
+        route: ROUTES.History.PolicyChanges,
+      },
+      {
+        id: "ai-learning",
+        label: "AI learning history",
+        route: ROUTES.History.AiLearning,
+      },
+      {
+        id: "authority-history",
+        label: "Authority history",
+        route: ROUTES.History.Authority,
+      },
+    ],
+  },
+  {
+    id: "alarm",
+    label: "Alarm",
+    route: "/alarm",
+    icon: <i className="ri-alarm-warning-line text-lg" />,
+    children: [
+      {
+        id: "notifications",
+        label: "Notification List",
+        route: ROUTES.Alarm.Notifications,
+      },
+      {
+        id: "schedule",
+        label: "Schedule",
+        route: ROUTES.Alarm.Schedule,
+      },
+    ],
+  },
+  {
+    id: "report",
+    label: "Report",
+    route: "/report",
+    icon: <i className="ri-file-text-line text-lg" />,
+    children: [
+      {
+        id: "report-list",
+        label: "List of reports",
+        route: ROUTES.Report.List,
+      },
+      {
+        id: "regular-report",
+        label: "Regular Report",
+        route: ROUTES.Report.Regular,
+      },
+    ],
+  },
+  {
+    id: "user",
+    label: "User",
+    route: "/user",
+    icon: <i className="ri-user-line text-lg" />,
+    children: [
+      {
+        id: "change-info",
+        label: "Change Information",
+        route: ROUTES.User.ChangeInfo,
+      },
+      {
+        id: "permissions",
+        label: "Modify Permissions",
+        route: ROUTES.User.Permissions,
+      },
+    ],
+  },
+];
+
+export const findActiveMenuItem = (
+  pathname: string,
+  menuItems: MenuItem[] = getMenuItems()
+): { parentId?: string; childId?: string } => {
+  for (const item of menuItems) {
+    if (item.route === pathname) {
+      return { parentId: item.id };
+    }
+
+    if (item.children) {
+      for (const child of item.children) {
+        if (child.route === pathname) {
+          return { parentId: item.id, childId: child.id };
+        }
+      }
+
+      if (pathname.startsWith(item.route) && item.route !== "/") {
+        return { parentId: item.id };
+      }
+    }
+  }
+
+  return {};
+};
