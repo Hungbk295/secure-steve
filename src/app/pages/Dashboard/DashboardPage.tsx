@@ -1,87 +1,188 @@
-import { Card, Row, Col, Statistic, Progress, Tag } from "antd";
-import AlertNotificationPanel from "@/app/components/dashboard/AlertNotificationPanel";
+import { useState, useEffect, useCallback } from "react";
+import AlertNotificationPanel from "@/app/pages/Dashboard/dashboard/AlertNotificationPanel";
+import StatusByPeriodCard from "./widgets/StatusByPeriodCard";
+import MalwareDetectionStatusCard from "./widgets/MalwareDetectionStatusCard";
+import ServerStatusCard from "./widgets/ServerStatusCard";
+import MalwareOnWhitelistCard from "./widgets/MalwareOnWhitelistCard";
+import {
+  dashboardService,
+  StatusByPeriodData,
+  MalwareFamilyData,
+  ServerData,
+  MalwareWhitelistData,
+} from "@/app/services/dashboardService";
 
 function DashboardPage() {
+  const [statusData, setStatusData] = useState<StatusByPeriodData>();
+  const [malwareFamilyData, setMalwareFamilyData] =
+    useState<MalwareFamilyData[]>();
+  const [serverData, setServerData] = useState<ServerData[]>();
+  const [malwareWhitelistData, setMalwareWhitelistData] =
+    useState<MalwareWhitelistData[]>();
+  const [currentFilters, setCurrentFilters] = useState({
+    collection: "collection_a",
+    range: "30d",
+  });
+
+  const loadStatusData = useCallback(async () => {
+    try {
+      const data = await dashboardService.getStatusByPeriod(currentFilters);
+      setStatusData(data);
+    } catch (error) {
+      console.error("Failed to load status data:", error);
+    }
+  }, [currentFilters]);
+
+  const loadMalwareFamilyData = useCallback(async () => {
+    try {
+      const data = await dashboardService.getMalwareFamilyDistribution(
+        currentFilters
+      );
+      setMalwareFamilyData(data);
+    } catch (error) {
+      console.error("Failed to load malware family data:", error);
+    }
+  }, [currentFilters]);
+
+  const loadServerData = useCallback(async () => {
+    try {
+      const data = await dashboardService.getServerStatus();
+      setServerData(data);
+    } catch (error) {
+      console.error("Failed to load server data:", error);
+    }
+  }, []);
+
+  const loadMalwareWhitelistData = useCallback(async () => {
+    try {
+      const data = await dashboardService.getMalwareWhitelistData();
+      setMalwareWhitelistData(data);
+    } catch (error) {
+      console.error("Failed to load malware whitelist data:", error);
+    }
+  }, []);
+
+  // Load initial data
+  useEffect(() => {
+    loadStatusData();
+    loadMalwareFamilyData();
+    loadServerData();
+    loadMalwareWhitelistData();
+  }, [
+    loadStatusData,
+    loadMalwareFamilyData,
+    loadServerData,
+    loadMalwareWhitelistData,
+  ]);
+
+  const handleCollectionChange = (collection: string) => {
+    setCurrentFilters((prev) => ({ ...prev, collection }));
+  };
+
+  const handleRangeChange = (range: string) => {
+    setCurrentFilters((prev) => ({ ...prev, range }));
+  };
+
+  const handleBarClick = (category: string) => {
+    const url = dashboardService.navigateToAnalysisDetectionList({
+      status: category,
+      range: currentFilters.range,
+      collection: currentFilters.collection,
+    });
+    console.log("Would navigate to:", url);
+  };
+
+  const handleFamilyClick = (family: string) => {
+    const url = dashboardService.navigateToAnalysisDetectionList({
+      family: family,
+      range: currentFilters.range,
+      collection: currentFilters.collection,
+    });
+    console.log("Would navigate to:", url);
+  };
+
+  // Server status handlers
+  const handleServerClick = (serverId: string) => {
+    console.log("Server clicked:", serverId);
+  };
+
+  const handleRetryPing = async (serverId: string) => {
+    try {
+      await dashboardService.retryServerPing(serverId);
+    } catch (error) {
+      console.error("Failed to retry ping:", error);
+    }
+  };
+
+  const handleCreateTicket = async (serverId: string) => {
+    try {
+      await dashboardService.createSupportTicket(serverId);
+    } catch (error) {
+      console.error("Failed to create ticket:", error);
+    }
+  };
+
+  // Malware whitelist handlers
+  const handleRescan = async (id: string) => {
+    try {
+      await dashboardService.rescanMalwareFile(id);
+    } catch (error) {
+      console.error("Failed to rescan:", error);
+    }
+  };
+
+  const handleRemoveFromWhitelist = async (id: string) => {
+    try {
+      await dashboardService.removeFromWhitelist(id);
+      // Reload data after removal
+      loadMalwareWhitelistData();
+    } catch (error) {
+      console.error("Failed to remove from whitelist:", error);
+    }
+  };
+
+  const handleIgnore = async (id: string) => {
+    try {
+      await dashboardService.ignoreMalwareAlert(id);
+      // Reload data after ignoring
+      loadMalwareWhitelistData();
+    } catch (error) {
+      console.error("Failed to ignore alert:", error);
+    }
+  };
+
+  const handleFileClick = (fileName: string) => {
+    console.log("File clicked:", fileName);
+    // Navigate to whitelist page with anchor to file
+  };
   return (
-    <div className="dashboard-page">
-      {/* Alert Notification Panel - Top Priority */}
+    <div className="dashboard-page flex flex-col gap-6">
       <AlertNotificationPanel />
+      <StatusByPeriodCard
+        data={statusData}
+        onCollectionChange={handleCollectionChange}
+        onRangeChange={handleRangeChange}
+        onBarClick={handleBarClick}
+      />
+      <MalwareDetectionStatusCard
+        data={malwareFamilyData}
+        onFamilyClick={handleFamilyClick}
+      />
 
-      <Row gutter={[24, 24]}>
-        {/* Malware Trend Chart */}
-        <Col xs={24} lg={16}>
-          <Card title="Malware Detection Status" size="small">
-            <Row gutter={16}>
-              <Col span={8}>
-                <Statistic title="Total Scans" value={312} />
-              </Col>
-              <Col span={8}>
-                <Statistic title="Confirmed Malware" value={211} />
-              </Col>
-              <Col span={8}>
-                <Statistic title="No Threats" value={101} />
-              </Col>
-            </Row>
-            <div className="mt-4">
-              <Progress percent={68} status="active" />
-              <p className="text-sm text-gray-500 mt-2">Detection Rate</p>
-            </div>
-          </Card>
-        </Col>
+      <ServerStatusCard
+        data={serverData}
+        onServerClick={handleServerClick}
+        onRetryPing={handleRetryPing}
+        onCreateTicket={handleCreateTicket}
+      />
 
-        {/* Server Health */}
-        <Col xs={24} lg={8}>
-          <Card title="Server Status" size="small">
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between">
-                  <span>Connection status</span>
-                  <Tag color="green">Online</Tag>
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between">
-                  <span>Server IP</span>
-                  <span className="text-sm">192.168.1.100</span>
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between">
-                  <span>Detection frequency</span>
-                  <span className="text-sm">Every 5 min</span>
-                </div>
-              </div>
-            </div>
-          </Card>
-        </Col>
-
-        <Col span={24}>
-          <Card title="Regular Report" size="small">
-            <div className="space-y-3">
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                <div>
-                  <span className="font-medium">2025.06.18</span>
-                  <p className="text-sm text-gray-500">
-                    Increase in network server malware detections in the past
-                    month...
-                  </p>
-                </div>
-                <Tag color="blue">Ready</Tag>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                <div>
-                  <span className="font-medium">Monthly Security Report</span>
-                  <p className="text-sm text-gray-500">
-                    The appearance of the Malware family has increased
-                    significantly...
-                  </p>
-                </div>
-                <Tag color="orange">Processing</Tag>
-              </div>
-            </div>
-          </Card>
-        </Col>
-      </Row>
+      <MalwareOnWhitelistCard
+        data={malwareWhitelistData}
+        onRescan={handleRescan}
+        onRemoveFromWhitelist={handleRemoveFromWhitelist}
+        onIgnore={handleIgnore}
+        onFileClick={handleFileClick}
+      />
     </div>
   );
 }

@@ -11,8 +11,8 @@ import {
   Alert,
 } from "@/store/alertsSlice";
 import { CURRENT_USER_ROLE, getTopBarFeatures } from "@/constants/roleConfig";
-import ActionConfirmModal from "./ActionConfirmModal";
 import styles from "./AlertNotificationPanel.module.css";
+import ActionConfirmModal from "./ActionConfirmModal";
 
 const actionOptions = [
   { value: "pending", label: "Pending" },
@@ -98,10 +98,10 @@ function AlertNotificationPanel() {
     }
   };
 
-  const handleConfirmAction = async (memo: string) => {
+  const handleConfirmAction = async () => {
     if (!selectedAlert) return;
 
-    await executeAction(selectedAlert.id, selectedAlert.action, memo);
+    await executeAction(selectedAlert.id, selectedAlert.action);
     setShowConfirmModal(false);
     setSelectedAlert(null);
   };
@@ -289,7 +289,7 @@ function AlertNotificationPanel() {
   return (
     <>
       <Card
-        title="Alert Notification"
+        title="Alert / 알림명"
         size="small"
         className="mb-6"
         extra={
@@ -322,7 +322,6 @@ function AlertNotificationPanel() {
               rowKey="id"
               scroll={{ x: 800 }}
               className={`alerts-notification-table ${styles["alerts-notification-table"]}`}
-              responsive={["md"]}
               locale={{
                 emptyText: (
                   <div className="p-8 text-center text-gray-500">
@@ -332,88 +331,6 @@ function AlertNotificationPanel() {
                 ),
               }}
             />
-
-            {/* Mobile Card View - Hidden on desktop */}
-            <div
-              className={`block md:hidden space-y-3 ${styles["mobile-alert-cards"]}`}
-            >
-              {latestAlerts.slice(0, 10).map((alert) => (
-                <div
-                  key={alert.id}
-                  className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm"
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-lg">{alert.icon}</span>
-                      <div>
-                        <h4 className="font-medium text-gray-900 text-sm">
-                          {alert.alertName}
-                        </h4>
-                        <p className="text-xs text-gray-600">
-                          {alert.fileName}
-                        </p>
-                      </div>
-                    </div>
-                    <Tag
-                      className={`${getRiskColor(
-                        alert.riskPercentage
-                      )} border-0 text-xs`}
-                    >
-                      {alert.riskPercentage}%
-                    </Tag>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 mb-3">
-                    <div>
-                      <span className="font-medium">Server:</span>{" "}
-                      {alert.serverIP}
-                    </div>
-                    <div>
-                      <span className="font-medium">Verdict:</span>{" "}
-                      {alert.verdict}
-                    </div>
-                    <div>
-                      <span className="font-medium">Created:</span>{" "}
-                      {new Date(alert.createdAt).toLocaleDateString("ko-KR")}
-                    </div>
-                    <div>
-                      <span className="font-medium">Status:</span>{" "}
-                      <Tag
-                        color={getStatusColor(alert.status)}
-                        className="text-xs"
-                      >
-                        {alert.status.replace("_", " ").toUpperCase()}
-                      </Tag>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <button
-                      onClick={() => handleRowClick(alert)}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                    >
-                      View Details
-                    </button>
-                    {topBarFeatures.canManageAlerts &&
-                      !["delete", "quarantine", "no_action"].includes(
-                        alert.status
-                      ) && (
-                        <Select
-                          value={alert.status}
-                          size="small"
-                          className="w-24"
-                          loading={updatingAlerts.has(alert.id)}
-                          disabled={updatingAlerts.has(alert.id)}
-                          onChange={(value) =>
-                            handleActionSelect(alert.id, value)
-                          }
-                          options={actionOptions}
-                        />
-                      )}
-                  </div>
-                </div>
-              ))}
-            </div>
           </Col>
         </Row>
       </Card>

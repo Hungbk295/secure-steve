@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Input, Form } from "antd";
+import { Form } from "antd";
 import CustomModal from "@/app/components/common/CustomModal";
 import { EModalMode } from "@/interfaces/app";
 
