@@ -79,6 +79,7 @@ export const TOPBAR_FEATURES = {
     showUserMenu: true,
     alarmTypes: ["personal", "group"],
     maxAlarmCount: 50,
+    canManageAlerts: false,
   },
   [UserRole.ADMINISTRATOR]: {
     showVerificationCounter: true,
@@ -87,6 +88,7 @@ export const TOPBAR_FEATURES = {
     showUserMenu: true,
     alarmTypes: ["personal", "group", "system"],
     maxAlarmCount: 999,
+    canManageAlerts: true,
   },
 };
 
