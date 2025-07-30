@@ -64,7 +64,86 @@
   position: sticky;
   top: 0;
   z-index: 40;
-  backdrop-filter: blur(8px);
+  background-color: #f3f4f6 !important;
+  border-bottom: 1px solid #d1d5db !important;
+}
+
+/* Latest Alerts Dropdown */
+.latest-alerts-dropdown {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.latest-alerts-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.latest-alerts-dropdown::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.latest-alerts-dropdown::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.latest-alerts-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Alerts Table Styling */
+.alerts-table .ant-table {
+  font-size: 12px;
+}
+
+.alerts-table .ant-table-thead > tr > th {
+  background-color: #f9fafb !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  padding: 8px 12px !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  font-size: 11px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.alerts-table .ant-table-tbody > tr > td {
+  padding: 12px !important;
+  border-bottom: 1px solid #f3f4f6 !important;
+  vertical-align: top;
+}
+
+.alerts-table .ant-table-tbody > tr:hover > td {
+  background-color: #f9fafb !important;
+}
+
+.alerts-table .ant-table-tbody > tr:last-child > td {
+  border-bottom: none !important;
+}
+
+.alerts-table .ant-spin-nested-loading {
+  min-height: 200px;
+}
+
+.alerts-table .ant-empty {
+  margin: 20px 0;
+}
+
+/* Alert action menu animation */
+.alert-action-menu {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .top-bar .notification-badge {

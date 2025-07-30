@@ -3,6 +3,7 @@ import appSlice from "@/store/appSlide";
 import customerAccountSlice from "@/store/customerAccountSlice";
 import personalSlice from "@/store/personalSlice";
 import commonSlice from "@/store/common";
+import alertsSlice from "@/store/alertsSlice";
 
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
@@ -23,6 +24,7 @@ const reducers = {
   customerAccountSlice,
   personal: personalSlice,
   common: commonSlice,
+  alerts: alertsSlice,
 };
 
 const rootReducer = combineReducers(reducers);
