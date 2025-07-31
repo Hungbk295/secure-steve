@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { Row, Col } from "antd";
 import AlertNotificationPanel from "@/app/pages/Dashboard/dashboard/AlertNotificationPanel";
 import StatusByPeriodCard from "./widgets/StatusByPeriodCard";
 import MalwareDetectionStatusCard from "./widgets/MalwareDetectionStatusCard";
@@ -19,30 +20,34 @@ function DashboardPage() {
   const [serverData, setServerData] = useState<ServerData[]>();
   const [malwareWhitelistData, setMalwareWhitelistData] =
     useState<MalwareWhitelistData[]>();
-  const [currentFilters, setCurrentFilters] = useState({
+  const [statusFilters, setStatusFilters] = useState({
+    collection: "collection_a",
+    range: "30d",
+  });
+  const [malwareFilters, setMalwareFilters] = useState({
     collection: "collection_a",
     range: "30d",
   });
 
   const loadStatusData = useCallback(async () => {
     try {
-      const data = await dashboardService.getStatusByPeriod(currentFilters);
+      const data = await dashboardService.getStatusByPeriod(statusFilters);
       setStatusData(data);
     } catch (error) {
       console.error("Failed to load status data:", error);
     }
-  }, [currentFilters]);
+  }, [statusFilters]);
 
   const loadMalwareFamilyData = useCallback(async () => {
     try {
       const data = await dashboardService.getMalwareFamilyDistribution(
-        currentFilters
+        malwareFilters
       );
       setMalwareFamilyData(data);
     } catch (error) {
       console.error("Failed to load malware family data:", error);
     }
-  }, [currentFilters]);
+  }, [malwareFilters]);
 
   const loadServerData = useCallback(async () => {
     try {
@@ -62,7 +67,6 @@ function DashboardPage() {
     }
   }, []);
 
-  // Load initial data
   useEffect(() => {
     loadStatusData();
     loadMalwareFamilyData();
@@ -76,18 +80,18 @@ function DashboardPage() {
   ]);
 
   const handleCollectionChange = (collection: string) => {
-    setCurrentFilters((prev) => ({ ...prev, collection }));
+    setStatusFilters((prev) => ({ ...prev, collection }));
   };
 
   const handleRangeChange = (range: string) => {
-    setCurrentFilters((prev) => ({ ...prev, range }));
+    setStatusFilters((prev) => ({ ...prev, range }));
   };
 
   const handleBarClick = (category: string) => {
     const url = dashboardService.navigateToAnalysisDetectionList({
       status: category,
-      range: currentFilters.range,
-      collection: currentFilters.collection,
+      range: statusFilters.range,
+      collection: statusFilters.collection,
     });
     console.log("Would navigate to:", url);
   };
@@ -95,13 +99,12 @@ function DashboardPage() {
   const handleFamilyClick = (family: string) => {
     const url = dashboardService.navigateToAnalysisDetectionList({
       family: family,
-      range: currentFilters.range,
-      collection: currentFilters.collection,
+      range: malwareFilters.range,
+      collection: malwareFilters.collection,
     });
     console.log("Would navigate to:", url);
   };
 
-  // Server status handlers
   const handleServerClick = (serverId: string) => {
     console.log("Server clicked:", serverId);
   };
@@ -122,7 +125,6 @@ function DashboardPage() {
     }
   };
 
-  // Malware whitelist handlers
   const handleRescan = async (id: string) => {
     try {
       await dashboardService.rescanMalwareFile(id);
@@ -134,7 +136,6 @@ function DashboardPage() {
   const handleRemoveFromWhitelist = async (id: string) => {
     try {
       await dashboardService.removeFromWhitelist(id);
-      // Reload data after removal
       loadMalwareWhitelistData();
     } catch (error) {
       console.error("Failed to remove from whitelist:", error);
@@ -144,7 +145,6 @@ function DashboardPage() {
   const handleIgnore = async (id: string) => {
     try {
       await dashboardService.ignoreMalwareAlert(id);
-      // Reload data after ignoring
       loadMalwareWhitelistData();
     } catch (error) {
       console.error("Failed to ignore alert:", error);
@@ -153,36 +153,61 @@ function DashboardPage() {
 
   const handleFileClick = (fileName: string) => {
     console.log("File clicked:", fileName);
-    // Navigate to whitelist page with anchor to file
   };
   return (
-    <div className="dashboard-page flex flex-col gap-6">
-      <AlertNotificationPanel />
-      <StatusByPeriodCard
-        data={statusData}
-        onCollectionChange={handleCollectionChange}
-        onRangeChange={handleRangeChange}
-        onBarClick={handleBarClick}
-      />
-      <MalwareDetectionStatusCard
-        data={malwareFamilyData}
-        onFamilyClick={handleFamilyClick}
-      />
+    <div className="dashboard-page" style={{ padding: "24px" }}>
+      <Row gutter={[16, 16]} style={{ marginBottom: "16px" }}>
+        <Col span={24}>
+          <div style={{ height: "100%" }}>
+            <AlertNotificationPanel />
+          </div>
+        </Col>
+      </Row>
 
-      <ServerStatusCard
-        data={serverData}
-        onServerClick={handleServerClick}
-        onRetryPing={handleRetryPing}
-        onCreateTicket={handleCreateTicket}
-      />
+      <Row gutter={[16, 16]} style={{ marginBottom: "16px" }}>
+        <Col span={12}>
+          <div style={{ height: "400px" }}>
+            <StatusByPeriodCard
+              data={statusData}
+              onCollectionChange={handleCollectionChange}
+              onRangeChange={handleRangeChange}
+              onBarClick={handleBarClick}
+            />
+          </div>
+        </Col>
+        <Col span={12}>
+          <div style={{ height: "400px" }}>
+            <MalwareDetectionStatusCard
+              data={malwareFamilyData}
+              onFamilyClick={handleFamilyClick}
+            />
+          </div>
+        </Col>
+      </Row>
 
-      <MalwareOnWhitelistCard
-        data={malwareWhitelistData}
-        onRescan={handleRescan}
-        onRemoveFromWhitelist={handleRemoveFromWhitelist}
-        onIgnore={handleIgnore}
-        onFileClick={handleFileClick}
-      />
+      <Row gutter={[16, 16]}>
+        <Col span={12}>
+          <div style={{ height: "400px" }}>
+            <ServerStatusCard
+              data={serverData}
+              onServerClick={handleServerClick}
+              onRetryPing={handleRetryPing}
+              onCreateTicket={handleCreateTicket}
+            />
+          </div>
+        </Col>
+        <Col span={12}>
+          <div style={{ height: "400px" }}>
+            <MalwareOnWhitelistCard
+              data={malwareWhitelistData}
+              onRescan={handleRescan}
+              onRemoveFromWhitelist={handleRemoveFromWhitelist}
+              onIgnore={handleIgnore}
+              onFileClick={handleFileClick}
+            />
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 }

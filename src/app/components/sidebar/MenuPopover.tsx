@@ -22,7 +22,6 @@ function MenuPopover({ item, onClose }: MenuPopoverProps) {
     }
   };
 
-  // If no children, show simple tooltip
   if (!item.children || item.children.length === 0) {
     return (
       <div className="bg-gray-900 text-white text-sm px-3 py-2 rounded-md shadow-lg whitespace-nowrap">
@@ -31,10 +30,8 @@ function MenuPopover({ item, onClose }: MenuPopoverProps) {
     );
   }
 
-  // If has children, show full menu
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-[180px] z-50">
-      {/* Parent menu item */}
       <div
         className={cn(
           "px-4 py-2 text-sm font-medium text-gray-700 border-b border-gray-100 cursor-pointer hover:bg-gray-50",
@@ -48,7 +45,6 @@ function MenuPopover({ item, onClose }: MenuPopoverProps) {
         </div>
       </div>
 
-      {/* Children menu items */}
       <div className="py-1">
         {item.children.map((child) => {
           const isChildActive = location.pathname === child.route;

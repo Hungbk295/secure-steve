@@ -58,11 +58,7 @@ function StatusByPeriodCard({
         {
           label: "Status Count",
           data: chartValues,
-          backgroundColor: [
-            "#ff4d4f", // Red for malware
-            "#52c41a", // Green for no threats
-            "#1890ff", // Blue for action completed
-          ],
+          backgroundColor: ["#ff4d4f", "#52c41a", "#1890ff"],
           borderWidth: 0,
           borderRadius: { topLeft: 4, topRight: 4 },
         },
@@ -73,7 +69,7 @@ function StatusByPeriodCard({
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    indexAxis: 'y' as const,
+    indexAxis: "y" as const,
     plugins: {
       legend: {
         display: false,
@@ -83,15 +79,15 @@ function StatusByPeriodCard({
       },
       tooltip: {
         callbacks: {
-          label: function(context: any) {
-            const label = context.label || '';
+          label: function (context: any) {
+            const label = context.label || "";
             const value = context.parsed.x;
             const total = data.total_scans;
             const percentage = ((value / total) * 100).toFixed(1);
             return `${label}: ${value} (${percentage}%)`;
-          }
-        }
-      }
+          },
+        },
+      },
     },
     scales: {
       x: {
@@ -126,8 +122,8 @@ function StatusByPeriodCard({
   };
 
   return (
-    <Card 
-      title="기간별 현황" 
+    <Card
+      title="기간별 현황"
       size="small"
       extra={
         <div className="flex gap-2">
@@ -152,31 +148,39 @@ function StatusByPeriodCard({
         <Row gutter={16}>
           <Col span={6}>
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-800">{data.total_scans}</div>
+              <div className="text-2xl font-bold text-gray-800">
+                {data.total_scans}
+              </div>
               <div className="text-sm text-gray-500">Total Scans</div>
             </div>
           </Col>
           <Col span={6}>
             <div className="text-center">
-              <div className="text-2xl font-bold text-red-500">{data.confirmed_malware}</div>
+              <div className="text-2xl font-bold text-red-500">
+                {data.confirmed_malware}
+              </div>
               <div className="text-sm text-gray-500">Confirmed Malware</div>
             </div>
           </Col>
           <Col span={6}>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-500">{data.no_threats}</div>
+              <div className="text-2xl font-bold text-green-500">
+                {data.no_threats}
+              </div>
               <div className="text-sm text-gray-500">No Threats</div>
             </div>
           </Col>
           <Col span={6}>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-500">{data.action_completed}</div>
+              <div className="text-2xl font-bold text-blue-500">
+                {data.action_completed}
+              </div>
               <div className="text-sm text-gray-500">Action Completed</div>
             </div>
           </Col>
         </Row>
       </div>
-      
+
       <div className="h-[200px]">
         <CustomBarChart
           labels={chartData.labels}
