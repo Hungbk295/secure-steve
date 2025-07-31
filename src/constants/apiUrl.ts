@@ -38,6 +38,16 @@ export const API_URL_TYPE = {
       ACCOUNT_LIST: "ACCOUNT_LUNA_ADMIN_ACCOUNT_LIST",
     },
   },
+  ANALYZE: {
+    DETECTION: {
+      SERVERS: "ANALYZE_DETECTION_SERVERS",
+      CLUSTERS: "ANALYZE_DETECTION_CLUSTERS",
+      MANAGERS: "ANALYZE_DETECTION_MANAGERS",
+      CLUSTER_CHECK: "ANALYZE_DETECTION_CLUSTER_CHECK",
+      ASSIGN_CLUSTER: "ANALYZE_DETECTION_ASSIGN_CLUSTER",
+      ASSIGN_MANAGER: "ANALYZE_DETECTION_ASSIGN_MANAGER",
+    },
+  },
 };
 
 export const API_URL: Record<string, any> = {
@@ -135,5 +145,29 @@ export const API_URL: Record<string, any> = {
   [API_URL_TYPE.ACCOUNT.LUNA_ADMIN.DELETE]: {
     [EUserRole.MASTER]: "/api/master/luna/delete",
     [EUserRole.ADMIN]: "/api/admin/luna/delete",
+  },
+  [API_URL_TYPE.ANALYZE.DETECTION.SERVERS]: {
+    [EUserRole.USER]: "/api/user/analyze/detection/servers",
+    [EUserRole.ADMIN]: "/api/admin/analyze/detection/servers",
+  },
+  [API_URL_TYPE.ANALYZE.DETECTION.CLUSTERS]: {
+    [EUserRole.USER]: "/api/user/analyze/detection/clusters",
+    [EUserRole.ADMIN]: "/api/admin/analyze/detection/clusters",
+  },
+  [API_URL_TYPE.ANALYZE.DETECTION.MANAGERS]: {
+    [EUserRole.USER]: "/api/user/analyze/detection/managers",
+    [EUserRole.ADMIN]: "/api/admin/analyze/detection/managers",
+  },
+  [API_URL_TYPE.ANALYZE.DETECTION.CLUSTER_CHECK]: {
+    [EUserRole.USER]: "/api/user/analyze/detection/clusters/check",
+    [EUserRole.ADMIN]: "/api/admin/analyze/detection/clusters/check",
+  },
+  [API_URL_TYPE.ANALYZE.DETECTION.ASSIGN_CLUSTER]: {
+    [EUserRole.USER]: "/api/user/analyze/detection/assign/cluster",
+    [EUserRole.ADMIN]: "/api/admin/analyze/detection/assign/cluster",
+  },
+  [API_URL_TYPE.ANALYZE.DETECTION.ASSIGN_MANAGER]: {
+    [EUserRole.USER]: "/api/user/analyze/detection/assign/manager",
+    [EUserRole.ADMIN]: "/api/admin/analyze/detection/assign/manager",
   },
 };

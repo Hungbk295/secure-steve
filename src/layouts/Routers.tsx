@@ -8,6 +8,9 @@ import PrivateLayout from "@/layouts/PrivateLayout";
 
 const Login = lazy(() => import("@/app/pages/Login"));
 const DashboardPage = lazy(() => import("@/app/pages/Dashboard/DashboardPage"));
+const AnalyzeDetectionPage = lazy(
+  () => import("@/app/pages/Analyze/AnalyzeDetectionPage")
+);
 
 const PlaceholderPage = () => (
   <div className="flex items-center justify-center h-full">
@@ -36,7 +39,7 @@ const securityRoutes: ItemRoute[] = [
 
   {
     key: ROUTES.Analyze.Detection,
-    components: <PlaceholderPage />,
+    components: <AnalyzeDetectionPage />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },
