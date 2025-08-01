@@ -53,22 +53,39 @@ function Sidebar() {
   return (
     <div
       className={cn(
-        "security-sidebar h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300 align-center",
-        isCollapsed ? "w-[88px]" : "w-[220px]"
+        "security-sidebar h-screen bg-white flex flex-col transition-all duration-300 align-center",
+        isCollapsed ? "w-[80px]" : "w-[256px]"
       )}
+      style={{
+        borderRight: `1px solid var(--color-border-100)`,
+      }}
     >
-      <div className="security-logo-section p-6 border-b border-gray-200">
+      <div
+        className="security-logo-section p-5"
+        style={{ borderBottom: `1px solid var(--color-border-100)` }}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center mr-3">
+            <div
+              className="w-8 h-8 rounded-md flex items-center justify-center mr-3"
+              style={{ backgroundColor: "var(--color-primary-100)" }}
+            >
               <i className="ri-shield-check-line text-white text-lg" />
             </div>
             {!isCollapsed && (
               <div>
-                <h1 className="text-sm font-semibold text-gray-900">
+                <h1
+                  className="text-sm font-semibold"
+                  style={{ color: "var(--color-grey-100)" }}
+                >
                   Security
                 </h1>
-                <p className="text-xs text-gray-500">Dashboard</p>
+                <p
+                  className="text-xs"
+                  style={{ color: "var(--color-grey-40)" }}
+                >
+                  Dashboard
+                </p>
               </div>
             )}
           </div>
@@ -82,14 +99,21 @@ function Sidebar() {
       >
         <button
           onClick={handleToggleCollapse}
-          className="p-1.5 rounded-md hover:bg-gray-100 transition-colors duration-200"
+          className="p-1.5 rounded-md transition-colors duration-200"
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--color-grey-5)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "transparent";
+          }}
           title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           <i
             className={cn(
-              "text-gray-500 text-lg transition-transform duration-200",
+              "text-lg transition-transform duration-200",
               isCollapsed ? "ri-menu-unfold-line" : "ri-menu-fold-line"
             )}
+            style={{ color: "var(--color-grey-40)" }}
           />
         </button>
       </div>

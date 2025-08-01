@@ -10,7 +10,10 @@ interface DefaultLayoutProps {
 
 function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
-    <div className="security-layout flex h-screen bg-gray-50">
+    <div
+      className="security-layout flex h-screen"
+      style={{ backgroundColor: "var(--color-grey-3)" }}
+    >
       <Sidebar />
 
       <div className="security-main-content flex-1 flex flex-col overflow-hidden">

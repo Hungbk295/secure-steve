@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Card } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
-import TabNavigation from "@/app/pages/Analyze/analyze/TabNavigation";
-import ServerAssignmentTab from "@/app/pages/Analyze/analyze/ServerAssignmentTab";
+import TabNavigation from "@/app/pages/Analyze/TabNavigation";
+import ServerAssignmentTab from "@/app/pages/Analyze/ServerAssignmentTab";
 
 function AnalyzeDetectionPage() {
   const location = useLocation();
@@ -40,8 +40,13 @@ function AnalyzeDetectionPage() {
       case "server-settings":
         return (
           <div className="p-6">
-            <h3 className="text-lg font-semibold mb-4">관리 서버 설정</h3>
-            <p className="text-gray-500">
+            <h3
+              className="text-lg font-semibold mb-4"
+              style={{ color: "var(--color-grey-100)" }}
+            >
+              관리 서버 설정
+            </h3>
+            <p style={{ color: "var(--color-grey-40)" }}>
               Server settings functionality will be implemented here.
             </p>
           </div>
@@ -49,8 +54,13 @@ function AnalyzeDetectionPage() {
       case "quarantine-folder":
         return (
           <div className="p-6">
-            <h3 className="text-lg font-semibold mb-4">격리 폴더 설정</h3>
-            <p className="text-gray-500">
+            <h3
+              className="text-lg font-semibold mb-4"
+              style={{ color: "var(--color-grey-100)" }}
+            >
+              격리 폴더 설정
+            </h3>
+            <p style={{ color: "var(--color-grey-40)" }}>
               Quarantine folder settings will be implemented here.
             </p>
           </div>
@@ -62,11 +72,18 @@ function AnalyzeDetectionPage() {
 
   return (
     <div className="analyze-detection-page">
-      <Card>
+      <Card
+        className="w-full"
+        style={{
+          backgroundColor: "white",
+          border: `1px solid var(--color-border-100)`,
+          borderRadius: "8px",
+        }}
+      >
         <TabNavigation
           activeKey={activeTab}
           onChange={handleTabChange}
-          className="mb-4"
+          className="mb-6"
         />
         {renderTabContent()}
       </Card>
