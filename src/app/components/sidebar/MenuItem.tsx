@@ -120,13 +120,6 @@ function MenuItem({
 
         {!isCollapsed && <span className="flex-1 text-sm">{item.label}</span>}
 
-        {isActive && (
-          <div
-            className="w-2 h-2 rounded-full ml-2 flex-shrink-0"
-            style={{ backgroundColor: "var(--color-primary-100)" }}
-          />
-        )}
-
         {item.children && item.children.length > 0 && !isCollapsed && (
           <div
             className={cn(

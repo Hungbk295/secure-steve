@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Card } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
-import TabNavigation from "@/app/pages/Analyze/TabNavigation";
-import ServerAssignmentTab from "@/app/pages/Analyze/ServerAssignmentTab";
+import TabNavigation from "@/app/pages/Policy/TabNavigation";
+import ServerAssignmentTab from "@/app/pages/Policy/ServerAssignmentTab";
 
 function AnalyzeDetectionPage() {
   const location = useLocation();
