@@ -4,6 +4,7 @@ import customerAccountSlice from "@/store/customerAccountSlice";
 import personalSlice from "@/store/personalSlice";
 import commonSlice from "@/store/common";
 import alertsSlice from "@/store/alertsSlice";
+import analyzeDetectionSlice from "@/store/analyzeDetectionSlice";
 
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
@@ -25,6 +26,7 @@ const reducers = {
   personal: personalSlice,
   common: commonSlice,
   alerts: alertsSlice,
+  analyzeDetection: analyzeDetectionSlice,
 };
 
 const rootReducer = combineReducers(reducers);
