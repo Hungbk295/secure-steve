@@ -28,13 +28,15 @@ function FilterBar({
 }: FilterBarProps) {
   return (
     <div
-      className={`filter-bar bg-gray-50 p-4 rounded-lg mb-4 ${className || ""}`}
+      className={`filter-bar p-4 rounded-lg mb-4 ${className || ""}`}
+      style={{ backgroundColor: "var(--color-grey-5)" }}
     >
       <Row gutter={[16, 16]} align="middle">
         <Col xs={24} sm={12} md={8} lg={6}>
           <div className="filter-item">
             <label
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium mb-2"
+              style={{ color: "var(--color-grey-80)" }}
               id="cluster-label"
             >
               Cluster Name
@@ -62,7 +64,8 @@ function FilterBar({
         <Col xs={24} sm={12} md={8} lg={6}>
           <div className="filter-item">
             <label
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium mb-2"
+              style={{ color: "var(--color-grey-80)" }}
               id="manager-label"
             >
               Server Manager

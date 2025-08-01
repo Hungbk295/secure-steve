@@ -81,30 +81,44 @@ function MenuItem({
       <div
         className={cn(
           "flex items-center px-8 py-2 cursor-pointer transition-colors duration-200 group",
-          "hover:bg-gray-50",
-          isActive && "text-blue-600 font-medium",
-          isChildActive && "text-blue-600"
+          isActive && "font-medium",
+          isChildActive && ""
         )}
+        style={{
+          color:
+            isActive || isChildActive
+              ? "var(--color-primary-105)"
+              : "var(--color-grey-80)",
+        }}
+        onMouseEnter={(e) => {
+          if (!isActive && !isChildActive) {
+            e.currentTarget.style.backgroundColor = "var(--color-grey-5)";
+          }
+          handleMouseEnter(e);
+        }}
+        onMouseLeave={(e) => {
+          if (!isActive && !isChildActive) {
+            e.currentTarget.style.backgroundColor = "transparent";
+          }
+          handleMouseLeave(e);
+        }}
         onClick={handleClick}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
       >
         {item.icon && (
           <div
-            className={cn(
-              "mr-3 flex-shrink-0",
-              isActive || isChildActive ? "text-blue-600" : "text-gray-600"
-            )}
+            className="mr-3 flex-shrink-0"
+            style={{
+              color:
+                isActive || isChildActive
+                  ? "var(--color-primary-105)"
+                  : "var(--color-grey-40)",
+            }}
           >
             {item.icon}
           </div>
         )}
 
         {!isCollapsed && <span className="flex-1 text-sm">{item.label}</span>}
-
-        {isActive && (
-          <div className="w-2 h-2 bg-blue-600 rounded-full ml-2 flex-shrink-0" />
-        )}
 
         {item.children && item.children.length > 0 && !isCollapsed && (
           <div
@@ -132,14 +146,14 @@ function MenuItem({
                   className={cn(
                     "flex items-center pl-4 pr-4 py-1.5 cursor-pointer transition-colors duration-200",
                     "hover:bg-gray-50",
-                    isChildItemActive && "text-blue-600 font-medium bg-blue-50"
+                    isChildItemActive && "text-green-600 bg-green-50"
                   )}
                   onClick={() => handleChildClick(child.route)}
                 >
                   <span className="text-sm flex-1">{child.label}</span>
 
                   {isChildItemActive && (
-                    <div className="w-2 h-2 bg-blue-600 rounded-full ml-2 flex-shrink-0" />
+                    <div className="w-2 h-2 rounded-full ml-2 flex-shrink-0" />
                   )}
                 </div>
               );

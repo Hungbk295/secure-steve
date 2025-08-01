@@ -51,4 +51,8 @@ body {
   --spacing-sidebar-width: 256px;
   --spacing-sidebar-collapsed-width: 80px;
   --spacing-custom-normal: 150%;
+
+  /* Sidebar width utilities for Tailwind */
+  --sidebar-width: 256px;
+  --sidebar-collapsed-width: 80px;
 }

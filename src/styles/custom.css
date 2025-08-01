@@ -48,7 +48,7 @@
 }
 
 .security-main-content {
-  background-color: #f9fafb;
+  background-color: var(--color-grey-3);
 }
 
 .security-header {
@@ -64,8 +64,8 @@
   position: sticky;
   top: 0;
   z-index: 40;
-  background-color: #f3f4f6 !important;
-  border-bottom: 1px solid #d1d5db !important;
+  background-color: var(--color-grey-8) !important;
+  border-bottom: 1px solid var(--color-border-100) !important;
 }
 
 /* Latest Alerts Dropdown */
@@ -79,17 +79,17 @@
 }
 
 .latest-alerts-dropdown::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--color-grey-5);
   border-radius: 3px;
 }
 
 .latest-alerts-dropdown::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: var(--color-grey-35);
   border-radius: 3px;
 }
 
 .latest-alerts-dropdown::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: var(--color-grey-40);
 }
 
 /* Alerts Table Styling */
@@ -115,7 +115,7 @@
 }
 
 .alerts-table .ant-table-tbody > tr:hover > td {
-  background-color: #f9fafb !important;
+  background-color: var(--color-grey-3) !important;
 }
 
 .alerts-table .ant-table-tbody > tr:last-child > td {
@@ -233,7 +233,7 @@
 
 .sidebar-expanded .ant-menu-light:not(.ant-menu-horizontal),
 .sidebar-expanded .ant-menu-submenu-title:hover {
-  /* background-color: transparent; */
+  background-color: transparent;
 }
 
 .sidebar-expanded .ant-menu-submenu-selected,
@@ -619,7 +619,7 @@
 /* Provider/Airline styles */
 
 .supplier-panel .ant-collapse-content {
-  background-color: #f9f9f9;
+  background-color: var(--color-grey-5);
 }
 
 .supplier-panel .ant-collapse-header {

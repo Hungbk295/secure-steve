@@ -65,18 +65,36 @@ function TopBar({
   };
 
   return (
-    <div className="top-bar h-18 bg-gray-100 border-b border-gray-300 px-6 flex items-center justify-between">
+    <div
+      className="top-bar h-19 px-6 flex items-center justify-between"
+      style={{
+        backgroundColor: "var(--color-grey-8)",
+        borderBottom: `1px solid var(--color-border-100)`,
+      }}
+    >
       <div className="flex items-center space-x-4">
         {topBarFeatures.showAlarmNotifications && (
           <div className="relative">
             <button
               onClick={handleAlarmClick}
-              className="relative p-1 text-gray-600 hover:text-gray-900 transition-colors"
+              className="relative p-1 transition-colors"
+              style={{
+                color: "var(--color-grey-40)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "var(--color-grey-100)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "var(--color-grey-40)";
+              }}
               title={`${alertCount} alarm notifications`}
             >
               <i className="ri-alarm-warning-line text-lg" />
               {alertCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-semibold">
+                <span
+                  className="absolute -top-1 -right-1 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-semibold"
+                  style={{ backgroundColor: "var(--color-error-100)" }}
+                >
                   {alertCount > topBarFeatures.maxAlarmCount
                     ? `${topBarFeatures.maxAlarmCount}+`
                     : alertCount}
@@ -95,7 +113,16 @@ function TopBar({
         {topBarFeatures.showVerificationCounter && verificationCount > 0 && (
           <button
             onClick={handleVerificationClick}
-            className="flex items-center space-x-2 px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-sm font-medium transition-colors"
+            className="flex items-center space-x-2 px-3 py-1 text-white rounded text-sm font-medium transition-colors"
+            style={{
+              backgroundColor: "var(--color-error-100)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--color-error-110)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--color-error-100)";
+            }}
             title={`${verificationCount} verification requests pending`}
           >
             <span>확인 필요 알림: {verificationCount}건</span>
@@ -105,13 +132,16 @@ function TopBar({
 
       <div className="flex items-center space-x-6">
         {topBarFeatures.showUserMenu && (
-          <div className="flex items-center space-x-2 text-sm text-gray-700">
+          <div
+            className="flex items-center space-x-2 text-sm"
+            style={{ color: "var(--color-grey-80)" }}
+          >
             <span>
               {userInfo.role}/{userInfo.name}
             </span>
-            <span className="text-gray-500">|</span>
+            <span style={{ color: "var(--color-grey-40)" }}>|</span>
             <span>{userInfo.department}</span>
-            <span className="text-gray-500">|</span>
+            <span style={{ color: "var(--color-grey-40)" }}>|</span>
             <span>{userInfo.name}</span>
           </div>
         )}

@@ -54,15 +54,12 @@ function MenuPopover({ item, onClose }: MenuPopoverProps) {
               key={child.id}
               className={cn(
                 "px-4 py-2 text-sm cursor-pointer transition-colors duration-200 hover:bg-gray-50",
-                isChildActive && "text-blue-600 bg-blue-50 font-medium"
+                isChildActive && "text-green-600 bg-blue-50"
               )}
               onClick={() => handleItemClick(child.route)}
             >
               <div className="flex items-center justify-between">
                 <span>{child.label}</span>
-                {isChildActive && (
-                  <div className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0" />
-                )}
               </div>
             </div>
           );

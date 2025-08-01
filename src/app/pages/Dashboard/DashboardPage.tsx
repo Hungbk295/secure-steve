@@ -155,8 +155,8 @@ function DashboardPage() {
     console.log("File clicked:", fileName);
   };
   return (
-    <div className="dashboard-page" style={{ padding: "24px" }}>
-      <Row gutter={[16, 16]} style={{ marginBottom: "16px" }}>
+    <div className="dashboard-page" style={{ padding: "8px" }}>
+      <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
         <Col span={24}>
           <div style={{ height: "100%" }}>
             <AlertNotificationPanel />

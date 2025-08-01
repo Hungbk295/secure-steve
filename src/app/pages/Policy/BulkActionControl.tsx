@@ -36,13 +36,15 @@ function BulkActionControl({
 
   return (
     <div
-      className={`bulk-action-control bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 ${
-        className || ""
-      }`}
+      className={`bulk-action-control rounded-lg p-4 mb-4 ${className || ""}`}
+      style={{
+        backgroundColor: "var(--color-primary-5)",
+        border: `1px solid var(--color-primary-20)`,
+      }}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <Typography.Text strong className="text-blue-700">
+          <Typography.Text strong style={{ color: "var(--color-primary-105)" }}>
             {selectedCount} server{selectedCount > 1 ? "s" : ""} selected
           </Typography.Text>
         </div>
