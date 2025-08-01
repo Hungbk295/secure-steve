@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
-import TabNavigation from "@/app/components/analyze/TabNavigation";
-import ServerAssignmentTab from "@/app/components/analyze/ServerAssignmentTab";
+import TabNavigation from "@/app/pages/Analyze/analyze/TabNavigation";
+import ServerAssignmentTab from "@/app/pages/Analyze/analyze/ServerAssignmentTab";
 
-/**
- * AnalyzeDetectionPage - Main page for server assignment functionality
- * Located at /analyze/detection route
- * Contains 3 tabs: 관리 서버 할당, 관리 서버 설정, 격리 폴더 설정
- */
 function AnalyzeDetectionPage() {
   const location = useLocation();
   const navigate = useNavigate();
