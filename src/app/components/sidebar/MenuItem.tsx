@@ -109,7 +109,7 @@ function MenuItem({
         {item.children && item.children.length > 0 && !isCollapsed && (
           <div
             className={cn(
-              "ml-2 transition-transform duration-200",
+              "transition-transform duration-200",
               isExpanded && "rotate-90"
             )}
           >
@@ -147,13 +147,18 @@ function MenuItem({
           </div>
         )}
 
-      {/* Popover for collapsed state */}
       {showPopover && isCollapsed && (
         <div
           className="fixed z-50"
           style={{
-            top: popoverPosition.top,
-            left: popoverPosition.left,
+            top:
+              item.children && item.children.length > 0
+                ? popoverPosition.top - 8
+                : popoverPosition.top + 2,
+            left:
+              item.children && item.children.length > 0
+                ? popoverPosition.left - 8
+                : popoverPosition.left - 8,
           }}
           onMouseEnter={() => setShowPopover(true)}
           onMouseLeave={() => setShowPopover(false)}
