@@ -3,8 +3,7 @@ import { useLocation } from "react-router-dom";
 import ROUTES from "@/constants/routes";
 
 const SCREEN_TITLES: Record<string, string> = {
-  [ROUTES.Home]: "Security Dashboard",
-  [ROUTES.Dashboard]: "Security Dashboard",
+  [ROUTES.Home.Dashboard]: "Security Dashboard",
 
   [ROUTES.Analyze.Detection]: "Malware Detection",
   [ROUTES.Analyze.Action]: "Security Actions",

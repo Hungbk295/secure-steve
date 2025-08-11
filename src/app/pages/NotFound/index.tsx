@@ -1,5 +1,5 @@
 import CustomButton from "@/app/components/common/Button";
-import URL from "@/constants/url";
+import ROUTES from "@/constants/routes";
 import { Result } from "antd";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,7 @@ function NotFound() {
       title="404"
       subTitle="Sorry, the page you visited does not exist."
       extra={
-        <CustomButton onClick={() => navigate(URL.Home)}>
+        <CustomButton onClick={() => navigate(ROUTES.Home.Dashboard)}>
           Back Home
         </CustomButton>
       }

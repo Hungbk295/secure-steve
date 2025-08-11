@@ -1,5 +1,4 @@
 import CustomButton from "@/app/components/common/Button";
-import UserInfo from "@/app/pages/PersonalSettings/UserInfo";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { actionToggleChangePasswordModal } from "@/store/appSlide";
 import { selectInfoLogin } from "@/store/authSlide";
@@ -31,7 +30,6 @@ function PersonalSettings() {
         </CustomButton>
       </div>
       <div className="mt-4 bg-white pt-4 px-6 pb-8 rounded-lg border border-grey-10">
-        <UserInfo />
         <CustomButton
           className="mt-6 !text-xs !h-[26px] !py-1 !px-2"
           theme="black"

@@ -1,6 +1,4 @@
-import { API_URL } from "@/constants/apiUrl";
-import { store } from "@/store";
-import { DynamicKeyObject, EUserRole } from "@/interfaces/app";
+import { DynamicKeyObject } from "@/interfaces/app";
 import { findActiveMenuItem } from "@/utils/sidebar";
 import { FormInstance } from "antd";
 
@@ -32,14 +30,14 @@ export function nvl(str: string, defaultVal: string | number) {
   return str;
 }
 
-export function getApiUrl(urlType: string, initRole?: EUserRole) {
-  const userRole = store.getState().auth.infoLogin.role;
-  const foundedUrl = API_URL[urlType][initRole ?? userRole];
+// export function getApiUrl(urlType: string, initRole?: EUserRole) {
+//   const userRole = store.getState().auth.infoLogin.role;
+//   const foundedUrl = API_URL[urlType][initRole ?? userRole];
 
-  if (!foundedUrl) return Object.values(API_URL[urlType])[0];
+//   if (!foundedUrl) return Object.values(API_URL[urlType])[0];
 
-  return foundedUrl;
-}
+//   return foundedUrl;
+// }
 
 export function getTagType(status: string, list: DynamicKeyObject[]) {
   const tag = list.find((item) => item.value === status);

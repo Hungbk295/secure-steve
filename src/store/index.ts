@@ -1,10 +1,7 @@
 import authSlide from "@/store/authSlide";
 import appSlice from "@/store/appSlide";
-import customerAccountSlice from "@/store/customerAccountSlice";
-import personalSlice from "@/store/personalSlice";
-import commonSlice from "@/store/common";
+// import personalSlice from "@/store/personalSlice";
 import alertsSlice from "@/store/alertsSlice";
-import analyzeDetectionSlice from "@/store/analyzeDetectionSlice";
 
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
@@ -22,11 +19,8 @@ const authPersistConfig = {
 const reducers = {
   auth: persistReducer(authPersistConfig, authSlide),
   app: appSlice,
-  customerAccountSlice,
-  personal: personalSlice,
-  common: commonSlice,
+  // personal: personalSlice,
   alerts: alertsSlice,
-  analyzeDetection: analyzeDetectionSlice,
 };
 
 const rootReducer = combineReducers(reducers);

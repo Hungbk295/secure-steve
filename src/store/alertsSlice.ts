@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
 
-// Types for alert data
 export interface Alert {
   id: string;
   fileName: string;

@@ -2,12 +2,12 @@ import { useAppSelector } from "@/store";
 import { selectIsLogin } from "@/store/authSlide";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import URL from "@/constants/url";
 import AlbusLogoLogin from "@/assets/svgs/albus-logo-login.svg";
 import ForgotPasswordForm from "@/app/pages/Login/ForgotPasswordForm";
 import SignInForm from "@/app/pages/Login/SignInForm";
 import AlbusCover from "./AlbusCover";
 import "@/styles/login.css";
+import ROUTES from "@/constants/routes";
 
 function Login() {
   const isLogin = useAppSelector(selectIsLogin);
@@ -28,7 +28,7 @@ function Login() {
       </div>
     </div>
   ) : (
-    <Navigate to={URL.Home} replace />
+    <Navigate to={ROUTES.Home.Index} replace />
   );
 }
 

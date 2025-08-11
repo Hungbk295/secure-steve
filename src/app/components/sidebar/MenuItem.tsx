@@ -96,11 +96,11 @@ function MenuItem({
           }
           handleMouseEnter(e);
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={(e: any) => {
           if (!isActive && !isChildActive) {
             e.currentTarget.style.backgroundColor = "transparent";
           }
-          handleMouseLeave(e);
+          handleMouseLeave();
         }}
         onClick={handleClick}
       >

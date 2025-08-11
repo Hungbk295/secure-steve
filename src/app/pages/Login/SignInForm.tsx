@@ -1,7 +1,6 @@
 import CustomButton from "@/app/components/common/Button";
 import CustomInputPassword from "@/app/components/common/CustomInputPassword";
 import Input from "@/app/components/common/Input";
-import URL from "@/constants/url";
 import { DynamicKeyObject, EUserRole } from "@/interfaces/app";
 import { useAppDispatch } from "@/store";
 import { actionLogin } from "@/store/authSlide";
@@ -18,7 +17,7 @@ function SignInForm(props: ISignInFormProps) {
   const dispatch = useAppDispatch();
   const [form] = Form.useForm();
   const location = useLocation();
-  const isMaster = location.pathname.includes(URL.SignInMaster);
+  const isMaster = location.pathname.includes("/sign-in");
   const username = Form.useWatch("username", form);
   const password = Form.useWatch("password", form);
 

@@ -7,8 +7,6 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import PrivateLayout from "@/layouts/PrivateLayout";
 
 const Login = lazy(() => import("@/app/pages/Login"));
-const DashboardPage = lazy(() => import("@/app/pages/Dashboard/DashboardPage"));
-const AnalyzeDetectionPage = lazy(() => import("@/app/pages/Policy"));
 
 const PlaceholderPage = () => (
   <div className="flex items-center justify-center h-full">
@@ -23,19 +21,17 @@ const PlaceholderPage = () => (
 
 const securityRoutes: ItemRoute[] = [
   {
-    key: ROUTES.Home,
-    components: <DashboardPage />,
+    key: ROUTES.Home.Index,
+    components: <PlaceholderPage />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },
   {
-    key: ROUTES.Dashboard,
-    components: <DashboardPage />,
+    key: ROUTES.Home.Dashboard,
+    components: <PlaceholderPage />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },
-
-  // Analyze
   {
     key: ROUTES.Analyze.Detection,
     components: <PlaceholderPage />,
@@ -54,10 +50,9 @@ const securityRoutes: ItemRoute[] = [
     layout: DEFAULT_LAYOUT,
     private: true,
   },
-
   {
     key: ROUTES.Policy.SystemSettings,
-    components: <AnalyzeDetectionPage />,
+    components: <PlaceholderPage />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },
@@ -131,19 +126,6 @@ const securityRoutes: ItemRoute[] = [
   },
 
   {
-    key: ROUTES.Report.List,
-    components: <PlaceholderPage />,
-    layout: DEFAULT_LAYOUT,
-    private: true,
-  },
-  {
-    key: ROUTES.Report.Regular,
-    components: <PlaceholderPage />,
-    layout: DEFAULT_LAYOUT,
-    private: true,
-  },
-
-  {
     key: ROUTES.User.ChangeInfo,
     components: <PlaceholderPage />,
     layout: DEFAULT_LAYOUT,
@@ -151,6 +133,18 @@ const securityRoutes: ItemRoute[] = [
   },
   {
     key: ROUTES.User.Permissions,
+    components: <PlaceholderPage />,
+    layout: DEFAULT_LAYOUT,
+    private: true,
+  },
+  {
+    key: ROUTES.Report.List,
+    components: <PlaceholderPage />,
+    layout: DEFAULT_LAYOUT,
+    private: true,
+  },
+  {
+    key: ROUTES.Report.Regular,
     components: <PlaceholderPage />,
     layout: DEFAULT_LAYOUT,
     private: true,

@@ -6,7 +6,6 @@ import {
   EInitialYn,
   EModalMode,
   ENotificationType,
-  EUserRole,
 } from "@/interfaces/app";
 import AlbusCover from "../Login/AlbusCover";
 import { useQueryParams } from "@/hooks/useQueryParams";
@@ -14,11 +13,11 @@ import { notify, pageLoading } from "@/utils/appStateHandle";
 import CustomInputPassword from "@/app/components/common/CustomInputPassword";
 import request from "@/utils/request";
 import { PASSWORD_RULE_REGEX } from "@/constants/app";
-import URL from "@/constants/url";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { actionLogout, selectInfoLogin } from "@/store/authSlide";
 import { useAppDispatch } from "@/store";
+import ROUTES from "@/constants/routes";
 
 function ResetPassword() {
   const params = useQueryParams();
@@ -60,11 +59,7 @@ function ResetPassword() {
                 })
               );
             }
-            navigate(
-              params.usertype === EUserRole.MASTER
-                ? URL.SignInMaster
-                : URL.SignIn
-            );
+            navigate(ROUTES.Login);
           },
         });
       })

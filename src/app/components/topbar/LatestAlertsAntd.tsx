@@ -39,12 +39,10 @@ function LatestAlertsAntd({ onClose, alertCount }: LatestAlertsAntdProps) {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // Don't close if clicking inside the dropdown
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        // Don't close if there are ongoing updates (better UX)
         if (updatingAlerts.size === 0) {
           onClose();
         }
@@ -84,11 +82,9 @@ function LatestAlertsAntd({ onClose, alertCount }: LatestAlertsAntdProps) {
   };
 
   const handleActionSelect = async (alertId: string, action: string) => {
-    // Add to updating set to show loading state
     setUpdatingAlerts((prev) => new Set(prev).add(alertId));
 
     try {
-      // Show loading message
       const hideLoading = message.loading(
         `Updating alert action to ${action}...`,
         0
@@ -101,20 +97,15 @@ function LatestAlertsAntd({ onClose, alertCount }: LatestAlertsAntdProps) {
         })
       ).unwrap();
 
-      // Hide loading message
       hideLoading();
 
-      // Show success message
       message.success(`Alert action updated to ${action} successfully!`);
 
-      // Refresh the alerts list while keeping dropdown open
-      // The dropdown will stay open because we don't call onClose()
       await dispatch(fetchLatestAlerts());
     } catch (error) {
       console.error("Failed to update alert action:", error);
       message.error("Failed to update alert action. Please try again.");
     } finally {
-      // Remove from updating set
       setUpdatingAlerts((prev) => {
         const newSet = new Set(prev);
         newSet.delete(alertId);

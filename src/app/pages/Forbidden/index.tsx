@@ -1,5 +1,5 @@
 import CustomButton from "@/app/components/common/Button";
-import URL from "@/constants/url";
+import ROUTES from "@/constants/routes";
 import { Result } from "antd";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,7 @@ function Forbidden() {
       title="403"
       subTitle="Sorry, you are not authorized to access this page."
       extra={
-        <CustomButton onClick={() => navigate(URL.Home)}>
+        <CustomButton onClick={() => navigate(ROUTES.Home.Dashboard)}>
           Back Home
         </CustomButton>
       }

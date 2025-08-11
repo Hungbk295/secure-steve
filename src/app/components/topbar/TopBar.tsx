@@ -34,24 +34,20 @@ function TopBar({
   const dispatch = useAppDispatch();
   const [showAlarmDropdown, setShowAlarmDropdown] = useState(false);
 
-  // Get alert count from Redux store
   const alertCount = useAppSelector(selectAlertCount);
 
   const topBarFeatures = getTopBarFeatures(userRole);
 
-  // Fetch alerts on component mount
   useEffect(() => {
     dispatch(fetchLatestAlerts());
   }, [dispatch]);
 
   const handleAlarmClick = (event: React.MouseEvent) => {
-    // Prevent event bubbling to avoid conflicts
     event.stopPropagation();
 
     if (onAlarmClick) {
       onAlarmClick();
     } else {
-      // Toggle dropdown state
       setShowAlarmDropdown(!showAlarmDropdown);
     }
   };

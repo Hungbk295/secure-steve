@@ -1,4 +1,4 @@
-import AlbusCoverImage from "@/assets/images/albus-cover.png";
+import AlbusCoverImage from "@/assets/images/cover.png";
 import "@/styles/login.css";
 
 function AlbusCover() {

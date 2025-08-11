@@ -16,17 +16,19 @@ export const getAllMenuItems = (): MenuItem[] => [
   {
     id: "home",
     label: "Home",
-    route: ROUTES.Home,
+    route: ROUTES.Home.Dashboard,
     icon: <i className="ri-home-5-line text-lg" />,
     roles: [UserRole.USER, UserRole.ADMINISTRATOR],
+    children: [
+      {
+        id: "dashboard",
+        label: "Dashboard",
+        route: ROUTES.Home.Dashboard,
+        roles: [UserRole.USER, UserRole.ADMINISTRATOR],
+      },
+    ],
   },
-  {
-    id: "dashboard",
-    label: "Dashboard",
-    route: ROUTES.Dashboard,
-    icon: <i className="ri-dashboard-line text-lg" />,
-    roles: [UserRole.USER, UserRole.ADMINISTRATOR],
-  },
+
   {
     id: "analyze",
     label: "Analyze",

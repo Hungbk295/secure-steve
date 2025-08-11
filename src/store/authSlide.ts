@@ -1,6 +1,4 @@
-import { API_URL_TYPE } from "@/constants/apiUrl";
 import { DynamicKeyObject, EUserRole } from "@/interfaces/app";
-import { getApiUrl } from "@/utils/app";
 import { RootState } from "@/store";
 import request from "@/utils/request";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -77,21 +75,21 @@ export const actionLogout = createAsyncThunk(
   }
 );
 
-export const actionRefreshToken = createAsyncThunk(
-  "auth/actionRefreshToken",
-  async (data: DynamicKeyObject, { rejectWithValue }) => {
-    try {
-      const response = await request({
-        url: getApiUrl(API_URL_TYPE.REFRESH_TOKEN),
-        method: "POST",
-        data,
-      });
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
+// export const actionRefreshToken = createAsyncThunk(
+//   "auth/actionRefreshToken",
+//   async (data: DynamicKeyObject, { rejectWithValue }) => {
+//     try {
+//       const response = await request({
+//         url: getApiUrl(API_URL_TYPE.REFRESH_TOKEN),
+//         method: "POST",
+//         data,
+//       });
+//       return response;
+//     } catch (error) {
+//       return rejectWithValue(error);
+//     }
+//   }
+// );
 
 export const slice = createSlice({
   name: "auth",
@@ -118,19 +116,19 @@ export const slice = createSlice({
         state.infoLogin = initialState.infoLogin;
         state.isLogin = false;
       })
-      .addCase(actionRefreshToken.fulfilled, (state, action) => {
-        const data = get(action, "payload.data.data", initialState.infoLogin);
-        const decodedToken: DynamicKeyObject = jwtDecode(data.accessToken);
-        state.infoLogin = {
-          ...state.infoLogin,
-          accessToken: data.accessToken,
-          expiresTime: decodedToken.exp,
-        };
-      })
-      .addCase(actionRefreshToken.rejected, (state) => {
-        state.infoLogin = initialState.infoLogin;
-        state.isLogin = false;
-      })
+      // .addCase(actionRefreshToken.fulfilled, (state, action) => {
+      //   const data = get(action, "payload.data.data", initialState.infoLogin);
+      //   const decodedToken: DynamicKeyObject = jwtDecode(data.accessToken);
+      //   state.infoLogin = {
+      //     ...state.infoLogin,
+      //     accessToken: data.accessToken,
+      //     expiresTime: decodedToken.exp,
+      //   };
+      // })
+      // .addCase(actionRefreshToken.rejected, (state) => {
+      //   state.infoLogin = initialState.infoLogin;
+      //   state.isLogin = false;
+      // })
       .addCase(actionLogout.pending, (state) => {
         state.isLogin = false;
       });
