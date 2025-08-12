@@ -5,8 +5,12 @@ import ROUTES from "@/constants/routes";
 const SCREEN_TITLES: Record<string, string> = {
   [ROUTES.Home.Dashboard]: "Security Dashboard",
 
-  [ROUTES.Analyze.Detection]: "Malware Detection",
-  [ROUTES.Analyze.Action]: "Security Actions",
+  [ROUTES.Analysis.Detection]: "Malware Detection",
+  [ROUTES.Analysis.Action]: "Security Actions",
+  [ROUTES.Analysis.Requests]: "Analysis Requests",
+  [ROUTES.Analysis.RequestDetail]: "Analysis Request Detail",
+  [ROUTES.Analysis.Pending]: "Pending Actions",
+  [ROUTES.Analysis.Completed]: "Completed Actions",
 
   [ROUTES.Policy.SystemSettings]: "System Settings",
   [ROUTES.Policy.AdminPolicy]: "Administrator Policy",

@@ -1,12 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   UserRole,
   getTopBarFeatures,
   CURRENT_USER_ROLE,
 } from "@/constants/roleConfig";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { fetchLatestAlerts, selectAlertCount } from "@/store/alertsSlice";
-import LatestAlertsAntd from "./LatestAlertsAntd";
+import {
+  actionFetchLatestAlerts,
+  selectAlertsState,
+  actionUpdateAlertAction,
+  clearError,
+} from "@/store/alertsSlice";
+import { EAlertProcessStatus } from "@/interfaces/app";
+import AlertsPopup from "./AlertsPopup";
 
 interface TopBarProps {
   verificationCount?: number;
@@ -33,24 +39,51 @@ function TopBar({
 }: TopBarProps) {
   const dispatch = useAppDispatch();
   const [showAlarmDropdown, setShowAlarmDropdown] = useState(false);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const alertCount = useAppSelector(selectAlertCount);
-
+  const alertsState = useAppSelector(selectAlertsState);
   const topBarFeatures = getTopBarFeatures(userRole);
 
+  // Initialize alerts on mount
   useEffect(() => {
-    dispatch(fetchLatestAlerts());
+    dispatch(actionFetchLatestAlerts());
   }, [dispatch]);
 
-  const handleAlarmClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
-
-    if (onAlarmClick) {
-      onAlarmClick();
-    } else {
-      setShowAlarmDropdown(!showAlarmDropdown);
+  // Clear errors after 5 seconds
+  useEffect(() => {
+    if (alertsState.error) {
+      const timeout = setTimeout(() => {
+        dispatch(clearError());
+      }, 5000);
+      return () => clearTimeout(timeout);
     }
-  };
+  }, [alertsState.error, dispatch]);
+
+  // Debounced alarm click handler
+  const handleAlarmClick = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation();
+
+      // Clear any existing timeout
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+
+      // Debounce the click to prevent spam
+      debounceTimeoutRef.current = setTimeout(() => {
+        if (onAlarmClick) {
+          onAlarmClick();
+        } else {
+          setShowAlarmDropdown((prev) => !prev);
+          // Refresh alerts when opening
+          if (!showAlarmDropdown) {
+            dispatch(actionFetchLatestAlerts());
+          }
+        }
+      }, 200);
+    },
+    [onAlarmClick, showAlarmDropdown, dispatch]
+  );
 
   const handleVerificationClick = () => {
     if (onVerificationClick) {
@@ -59,6 +92,45 @@ function TopBar({
       console.log("Navigate to verification page");
     }
   };
+
+  const handleActionConfirm = useCallback(
+    async (alertId: string, action: EAlertProcessStatus, memo: string) => {
+      try {
+        await dispatch(
+          actionUpdateAlertAction({
+            alertId,
+            action,
+            memo,
+            userId: userInfo.name, // Use actual user ID in real implementation
+          })
+        ).unwrap();
+
+        // Refresh alerts after successful action
+        dispatch(actionFetchLatestAlerts());
+      } catch (error) {
+        console.error("Failed to update alert action:", error);
+        // Error is handled by Redux state
+      }
+    },
+    [dispatch, userInfo.name]
+  );
+
+  const handleRefreshAlerts = useCallback(() => {
+    dispatch(actionFetchLatestAlerts());
+  }, [dispatch]);
+
+  const handleClosePopup = useCallback(() => {
+    setShowAlarmDropdown(false);
+  }, []);
+
+  // Cleanup debounce timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div
@@ -83,27 +155,32 @@ function TopBar({
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = "var(--color-grey-40)";
               }}
-              title={`${alertCount} alarm notifications`}
+              title={`${alertsState.pendingCount} pending alerts (${alertsState.alertCount} total)`}
             >
               <i className="ri-alarm-warning-line text-lg" />
-              {alertCount > 0 && (
+              {alertsState.pendingCount > 0 && (
                 <span
                   className="absolute -top-1 -right-1 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-semibold"
                   style={{ backgroundColor: "var(--color-error-100)" }}
                 >
-                  {alertCount > topBarFeatures.maxAlarmCount
+                  {alertsState.pendingCount > topBarFeatures.maxAlarmCount
                     ? `${topBarFeatures.maxAlarmCount}+`
-                    : alertCount}
+                    : alertsState.pendingCount}
                 </span>
               )}
             </button>
 
-            {showAlarmDropdown && (
-              <LatestAlertsAntd
-                onClose={() => setShowAlarmDropdown(false)}
-                alertCount={alertCount}
-              />
-            )}
+            <AlertsPopup
+              isOpen={showAlarmDropdown}
+              onClose={handleClosePopup}
+              alerts={alertsState.alerts}
+              alertCount={alertsState.alertCount}
+              loading={alertsState.loading}
+              error={alertsState.error}
+              onActionConfirm={handleActionConfirm}
+              onRefresh={handleRefreshAlerts}
+              updatingAlerts={alertsState.updatingAlerts}
+            />
           </div>
         )}
         {topBarFeatures.showVerificationCounter && verificationCount > 0 && (

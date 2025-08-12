@@ -11,9 +11,13 @@ const ROUTES = {
   Logout: "/logout",
   Forbidden: "/forbidden",
 
-  Analyze: {
-    Detection: "/analyze/detection",
-    Action: "/analyze/action",
+  Analysis: {
+    Requests: "/analysis/requests",
+    RequestDetail: "/analysis/requests/:id",
+    Detection: "/analysis/detection",
+    Action: "/analysis/action",
+    Pending: "/analysis/action/pending",
+    Completed: "/analysis/action/completed",
   },
   Policy: {
     SystemSettings: "/policy/system-settings",

@@ -8,6 +8,7 @@ import IconSuccess from "@/assets/svgs/success.svg";
 import IconError from "@/assets/svgs/error.svg";
 import IconWarning from "@/assets/svgs/warning.svg";
 import { ENotificationType } from "@/interfaces/app";
+import { notificationCallbackManager } from "@/utils/appStateHandle";
 
 const NOTIFICATION_ICON: Record<ENotificationType, React.ReactNode> = {
   [ENotificationType.NONE]: null,
@@ -25,16 +26,31 @@ function CustomNotification() {
     type,
     okText,
     cancelText,
-    onOk,
-    onCancel,
-    onClose,
   } = useAppSelector(selectActionNotification);
+
+  // Get callbacks from the callback manager instead of Redux state
+  const { onOk, onCancel, onClose } = notificationCallbackManager.getCallbacks();
 
   const handleClose = () => {
     dispatch(actionUpdateNotification({ isOpen: false }));
+    notificationCallbackManager.clearCallbacks();
     if (onClose) {
       onClose();
     }
+  };
+
+  const handleOk = () => {
+    if (onOk) {
+      onOk();
+    }
+    handleClose();
+  };
+
+  const handleCancel = () => {
+    if (onCancel) {
+      onCancel();
+    }
+    handleClose();
   };
 
   return (
@@ -51,8 +67,8 @@ function CustomNotification() {
         mode={mode}
         okText={okText}
         cancelText={cancelText}
-        onOk={onOk}
-        onCancel={onCancel}
+        onOk={handleOk}
+        onCancel={handleCancel}
         onClose={handleClose}
       />
     )

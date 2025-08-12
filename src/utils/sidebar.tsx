@@ -39,13 +39,19 @@ export const getAllMenuItems = (): MenuItem[] => [
       {
         id: "detection",
         label: "Detection",
-        route: ROUTES.Analyze.Detection,
+        route: ROUTES.Analysis.Detection,
         roles: [UserRole.USER, UserRole.ADMINISTRATOR],
       },
       {
         id: "action",
         label: "Action",
-        route: ROUTES.Analyze.Action,
+        route: ROUTES.Analysis.Action,
+        roles: [UserRole.USER, UserRole.ADMINISTRATOR],
+      },
+      {
+        id: "requests",
+        label: "Analysis Requests",
+        route: ROUTES.Analysis.Requests,
         roles: [UserRole.USER, UserRole.ADMINISTRATOR],
       },
     ],

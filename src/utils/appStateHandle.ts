@@ -5,6 +5,33 @@ import {
   actionUpdatePageLoading,
 } from "@/store/appSlide";
 
+// Callback manager to handle notification callbacks without storing them in Redux
+class NotificationCallbackManager {
+  private callbacks: {
+    onOk?: () => void;
+    onCancel?: () => void;
+    onClose?: () => void;
+  } = {};
+
+  setCallbacks(callbacks: {
+    onOk?: () => void;
+    onCancel?: () => void;
+    onClose?: () => void;
+  }) {
+    this.callbacks = callbacks;
+  }
+
+  getCallbacks() {
+    return this.callbacks;
+  }
+
+  clearCallbacks() {
+    this.callbacks = {};
+  }
+}
+
+export const notificationCallbackManager = new NotificationCallbackManager();
+
 export const pageLoading = {
   on: () => {
     store.dispatch(actionUpdatePageLoading(true));
@@ -27,9 +54,17 @@ export const notify = (props: {
   const {
     type = ENotificationType.NONE,
     mode = EModalMode.MULTIPLE,
-    ...nest
+    onOk,
+    onCancel,
+    onClose,
+    ...rest
   } = props;
+
+  // Store callbacks separately from Redux state
+  notificationCallbackManager.setCallbacks({ onOk, onCancel, onClose });
+
+  // Only store serializable data in Redux
   store.dispatch(
-    actionUpdateNotification({ isOpen: true, type, mode, ...nest })
+    actionUpdateNotification({ isOpen: true, type, mode, ...rest })
   );
 };

@@ -13,9 +13,6 @@ type IInitialState = {
     mode: EModalMode;
     okText?: string;
     cancelText?: string;
-    onOk?: () => void;
-    onCancel?: () => void;
-    onClose?: () => void;
   };
   changePassword: {
     isOpen: boolean;
@@ -35,9 +32,6 @@ const initialState: IInitialState = {
     mode: EModalMode.MULTIPLE,
     okText: "Done",
     cancelText: "Cancel",
-    onOk: () => {},
-    onCancel: () => {},
-    onClose: () => {},
   },
   changePassword: {
     isOpen: false,

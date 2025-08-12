@@ -42,3 +42,42 @@ export enum EInitialYn {
   Y = "Y",
   N = "N",
 }
+
+export interface Alert {
+  id: string;
+  file_name: string;
+  client_server_ip: string;
+  file_created_at: string;
+  analysis_time: string;
+  malware_status: string;
+  process_status: "pending" | "no_action" | "quarantine" | "delete";
+  risk: number;
+  alert_name: string;
+  malware_type: string;
+  verdict: "Malware" | "Benign" | "Suspicious";
+}
+
+export interface AlertActionRequest {
+  process_status: "pending" | "no_action" | "quarantine" | "delete";
+  user_id: string;
+  comments?: string;
+  action_type?: "blacklist" | "whitelist";
+}
+
+export interface LatestAlertsResponse {
+  data: Alert[];
+  total_count: number;
+  pending_count: number;
+}
+
+export enum EAlertProcessStatus {
+  PENDING = "pending",
+  NO_ACTION = "no_action", 
+  QUARANTINE = "quarantine",
+  DELETE = "delete",
+}
+
+export enum EAlertActionType {
+  BLACKLIST = "blacklist",
+  WHITELIST = "whitelist",
+}
