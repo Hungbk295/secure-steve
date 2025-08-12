@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Alert, EAlertProcessStatus, EModalMode } from "@/interfaces/app";
 import CustomModal from "@/app/components/common/CustomModal";
+import { getActionMessage, getActionColor, getActionIcon } from "@/constants/alertActions";
 
 interface ActionConfirmModalProps {
   isOpen: boolean;
@@ -15,50 +16,6 @@ interface ActionConfirmModalProps {
   loading?: boolean;
 }
 
-const getActionMessage = (action: EAlertProcessStatus): string => {
-  switch (action) {
-    case EAlertProcessStatus.PENDING:
-      return "mark as pending";
-    case EAlertProcessStatus.NO_ACTION:
-      return "mark as no action";
-    case EAlertProcessStatus.QUARANTINE:
-      return "quarantine";
-    case EAlertProcessStatus.DELETE:
-      return "delete";
-    default:
-      return "process";
-  }
-};
-
-const getActionColor = (action: EAlertProcessStatus): string => {
-  switch (action) {
-    case EAlertProcessStatus.PENDING:
-      return "text-orange-700";
-    case EAlertProcessStatus.NO_ACTION:
-      return "text-gray-700";
-    case EAlertProcessStatus.QUARANTINE:
-      return "text-yellow-700";
-    case EAlertProcessStatus.DELETE:
-      return "text-red-700";
-    default:
-      return "text-gray-700";
-  }
-};
-
-const getActionIcon = (action: EAlertProcessStatus): string => {
-  switch (action) {
-    case EAlertProcessStatus.PENDING:
-      return "ri-time-line";
-    case EAlertProcessStatus.NO_ACTION:
-      return "ri-check-circle-line";
-    case EAlertProcessStatus.QUARANTINE:
-      return "ri-shield-line";
-    case EAlertProcessStatus.DELETE:
-      return "ri-delete-bin-line";
-    default:
-      return "ri-question-line";
-  }
-};
 
 function ActionConfirmModal({
   isOpen,

@@ -12,12 +12,12 @@ interface AlertsPopupProps {
   loading: boolean;
   error: string | null;
   onActionConfirm: (
-    alertId: string,
+    alertId: string | number,
     action: EAlertProcessStatus,
     memo: string
   ) => Promise<void>;
   onRefresh: () => void;
-  updatingAlerts?: Set<string>;
+  updatingAlerts?: Set<string | number>;
 }
 
 function AlertsPopup({
@@ -96,8 +96,8 @@ function AlertsPopup({
     onClose();
   };
 
-  const handleActionSelect = (alertId: string, action: EAlertProcessStatus) => {
-    const alert = alerts.find((a) => a.id === alertId);
+  const handleActionSelect = (alertId: string | number, action: EAlertProcessStatus) => {
+    const alert = alerts.find((a) => a.id == alertId);
     if (!alert) return;
 
     setConfirmModal({

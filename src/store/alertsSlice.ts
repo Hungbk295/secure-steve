@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
 import { Alert, EAlertProcessStatus } from "@/interfaces/app";
-import { mockAlertsData } from "@/data/mockAlerts";
+import { MOCK_LatestAlerts } from "@/data/mockAlerts";
 
 type IInitialState = {
   latestAlerts: Alert[];
@@ -10,12 +10,12 @@ type IInitialState = {
   loading: boolean;
   error: string | null;
   lastFetched: number | null;
-  updatingAlerts: string[];
+  updatingAlerts: (string | number)[];
   pollingEnabled: boolean;
 };
 
 // Use centralized mock data
-const mockAlerts: Alert[] = mockAlertsData;
+const mockAlerts = MOCK_LatestAlerts;
 
 const initialState: IInitialState = {
   latestAlerts: mockAlerts,
@@ -93,7 +93,7 @@ export const actionUpdateAlertAction = createAsyncThunk(
       userId: _userId,
       actionType: _actionType,
     }: {
-      alertId: string;
+      alertId: string | number;
       action: EAlertProcessStatus;
       memo?: string;
       userId: string;
@@ -121,7 +121,7 @@ export const actionUpdateAlertAction = createAsyncThunk(
       }
 
       // Create updated alert with new status and completion time
-      const currentAlert = mockAlerts.find((alert) => alert.id === alertId);
+      const currentAlert = mockAlerts.find((alert) => alert.id == alertId);
       if (!currentAlert) {
         throw new Error("Alert not found");
       }
@@ -137,7 +137,7 @@ export const actionUpdateAlertAction = createAsyncThunk(
       };
 
       // Update the mock data for consistency
-      const alertIndex = mockAlerts.findIndex((alert) => alert.id === alertId);
+      const alertIndex = mockAlerts.findIndex((alert) => alert.id == alertId);
       if (alertIndex !== -1) {
         mockAlerts[alertIndex] = updatedAlert;
       }
@@ -182,7 +182,7 @@ export const slice = createSlice({
     removeUpdatingAlert: (state, action) => {
       const alertId = action.payload;
       state.updatingAlerts = state.updatingAlerts.filter(
-        (id) => id !== alertId
+        (id) => id != alertId
       );
     },
   },
@@ -218,12 +218,12 @@ export const slice = createSlice({
 
         // Remove from updating list
         state.updatingAlerts = state.updatingAlerts.filter(
-          (id) => id !== alertId
+          (id) => id != alertId
         );
 
         // Update alert in list
         const alertIndex = state.latestAlerts.findIndex(
-          (alert) => alert.id === alertId
+          (alert) => alert.id == alertId
         );
         if (alertIndex !== -1) {
           state.latestAlerts[alertIndex] = updatedAlert;
@@ -240,7 +240,7 @@ export const slice = createSlice({
       .addCase(actionUpdateAlertAction.rejected, (state, action) => {
         const alertId = action.meta.arg.alertId;
         state.updatingAlerts = state.updatingAlerts.filter(
-          (id) => id !== alertId
+          (id) => id != alertId
         );
         state.error = action.payload as string;
       });

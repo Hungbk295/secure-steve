@@ -1,25 +1,27 @@
 import { Alert, EAlertProcessStatus } from "@/interfaces/app";
 import Select from "@/app/components/common/Select";
+import { ALERT_ACTION_OPTIONS, getActionIcon } from "@/constants/alertActions";
 
 interface AlertListItemProps {
   alert: Alert;
-  onItemClick: (alertId: string) => void;
-  onActionSelect: (alertId: string, action: EAlertProcessStatus) => void;
+  onItemClick: (alertId: string | number) => void;
+  onActionSelect: (alertId: string | number, action: EAlertProcessStatus) => void;
   isUpdating?: boolean;
 }
 
 const getStatusIcon = (status: string): string => {
+  const baseIcon = getActionIcon(status as EAlertProcessStatus);
   switch (status) {
     case "pending":
-      return "ri-time-line text-orange-500";
+      return `${baseIcon} text-orange-500`;
     case "no_action":
-      return "ri-check-circle-line text-gray-500";
+      return `${baseIcon} text-gray-500`;
     case "quarantine":
-      return "ri-shield-line text-yellow-500";
+      return `${baseIcon} text-yellow-500`;
     case "delete":
-      return "ri-delete-bin-line text-red-500";
+      return `${baseIcon} text-red-500`;
     default:
-      return "ri-time-line text-orange-500";
+      return `${baseIcon} text-orange-500`;
   }
 };
 
@@ -57,7 +59,7 @@ function AlertListItem({
 
           <div className="flex-1 min-w-0">
             <div className="font-medium text-gray-900 text-sm mb-1">
-              {alert.alert_name}
+              {alert.alert_name || alert.file_name}
             </div>
 
             <div className="text-sm text-gray-700 mb-2">
@@ -80,12 +82,7 @@ function AlertListItem({
               size="small"
               className="w-full"
               loading={isUpdating}
-              options={[
-                { value: "pending", label: "Pending" },
-                { value: "no_action", label: "No Action" },
-                { value: "quarantine", label: "Quarantine" },
-                { value: "delete", label: "Delete" },
-              ]}
+              options={ALERT_ACTION_OPTIONS}
             />
           </div>
 
