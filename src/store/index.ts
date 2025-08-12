@@ -2,6 +2,8 @@ import authSlide from "@/store/authSlide";
 import appSlice from "@/store/appSlide";
 // import personalSlice from "@/store/personalSlice";
 import alertsSlice from "@/store/alertsSlice";
+import detectionSlice from "@/store/detectionSlice";
+import alertDetailSlice from "@/store/alertDetailSlice";
 
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
@@ -21,6 +23,8 @@ const reducers = {
   app: appSlice,
   // personal: personalSlice,
   alerts: alertsSlice,
+  detectionList: detectionSlice,
+  alertDetail: alertDetailSlice,
 };
 
 const rootReducer = combineReducers(reducers);

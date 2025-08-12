@@ -1,0 +1,395 @@
+import React, { useState, useEffect } from "react";
+import { Table, Tag, Select, Tooltip, Badge, Pagination, message } from "antd";
+import type { ColumnsType } from "antd/es/table";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useAppDispatch, useAppSelector } from "@/store";
+import {
+  selectDetectionItems,
+  selectDetectionLoading,
+  selectDetectionPagination,
+  actionGetDetectionList,
+  actionUpdateProcessStatus,
+  actionUpdateFilePolicy,
+  updatePagination,
+} from "@/store/detectionSlice";
+import { openModal } from "@/store/alertDetailSlice";
+import {
+  getVerdictColor,
+  getRiskBadgeColor,
+  getTimeDisplay,
+  canChangeProcessStatus,
+  PROCESS_STATUS_OPTIONS,
+  EXCEPTION_OPTIONS,
+  BLACKLIST_ACTION_OPTIONS,
+  PAGE_SIZE_OPTIONS,
+} from "@/constants/detectionConstants";
+import ProcessActionModal from "./ProcessActionModal";
+import ExceptionModal from "./ExceptionModal";
+import AlertDetailModal from "./AlertDetailModal";
+
+interface DetectionItem {
+  id: number;
+  time: string;
+  file_name: string;
+  risk: string;
+  verdict: string;
+  server_ip: string;
+  process_status: string;
+  exception: string;
+}
+
+interface DetectionTableProps {
+  filters: any;
+  loading: boolean;
+}
+
+const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: externalLoading }) => {
+  const dispatch = useAppDispatch();
+  const data = useAppSelector(selectDetectionItems);
+  const loading = useAppSelector(selectDetectionLoading) || externalLoading;
+  const pagination = useAppSelector(selectDetectionPagination);
+  
+  const [selectedAlert, setSelectedAlert] = useState<DetectionItem | null>(null);
+  const [actionModalVisible, setActionModalVisible] = useState(false);
+  const [exceptionModalVisible, setExceptionModalVisible] = useState(false);
+  const [selectedAction, setSelectedAction] = useState<string>("");
+  const [selectedExceptionType, setSelectedExceptionType] = useState<string>("");
+  const [updatingRows, setUpdatingRows] = useState<Set<number>>(new Set());
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  // Handle responsive breakpoints
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Load initial data
+  useEffect(() => {
+    if (data.length === 0) {
+      dispatch(actionGetDetectionList());
+    }
+  }, [dispatch, data.length]);
+
+  const isDesktop = screenWidth >= 1280;
+
+  // Handle file name click -> open modal
+  const handleFileNameClick = (record: DetectionItem) => {
+    dispatch(openModal(record.id));
+  };
+
+  // Handle process status change
+  const handleProcessStatusChange = (record: DetectionItem, newStatus: string) => {
+    if (!canChangeProcessStatus(record.process_status)) {
+      message.warning("Only pending alerts can be processed");
+      return;
+    }
+
+    setSelectedAlert(record);
+    setSelectedAction(newStatus);
+    setActionModalVisible(true);
+  };
+
+  // Handle exception change
+  const handleExceptionChange = (record: DetectionItem, exceptionType: string) => {
+    if (exceptionType === "none") {
+      // Reset to none immediately
+      handleUpdateException(record, exceptionType);
+      return;
+    }
+
+    setSelectedAlert(record);
+    setSelectedExceptionType(exceptionType);
+    setExceptionModalVisible(true);
+  };
+
+  // Process action confirm
+  const handleProcessActionConfirm = async (
+    alertId: number,
+    action: string,
+    memo: string
+  ) => {
+    setUpdatingRows(prev => new Set(prev).add(alertId));
+    
+    try {
+      await dispatch(actionUpdateProcessStatus({
+        id: alertId,
+        processStatus: action as any,
+        userId: "current_user", // TODO: Get from auth state
+        comments: memo,
+      })).unwrap();
+      
+      message.success(`Alert ${action} successfully`);
+      setActionModalVisible(false);
+    } catch (error) {
+      message.error("Failed to process alert");
+    } finally {
+      setUpdatingRows(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(alertId);
+        return newSet;
+      });
+    }
+  };
+
+  // Exception update
+  const handleUpdateException = async (
+    record: DetectionItem,
+    exceptionType: string,
+    actionType?: string,
+    memo?: string
+  ) => {
+    setUpdatingRows(prev => new Set(prev).add(record.id));
+    
+    try {
+      if (exceptionType === "none") {
+        // Handle none case locally - no API call needed
+        message.success("Exception cleared successfully");
+        setExceptionModalVisible(false);
+      } else {
+        await dispatch(actionUpdateFilePolicy({
+          analysisRequestId: record.id,
+          filePolicy: exceptionType as "blacklist" | "whitelist",
+          actionType: actionType as "delete" | "quarantine" | undefined,
+          comments: memo,
+        })).unwrap();
+        
+        message.success(`Exception ${exceptionType} applied successfully`);
+        setExceptionModalVisible(false);
+      }
+    } catch (error) {
+      message.error("Failed to update exception");
+    } finally {
+      setUpdatingRows(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(record.id);
+        return newSet;
+      });
+    }
+  };
+
+  const columns: ColumnsType<DetectionItem> = [
+    {
+      title: "Time",
+      dataIndex: "time",
+      key: "time",
+      width: 180,
+      sorter: true,
+      render: (time: string) => {
+        const { local, iso } = getTimeDisplay(time);
+        return (
+          <Tooltip title={`ISO: ${iso}`}>
+            <span className="text-sm font-mono">{local}</span>
+          </Tooltip>
+        );
+      },
+    },
+    {
+      title: "File Name",
+      dataIndex: "file_name",
+      key: "file_name",
+      width: 200,
+      sorter: true,
+      render: (fileName: string, record: DetectionItem) => (
+        <Tooltip title={fileName}>
+          <button
+            onClick={() => handleFileNameClick(record)}
+            className="text-blue-600 hover:text-blue-800 hover:underline text-left text-sm max-w-[180px] truncate block"
+          >
+            {fileName}
+          </button>
+        </Tooltip>
+      ),
+    },
+    {
+      title: "Risk",
+      dataIndex: "risk",
+      key: "risk",
+      width: 120,
+      sorter: true,
+      render: (risk: string) => (
+        <Tag className={`${getRiskBadgeColor(risk)} border font-medium text-xs`}>
+          {risk}
+        </Tag>
+      ),
+    },
+    {
+      title: "Verdict",
+      dataIndex: "verdict",
+      key: "verdict",
+      width: 120,
+      filters: [
+        { text: "Malware", value: "Malware" },
+        { text: "Benign", value: "Benign" },
+        { text: "Suspicious", value: "Suspicious" },
+        { text: "Unknown", value: "Unknown" },
+      ],
+      render: (verdict: string) => (
+        <Tag className={`${getVerdictColor(verdict)} border font-medium text-xs`}>
+          {verdict}
+        </Tag>
+      ),
+    },
+    {
+      title: "Server IP",
+      dataIndex: "server_ip",
+      key: "server_ip",
+      width: 140,
+      render: (ip: string) => (
+        <Tooltip title="Reverse DNS lookup (feature pending)">
+          <span className="font-mono text-sm">{ip}</span>
+        </Tooltip>
+      ),
+    },
+    {
+      title: "Process Status",
+      dataIndex: "process_status",
+      key: "process_status",
+      width: 150,
+      filters: PROCESS_STATUS_OPTIONS.map(opt => ({ text: opt.label, value: opt.value })),
+      render: (status: string, record: DetectionItem) => {
+        const isUpdating = updatingRows.has(record.id);
+        const canChange = canChangeProcessStatus(status);
+        
+        return (
+          <Select
+            value={status}
+            size="small"
+            className="w-full"
+            disabled={!canChange || isUpdating}
+            loading={isUpdating}
+            options={PROCESS_STATUS_OPTIONS}
+            onChange={(value) => handleProcessStatusChange(record, value)}
+            placeholder="Select action"
+          />
+        );
+      },
+    },
+    {
+      title: "Exception",
+      dataIndex: "exception",
+      key: "exception",
+      width: 130,
+      render: (exception: string, record: DetectionItem) => {
+        const isUpdating = updatingRows.has(record.id);
+        
+        return (
+          <Select
+            value={exception}
+            size="small"
+            className="w-full"
+            loading={isUpdating}
+            disabled={isUpdating}
+            options={EXCEPTION_OPTIONS}
+            onChange={(value) => handleExceptionChange(record, value)}
+          />
+        );
+      },
+    },
+  ];
+
+  // Get columns based on screen size
+  const getColumns = () => {
+    if (isDesktop) {
+      return columns;
+    }
+    // On mobile, hide Server IP (index 4) and Exception (index 6) columns
+    return columns.filter((col, index) => index !== 4 && index !== 6);
+  };
+
+  return (
+    <div className="bg-white rounded-lg border border-gray-200">
+      {/* Table */}
+      <Table
+        columns={getColumns()}
+        dataSource={data}
+        rowKey="id"
+        loading={loading}
+        scroll={{ x: isDesktop ? 1200 : 800 }}
+        pagination={false}
+        className="detection-table"
+        expandable={
+          !isDesktop ? {
+            expandedRowRender: (record) => (
+              <div className="bg-gray-50 p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-600">Server IP:</span>
+                  <span className="font-mono text-sm">{record.server_ip}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-600">Exception:</span>
+                  <Select
+                    value={record.exception}
+                    size="small"
+                    className="w-32"
+                    options={EXCEPTION_OPTIONS}
+                    onChange={(value) => handleExceptionChange(record, value)}
+                    loading={updatingRows.has(record.id)}
+                    disabled={updatingRows.has(record.id)}
+                  />
+                </div>
+              </div>
+            ),
+            rowExpandable: () => !isDesktop,
+            columnTitle: "Details",
+          } : undefined
+        }
+      />
+
+      {/* Footer with Pagination */}
+      <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+        <div className="text-sm text-gray-600">
+          Total: {pagination.total} records
+        </div>
+        
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600">Page size:</span>
+            <Select
+              value={pagination.pageSize}
+              size="small"
+              className="w-20"
+              options={PAGE_SIZE_OPTIONS}
+              onChange={(value) => dispatch(updatePagination({ pageSize: value, current: 1 }))}
+            />
+          </div>
+          
+          <Pagination
+            current={pagination.current}
+            pageSize={pagination.pageSize}
+            total={pagination.total}
+            onChange={(page) => dispatch(updatePagination({ current: page }))}
+            showSizeChanger={false}
+            showQuickJumper
+            showTotal={(total, range) => 
+              `${range[0]}-${range[1]} of ${total} items`
+            }
+          />
+        </div>
+      </div>
+
+      {/* Process Action Modal */}
+      <ProcessActionModal
+        visible={actionModalVisible}
+        onCancel={() => setActionModalVisible(false)}
+        onConfirm={handleProcessActionConfirm}
+        alert={selectedAlert}
+        action={selectedAction}
+      />
+
+      {/* Exception Modal */}
+      <ExceptionModal
+        visible={exceptionModalVisible}
+        onCancel={() => setExceptionModalVisible(false)}
+        onConfirm={handleUpdateException}
+        alert={selectedAlert}
+        exceptionType={selectedExceptionType}
+      />
+
+      {/* Alert Detail Modal */}
+      <AlertDetailModal />
+    </div>
+  );
+};
+
+export default DetectionTable;
