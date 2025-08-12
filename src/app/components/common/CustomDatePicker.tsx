@@ -27,6 +27,7 @@ interface CustomDatePickerProps {
   showQuickPicker?: boolean;
   disabled?: boolean;
   onModifyForm?: () => void;
+  placeholder?: [string, string];
 }
 
 function CustomDatePicker(props: CustomDatePickerProps) {
@@ -39,6 +40,7 @@ function CustomDatePicker(props: CustomDatePickerProps) {
     showQuickPicker = true,
     disabled = false,
     onModifyForm,
+    placeholder = ["Start Time", "End Time"],
   } = props;
   const [open, setOpen] = useState(false);
   const formatType = showTime ? "YYYY-MM-DD HH:mm" : "YYYY-MM-DD";
@@ -208,6 +210,7 @@ function CustomDatePicker(props: CustomDatePickerProps) {
         allowClear={false}
         onOpenChange={(isOpen) => !disabled && setOpen(isOpen)}
         disabled={disabled}
+        placeholder={placeholder}
       />
     </div>
   );

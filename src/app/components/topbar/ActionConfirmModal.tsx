@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Alert, EAlertProcessStatus, EModalMode } from "@/interfaces/app";
 import CustomModal from "@/app/components/common/CustomModal";
-import { getActionMessage, getActionColor, getActionIcon } from "@/constants/alertActions";
+import {
+  getActionMessage,
+  getActionColor,
+  getActionIcon,
+} from "@/constants/alertActions";
 
 interface ActionConfirmModalProps {
   isOpen: boolean;
@@ -15,7 +19,6 @@ interface ActionConfirmModalProps {
   selectedAction: EAlertProcessStatus | null;
   loading?: boolean;
 }
-
 
 function ActionConfirmModal({
   isOpen,
@@ -32,7 +35,7 @@ function ActionConfirmModal({
   }
 
   const handleConfirm = () => {
-    onConfirm(alert.id, selectedAction, memo);
+    onConfirm(alert.id.toString(), selectedAction, memo);
     setMemo("");
   };
 
@@ -75,13 +78,12 @@ function ActionConfirmModal({
             : selectedAction === EAlertProcessStatus.QUARANTINE
             ? "!bg-yellow-600 hover:!bg-yellow-700"
             : "!bg-blue-600 hover:!bg-blue-700"
-        }`
+        }`,
       }}
       cancelButtonProps={{
-        disabled: loading
+        disabled: loading,
       }}
     >
-      {/* Action Icon and Message */}
       <div className="flex items-start space-x-3 mb-4">
         <div className={`flex-shrink-0 ${actionColor}`}>
           <i className={`${actionIcon} text-2xl`} />
@@ -107,7 +109,6 @@ function ActionConfirmModal({
         </div>
       </div>
 
-      {/* Memo Input */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Memo (Optional)

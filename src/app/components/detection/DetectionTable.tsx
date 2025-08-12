@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Table, Tag, Select, Tooltip, Pagination, message } from "antd";
+import React, { useEffect, useState } from "react";
+import { Table, Tag, message, Tooltip, Pagination } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
+  actionGetDetectionList,
   selectDetectionItems,
   selectDetectionLoading,
   selectDetectionPagination,
-  actionGetDetectionList,
+  updatePagination,
   actionUpdateProcessStatus,
   actionUpdateFilePolicy,
-  updatePagination,
 } from "@/store/detectionSlice";
 import { openModal } from "@/store/alertDetailSlice";
 import {
@@ -18,12 +18,14 @@ import {
   getTimeDisplay,
   canChangeProcessStatus,
   PROCESS_STATUS_OPTIONS,
-  EXCEPTION_OPTIONS,
   PAGE_SIZE_OPTIONS,
+  EXCEPTION_OPTIONS,
 } from "@/constants/detectionConstants";
+import AlertDetailModal from "./AlertDetailModal";
 import ProcessActionModal from "./ProcessActionModal";
 import ExceptionModal from "./ExceptionModal";
-import AlertDetailModal from "./AlertDetailModal";
+import useScreenWidth from "@/hooks/useScreenWidth";
+import Select from "../common/Select";
 
 interface DetectionItem {
   id: number;
@@ -47,8 +49,11 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const data = useAppSelector(selectDetectionItems);
-  const loading = useAppSelector(selectDetectionLoading) || externalLoading;
+  const internalLoading = useAppSelector(selectDetectionLoading);
   const pagination = useAppSelector(selectDetectionPagination);
+
+  // Combine external and internal loading states
+  const loading = externalLoading || internalLoading;
 
   const [selectedAlert, setSelectedAlert] = useState<DetectionItem | null>(
     null
@@ -59,14 +64,9 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
   const [selectedExceptionType, setSelectedExceptionType] =
     useState<string>("");
   const [updatingRows, setUpdatingRows] = useState<Set<number>>(new Set());
-  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
-  // Handle responsive breakpoints
-  useEffect(() => {
-    const handleResize = () => setScreenWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // Use the custom hook for screen width
+  const { isDesktop } = useScreenWidth();
 
   // Load initial data
   useEffect(() => {
@@ -74,8 +74,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
       dispatch(actionGetDetectionList(filters));
     }
   }, [dispatch, data.length, filters]);
-
-  const isDesktop = screenWidth >= 1280;
 
   // Handle file name click -> open modal
   const handleFileNameClick = (record: DetectionItem) => {

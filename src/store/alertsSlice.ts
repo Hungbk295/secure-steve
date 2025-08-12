@@ -89,9 +89,6 @@ export const actionUpdateAlertAction = createAsyncThunk(
     {
       alertId,
       action,
-      memo: _memo,
-      userId: _userId,
-      actionType: _actionType,
     }: {
       alertId: string | number;
       action: EAlertProcessStatus;
@@ -181,9 +178,7 @@ export const slice = createSlice({
     },
     removeUpdatingAlert: (state, action) => {
       const alertId = action.payload;
-      state.updatingAlerts = state.updatingAlerts.filter(
-        (id) => id != alertId
-      );
+      state.updatingAlerts = state.updatingAlerts.filter((id) => id != alertId);
     },
   },
   extraReducers: (builder) => {

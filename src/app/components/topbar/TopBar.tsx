@@ -44,12 +44,10 @@ function TopBar({
   const alertsState = useAppSelector(selectAlertsState);
   const topBarFeatures = getTopBarFeatures(userRole);
 
-  // Initialize alerts on mount
   useEffect(() => {
     dispatch(actionFetchLatestAlerts());
   }, [dispatch]);
 
-  // Clear errors after 5 seconds
   useEffect(() => {
     if (alertsState.error) {
       const timeout = setTimeout(() => {
@@ -59,17 +57,14 @@ function TopBar({
     }
   }, [alertsState.error, dispatch]);
 
-  // Debounced alarm click handler
   const handleAlarmClick = useCallback(
     (event: React.MouseEvent) => {
       event.stopPropagation();
 
-      // Clear any existing timeout
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
       }
 
-      // Debounce the click to prevent spam
       debounceTimeoutRef.current = setTimeout(() => {
         if (onAlarmClick) {
           onAlarmClick();
@@ -101,15 +96,13 @@ function TopBar({
             alertId,
             action,
             memo,
-            userId: userInfo.name, // Use actual user ID in real implementation
+            userId: userInfo.name,
           })
         ).unwrap();
 
-        // Refresh alerts after successful action
         dispatch(actionFetchLatestAlerts());
       } catch (error) {
         console.error("Failed to update alert action:", error);
-        // Error is handled by Redux state
       }
     },
     [dispatch, userInfo.name]
@@ -123,7 +116,6 @@ function TopBar({
     setShowAlarmDropdown(false);
   }, []);
 
-  // Cleanup debounce timeout on unmount
   useEffect(() => {
     return () => {
       if (debounceTimeoutRef.current) {
@@ -177,7 +169,9 @@ function TopBar({
               alertCount={alertsState.alertCount}
               loading={alertsState.loading}
               error={alertsState.error}
-              onActionConfirm={handleActionConfirm}
+              onActionConfirm={(alertId, action, memo) =>
+                handleActionConfirm(alertId.toString(), action, memo)
+              }
               onRefresh={handleRefreshAlerts}
               updatingAlerts={alertsState.updatingAlerts}
             />

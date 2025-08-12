@@ -1,4 +1,6 @@
-export const MOCK_LatestAlerts = [
+import { Alert } from "@/interfaces/app";
+
+export const MOCK_LatestAlerts: Alert[] = [
   {
     id: 2011,
     client_server_ip: "192.168.1.10",

@@ -70,28 +70,28 @@ function AlarmNotifications({ onClose, alarmCount }: AlarmNotificationsProps) {
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-2">
-                    {getStatusIcon(alarm.completedAt)}
+                    {getStatusIcon(alarm.analysis_time)}
                     <span className="font-medium text-gray-900 text-sm">
-                      {alarm.fileName}
+                      {alarm.file_name}
                     </span>
                   </div>
 
                   <div className="space-y-1 text-xs text-gray-600">
-                    <div>Server IP: {alarm.serverIP}</div>
-                    <div>Malware Type: {alarm.malwareType}</div>
-                    <div>Created: {alarm.createdAt}</div>
-                    {alarm.completedAt && (
-                      <div>Completed: {alarm.completedAt}</div>
+                    <div>Server IP: {alarm.client_server_ip}</div>
+                    <div>Malware Type: {alarm.malware_status}</div>
+                    <div>Created: {alarm.file_created_at}</div>
+                    {alarm.analysis_time && (
+                      <div>Completed: {alarm.analysis_time}</div>
                     )}
                   </div>
                 </div>
 
                 <span
                   className={`px-2 py-1 rounded-full text-xs font-medium ${getRiskColor(
-                    alarm.riskLevel
+                    alarm.risk
                   )}`}
                 >
-                  {alarm.riskLevel.toUpperCase()}
+                  {alarm.risk.toUpperCase()}
                 </span>
               </div>
             </div>

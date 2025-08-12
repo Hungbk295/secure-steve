@@ -44,17 +44,20 @@ export enum EInitialYn {
 }
 
 export interface Alert {
-  id: string;
+  id: number;
   file_name: string;
   client_server_ip: string;
   file_created_at: string;
   analysis_time: string;
   malware_status: string;
   process_status: "pending" | "no_action" | "quarantine" | "delete";
-  risk: number;
-  alert_name: string;
-  malware_type: string;
-  verdict: "Malware" | "Benign" | "Suspicious";
+  // Mock data now provides risk as a percentage string (e.g., "99%")
+  // but some places in the app may treat it as a number. Support both.
+  risk: string | number;
+  // Optional fields for backward compatibility with other UIs
+  alert_name?: string;
+  malware_type?: string;
+  verdict?: "Malware" | "Benign" | "Suspicious" | "Unknown";
 }
 
 export interface AlertActionRequest {
@@ -72,7 +75,7 @@ export interface LatestAlertsResponse {
 
 export enum EAlertProcessStatus {
   PENDING = "pending",
-  NO_ACTION = "no_action", 
+  NO_ACTION = "no_action",
   QUARANTINE = "quarantine",
   DELETE = "delete",
 }

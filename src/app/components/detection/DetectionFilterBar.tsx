@@ -1,62 +1,74 @@
-import { useState } from "react";
-import { Row, Col, DatePicker, Select, Button, Card } from "antd";
-import {
-  SearchOutlined,
-  ReloadOutlined,
-  CalendarOutlined,
-} from "@ant-design/icons";
-import { Dayjs } from "dayjs";
-
-const { RangePicker } = DatePicker;
+import { useEffect } from "react";
+import { Row, Col, Button, Form } from "antd";
+import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
+import Select from "@/app/components/common/Select";
+import { DynamicKeyObject } from "@/interfaces/app";
+import CustomDatePicker from "../common/CustomDatePicker";
+import { useAppDispatch } from "@/store";
+import { actionGetDetectionList } from "@/store/detectionSlice";
 
 interface DetectionFilterBarProps {
-  filters: {
-    dateRange: [Dayjs | null, Dayjs | null];
-    riskLevel: string;
-    triageVerdict: string;
-    processStatus: string;
-    serverIP: string;
-  };
-  onFilterChange: (filters: any) => void;
   loading?: boolean;
   className?: string;
 }
 
-function DetectionFilterBar({
-  filters,
-  onFilterChange,
-  loading = false,
-  className,
-}: DetectionFilterBarProps) {
-  const [localFilters, setLocalFilters] = useState(filters);
+const initialFormData = {
+  dateRange: null,
+  riskLevel: "all",
+  triageVerdict: "all",
+  processStatus: "all",
+  serverIP: "all",
+  fileNameOrHash: "",
+};
 
-  // Handle local filter changes
-  const handleLocalFilterChange = (key: string, value: any) => {
-    setLocalFilters((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+function DetectionFilterBar({ loading = false }: DetectionFilterBarProps) {
+  const [form] = Form.useForm();
+  const dispatch = useAppDispatch();
 
-  // Apply filters
-  const handleApply = () => {
-    onFilterChange(localFilters);
-  };
+  function getPayload(values: DynamicKeyObject) {
+    const {
+      dateRange,
+      riskLevel,
+      triageVerdict,
+      processStatus,
+      serverIP,
+      fileNameOrHash,
+    } = values;
 
-  // Reset filters
-  const handleReset = () => {
-    const resetFilters = {
-      dateRange: [null, null] as [Dayjs | null, Dayjs | null],
-      riskLevel: "all",
-      triageVerdict: "all",
-      processStatus: "all",
-      serverIP: "all",
+    const payload = {
+      timeRange:
+        dateRange && dateRange.length === 2
+          ? [
+              dateRange[0].format("YYYY-MM-DD"),
+              dateRange[1].format("YYYY-MM-DD"),
+            ]
+          : null,
+      risk: riskLevel === "all" ? [] : [riskLevel],
+      verdict: triageVerdict === "all" ? [] : [triageVerdict],
+      processStatus: processStatus === "all" ? [] : [processStatus],
+      serverIP: serverIP === "all" ? "" : serverIP,
+      fileNameOrHash: fileNameOrHash || "",
     };
-    setLocalFilters(resetFilters);
-    onFilterChange(resetFilters);
-  };
+    return payload;
+  }
 
-  // Filter options for Detection screen
+  function onFinish(values: DynamicKeyObject) {
+    const payload = getPayload(values);
+    dispatch(actionGetDetectionList(payload));
+  }
+
+  function onReset() {
+    form.setFieldsValue(initialFormData);
+    const payload = getPayload(initialFormData);
+    dispatch(actionGetDetectionList(payload));
+  }
+
+  useEffect(() => {
+    form.setFieldsValue(initialFormData);
+    const payload = getPayload(initialFormData);
+    dispatch(actionGetDetectionList(payload));
+  }, []);
+
   const riskLevelOptions = [
     { label: "All", value: "all" },
     { label: "High (80-100%)", value: "high" },
@@ -89,191 +101,93 @@ function DetectionFilterBar({
   ];
 
   return (
-    <Card
-      size="small"
-      className={`!z-index-0 detection-filter-bar ${className || ""}`}
-      style={{
-        backgroundColor: "var(--color-bg-secondary)",
-        border: "1px solid var(--color-border-100)",
-        borderRadius: "8px",
-      }}
-    >
+    <Form form={form} layout="vertical" onFinish={onFinish}>
       <Row gutter={[16, 16]} align="middle">
-        {/* Time Range Filter */}
         <Col xs={24} sm={12} md={8} lg={4}>
-          <div className="filter-item !z-index-0">
-            <label
-              className="block text-sm font-medium text-gray-700 mb-2"
-              id="date-range-label"
-            >
-              Time Range
-            </label>
-            <RangePicker
-              value={localFilters.dateRange}
-              onChange={(dates) => handleLocalFilterChange("dateRange", dates)}
+          <Form.Item label="Time Range" name="dateRange">
+            <CustomDatePicker
+              form={form}
+              name="dateRange"
+              showQuickPicker={false}
               placeholder={["Start Time", "End Time"]}
-              // showTime={{
-              //   format: "HH:mm:ss",
-              //   defaultValue: [
-              //     dayjs("00:00:00", "HH:mm:ss"),
-              //     dayjs("23:59:59", "HH:mm:ss"),
-              //   ],
-              // }}
-              format="YYYY-MM-DD"
-              className="w-full"
-              size="middle"
-              suffixIcon={<CalendarOutlined />}
-              aria-labelledby="date-range-label"
-              disabled={loading}
             />
-          </div>
+          </Form.Item>
         </Col>
 
-        {/* Risk Level Filter */}
         <Col xs={24} sm={12} md={6} lg={4}>
-          <div className="filter-item">
-            <label
-              className="block text-sm font-medium text-gray-700 mb-2"
-              id="risk-level-label"
-            >
-              Risk
-            </label>
+          <Form.Item label="Risk" name="riskLevel">
             <Select
-              value={localFilters.riskLevel}
-              onChange={(value) => handleLocalFilterChange("riskLevel", value)}
               placeholder="Risk Level"
-              allowClear
               showSearch
-              filterOption={(input, option) =>
-                (option?.label ?? "")
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
               options={riskLevelOptions}
               className="w-full"
               size="middle"
-              aria-labelledby="risk-level-label"
               disabled={loading}
             />
-          </div>
+          </Form.Item>
         </Col>
 
-        {/* Triage Verdict Filter */}
         <Col xs={24} sm={12} md={6} lg={4}>
-          <div className="filter-item">
-            <label
-              className="block text-sm font-medium text-gray-700 mb-2"
-              id="triage-verdict-label"
-            >
-              Triage Verdict
-            </label>
+          <Form.Item label="Triage Verdict" name="triageVerdict">
             <Select
-              value={localFilters.triageVerdict}
-              onChange={(value) =>
-                handleLocalFilterChange("triageVerdict", value)
-              }
               placeholder="Triage Verdict"
-              allowClear
               showSearch
-              filterOption={(input, option) =>
-                (option?.label ?? "")
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
               options={triageVerdictOptions}
               className="w-full"
               size="middle"
-              aria-labelledby="triage-verdict-label"
               disabled={loading}
             />
-          </div>
+          </Form.Item>
         </Col>
 
-        {/* Process Status Filter */}
         <Col xs={24} sm={12} md={6} lg={4}>
-          <div className="filter-item">
-            <label
-              className="block text-sm font-medium text-gray-700 mb-2"
-              id="process-status-label"
-            >
-              Process Status
-            </label>
+          <Form.Item label="Process Status" name="processStatus">
             <Select
-              value={localFilters.processStatus}
-              onChange={(value) =>
-                handleLocalFilterChange("processStatus", value)
-              }
               placeholder="Process Status"
-              allowClear
               showSearch
-              filterOption={(input, option) =>
-                (option?.label ?? "")
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
               options={processStatusOptions}
               className="w-full"
               size="middle"
-              aria-labelledby="process-status-label"
               disabled={loading}
             />
-          </div>
+          </Form.Item>
         </Col>
 
-        {/* Server IP Filter */}
         <Col xs={24} sm={12} md={6} lg={4}>
-          <div className="filter-item">
-            <label
-              className="block text-sm font-medium text-gray-700 mb-2"
-              id="server-ip-label"
-            >
-              Server IP
-            </label>
+          <Form.Item label="Server IP" name="serverIP">
             <Select
-              value={localFilters.serverIP}
-              onChange={(value) => handleLocalFilterChange("serverIP", value)}
               placeholder="Server IP"
-              allowClear
               showSearch
-              filterOption={(input, option) =>
-                (option?.label ?? "")
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
               options={serverIPOptions}
               className="w-full"
               size="middle"
-              aria-labelledby="server-ip-label"
               disabled={loading}
             />
-          </div>
+          </Form.Item>
         </Col>
 
-        {/* Action Buttons */}
         <Col xs={24} sm={24} md={8} lg={4}>
           <div className="filter-actions flex justify-end space-x-2">
             <Button
+              className="!h-[45px] !w-12"
               type="default"
               icon={<ReloadOutlined />}
-              onClick={handleReset}
+              onClick={onReset}
               disabled={loading}
-              size="middle"
-            >
-              Reset
-            </Button>
+            />
             <Button
+              className="!h-[45px]"
               type="primary"
               icon={<SearchOutlined />}
-              onClick={handleApply}
+              htmlType="submit"
               loading={loading}
-              size="middle"
             >
               Apply
             </Button>
           </div>
         </Col>
       </Row>
-    </Card>
+    </Form>
   );
 }
 

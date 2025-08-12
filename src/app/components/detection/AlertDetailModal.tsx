@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Modal, Tabs, Tag, Button, Spin, message } from "antd";
 import type { TabsProps } from "antd";
 import {
-  CloseOutlined,
   DownloadOutlined,
   FileTextOutlined,
   ExclamationCircleOutlined,
@@ -39,19 +38,16 @@ const AlertDetailModal: React.FC = () => {
   const [selectedExceptionType, setSelectedExceptionType] =
     useState<string>("");
 
-  // Fetch detail when modal opens
   useEffect(() => {
     if (isOpen && selectedId && !detail) {
       dispatch(actionGetAlertDetail(selectedId));
     }
   }, [isOpen, selectedId, detail, dispatch]);
 
-  // Handle modal close
   const handleClose = () => {
     dispatch(closeModal());
   };
 
-  // Handle process status change
   const handleProcessStatusChange = (newStatus: string) => {
     if (!canChangeProcessStatus(detail?.process_status)) {
       message.warning("Only pending alerts can be processed");
@@ -61,13 +57,11 @@ const AlertDetailModal: React.FC = () => {
     setActionModalVisible(true);
   };
 
-  // Handle exception change
   const handleExceptionChange = (exceptionType: string) => {
     setSelectedExceptionType(exceptionType);
     setExceptionModalVisible(true);
   };
 
-  // Process action confirm
   const handleProcessActionConfirm = async (
     alertId: number,
     action: string,
@@ -77,7 +71,6 @@ const AlertDetailModal: React.FC = () => {
       // TODO: Dispatch Redux action
       console.log("Process action:", { alertId, action, memo });
 
-      // Update local state
       dispatch(
         updateDetailProcessStatus({ id: alertId, processStatus: action })
       );
@@ -90,7 +83,6 @@ const AlertDetailModal: React.FC = () => {
     }
   };
 
-  // Exception update
   const handleUpdateException = async (
     record: any,
     exceptionType: string,
@@ -106,7 +98,6 @@ const AlertDetailModal: React.FC = () => {
         memo,
       });
 
-      // Update local state
       dispatch(
         updateDetailException({ id: record.id, exception: exceptionType })
       );
@@ -119,7 +110,6 @@ const AlertDetailModal: React.FC = () => {
     }
   };
 
-  // Action dropdown menu
   const actionMenuItems = PROCESS_STATUS_OPTIONS.map((option) => ({
     label: option.label,
     value: option.value,
@@ -131,7 +121,6 @@ const AlertDetailModal: React.FC = () => {
     value: option.value,
   }));
 
-  // Tab items
   const tabItems: TabsProps["items"] = [
     {
       key: "file-info",
@@ -215,7 +204,6 @@ const AlertDetailModal: React.FC = () => {
           <div className="text-sm text-gray-500">
             Detection rules and signatures will be displayed here.
           </div>
-          {/* TODO: Add detection rules content */}
         </div>
       ),
     },
@@ -278,7 +266,6 @@ const AlertDetailModal: React.FC = () => {
           <div className="text-sm text-gray-500">
             Related alerts and similar threats will be displayed here.
           </div>
-          {/* TODO: Add related alerts content */}
         </div>
       ),
     },
@@ -295,7 +282,6 @@ const AlertDetailModal: React.FC = () => {
         width="50vw"
         style={{ maxWidth: "800px", minWidth: "600px" }}
         className="alert-detail-modal"
-        destroyOnClose
         maskClosable={false}
         keyboard
       >
@@ -306,12 +292,6 @@ const AlertDetailModal: React.FC = () => {
               <h2 className="text-lg font-semibold text-gray-900">
                 Alert Detail
               </h2>
-              <Button
-                type="text"
-                icon={<CloseOutlined />}
-                onClick={handleClose}
-                className="text-gray-400 hover:text-gray-600"
-              />
             </div>
 
             {error && (
@@ -417,7 +397,6 @@ const AlertDetailModal: React.FC = () => {
             )}
           </div>
 
-          {/* Scrollable Content */}
           <div className="flex-1 overflow-auto">
             {loading && (
               <div className="flex justify-center items-center h-32">
@@ -432,7 +411,6 @@ const AlertDetailModal: React.FC = () => {
         </div>
       </Modal>
 
-      {/* Process Action Modal */}
       <ProcessActionModal
         visible={actionModalVisible}
         onCancel={() => setActionModalVisible(false)}
@@ -441,7 +419,6 @@ const AlertDetailModal: React.FC = () => {
         action={selectedAction}
       />
 
-      {/* Exception Modal */}
       <ExceptionModal
         visible={exceptionModalVisible}
         onCancel={() => setExceptionModalVisible(false)}

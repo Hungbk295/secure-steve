@@ -152,7 +152,6 @@ function AlertsPopup({
     onRefresh();
   };
 
-  // Show top 10 alerts
   const displayAlerts = alerts.slice(0, 10);
   const pendingCount = alerts.filter(
     (alert) => alert.process_status === EAlertProcessStatus.PENDING
@@ -164,7 +163,6 @@ function AlertsPopup({
         ref={dropdownRef}
         className="absolute z-index-100 top-full mt-2 w-[600px] bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[500px] flex flex-col"
       >
-        {/* Header */}
         <div className="px-4 py-3 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -234,7 +232,7 @@ function AlertsPopup({
                   <AlertListItem
                     key={alert.id}
                     alert={alert}
-                    onItemClick={() => handleItemClick(alert.id)}
+                    onItemClick={() => handleItemClick(alert.id.toString())}
                     onActionSelect={handleActionSelect}
                     isUpdating={updatingAlerts.has(alert.id)}
                   />

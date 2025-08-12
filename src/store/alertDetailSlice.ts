@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
-import request from "@/utils/request";
-import { DynamicKeyObject } from "@/interfaces/app";
-import { MOCK_AlertDetail, MOCK_AlertDetail_AltItems } from "@/constants/mockAlert";
-import { get } from "lodash";
+import {
+  MOCK_AlertDetail,
+  MOCK_AlertDetail_AltItems,
+} from "@/constants/mockAlert";
 
 // Alert Detail State
 type IAlertDetailState = {
@@ -34,8 +34,8 @@ export const actionGetAlertDetail = createAsyncThunk(
       // });
 
       // Mock implementation
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       // Simulate 404 error for invalid IDs
       if (id === 9999) {
         throw new Error("Alert not found");
@@ -43,8 +43,8 @@ export const actionGetAlertDetail = createAsyncThunk(
 
       // Find mock data based on ID
       const allMockData = [MOCK_AlertDetail, ...MOCK_AlertDetail_AltItems];
-      const foundItem = allMockData.find(item => item.id == id);
-      
+      const foundItem = allMockData.find((item) => item.id == id);
+
       if (!foundItem) {
         throw new Error("Alert not found");
       }
@@ -130,11 +130,15 @@ export const {
 } = alertDetailSlice.actions;
 
 // Selectors
-export const selectAlertDetailSelectedId = (state: RootState) => state.alertDetail.selectedId;
-export const selectAlertDetailIsOpen = (state: RootState) => state.alertDetail.isOpen;
+export const selectAlertDetailSelectedId = (state: RootState) =>
+  state.alertDetail.selectedId;
+export const selectAlertDetailIsOpen = (state: RootState) =>
+  state.alertDetail.isOpen;
 export const selectAlertDetail = (state: RootState) => state.alertDetail.detail;
-export const selectAlertDetailLoading = (state: RootState) => state.alertDetail.loading;
-export const selectAlertDetailError = (state: RootState) => state.alertDetail.error;
+export const selectAlertDetailLoading = (state: RootState) =>
+  state.alertDetail.loading;
+export const selectAlertDetailError = (state: RootState) =>
+  state.alertDetail.error;
 
 // Combined selectors
 export const selectAlertDetailState = (state: RootState) => ({
