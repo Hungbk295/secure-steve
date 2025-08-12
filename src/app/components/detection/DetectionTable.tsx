@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tag, Select, Tooltip, Badge, Pagination, message } from "antd";
+import { Table, Tag, Select, Tooltip, Pagination, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
   selectDetectionItems,
@@ -20,7 +19,6 @@ import {
   canChangeProcessStatus,
   PROCESS_STATUS_OPTIONS,
   EXCEPTION_OPTIONS,
-  BLACKLIST_ACTION_OPTIONS,
   PAGE_SIZE_OPTIONS,
 } from "@/constants/detectionConstants";
 import ProcessActionModal from "./ProcessActionModal";
@@ -43,17 +41,23 @@ interface DetectionTableProps {
   loading: boolean;
 }
 
-const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: externalLoading }) => {
+const DetectionTable: React.FC<DetectionTableProps> = ({
+  filters,
+  loading: externalLoading,
+}) => {
   const dispatch = useAppDispatch();
   const data = useAppSelector(selectDetectionItems);
   const loading = useAppSelector(selectDetectionLoading) || externalLoading;
   const pagination = useAppSelector(selectDetectionPagination);
-  
-  const [selectedAlert, setSelectedAlert] = useState<DetectionItem | null>(null);
+
+  const [selectedAlert, setSelectedAlert] = useState<DetectionItem | null>(
+    null
+  );
   const [actionModalVisible, setActionModalVisible] = useState(false);
   const [exceptionModalVisible, setExceptionModalVisible] = useState(false);
   const [selectedAction, setSelectedAction] = useState<string>("");
-  const [selectedExceptionType, setSelectedExceptionType] = useState<string>("");
+  const [selectedExceptionType, setSelectedExceptionType] =
+    useState<string>("");
   const [updatingRows, setUpdatingRows] = useState<Set<number>>(new Set());
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
@@ -67,9 +71,9 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
   // Load initial data
   useEffect(() => {
     if (data.length === 0) {
-      dispatch(actionGetDetectionList());
+      dispatch(actionGetDetectionList(filters));
     }
-  }, [dispatch, data.length]);
+  }, [dispatch, data.length, filters]);
 
   const isDesktop = screenWidth >= 1280;
 
@@ -79,7 +83,10 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
   };
 
   // Handle process status change
-  const handleProcessStatusChange = (record: DetectionItem, newStatus: string) => {
+  const handleProcessStatusChange = (
+    record: DetectionItem,
+    newStatus: string
+  ) => {
     if (!canChangeProcessStatus(record.process_status)) {
       message.warning("Only pending alerts can be processed");
       return;
@@ -91,7 +98,10 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
   };
 
   // Handle exception change
-  const handleExceptionChange = (record: DetectionItem, exceptionType: string) => {
+  const handleExceptionChange = (
+    record: DetectionItem,
+    exceptionType: string
+  ) => {
     if (exceptionType === "none") {
       // Reset to none immediately
       handleUpdateException(record, exceptionType);
@@ -109,22 +119,25 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
     action: string,
     memo: string
   ) => {
-    setUpdatingRows(prev => new Set(prev).add(alertId));
-    
+    setUpdatingRows((prev) => new Set(prev).add(alertId));
+
     try {
-      await dispatch(actionUpdateProcessStatus({
-        id: alertId,
-        processStatus: action as any,
-        userId: "current_user", // TODO: Get from auth state
-        comments: memo,
-      })).unwrap();
-      
+      await dispatch(
+        actionUpdateProcessStatus({
+          id: alertId,
+          processStatus: action as any,
+          userId: "current_user", // TODO: Get from auth state
+          comments: memo,
+        })
+      ).unwrap();
+
       message.success(`Alert ${action} successfully`);
       setActionModalVisible(false);
     } catch (error) {
+      console.error(error);
       message.error("Failed to process alert");
     } finally {
-      setUpdatingRows(prev => {
+      setUpdatingRows((prev) => {
         const newSet = new Set(prev);
         newSet.delete(alertId);
         return newSet;
@@ -139,28 +152,31 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
     actionType?: string,
     memo?: string
   ) => {
-    setUpdatingRows(prev => new Set(prev).add(record.id));
-    
+    setUpdatingRows((prev) => new Set(prev).add(record.id));
+
     try {
       if (exceptionType === "none") {
         // Handle none case locally - no API call needed
         message.success("Exception cleared successfully");
         setExceptionModalVisible(false);
       } else {
-        await dispatch(actionUpdateFilePolicy({
-          analysisRequestId: record.id,
-          filePolicy: exceptionType as "blacklist" | "whitelist",
-          actionType: actionType as "delete" | "quarantine" | undefined,
-          comments: memo,
-        })).unwrap();
-        
+        await dispatch(
+          actionUpdateFilePolicy({
+            analysisRequestId: record.id,
+            filePolicy: exceptionType as "blacklist" | "whitelist",
+            actionType: actionType as "delete" | "quarantine" | undefined,
+            comments: memo,
+          })
+        ).unwrap();
+
         message.success(`Exception ${exceptionType} applied successfully`);
         setExceptionModalVisible(false);
       }
     } catch (error) {
+      console.error(error);
       message.error("Failed to update exception");
     } finally {
-      setUpdatingRows(prev => {
+      setUpdatingRows((prev) => {
         const newSet = new Set(prev);
         newSet.delete(record.id);
         return newSet;
@@ -208,7 +224,9 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
       width: 120,
       sorter: true,
       render: (risk: string) => (
-        <Tag className={`${getRiskBadgeColor(risk)} border font-medium text-xs`}>
+        <Tag
+          className={`${getRiskBadgeColor(risk)} border font-medium text-xs`}
+        >
           {risk}
         </Tag>
       ),
@@ -225,7 +243,9 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
         { text: "Unknown", value: "Unknown" },
       ],
       render: (verdict: string) => (
-        <Tag className={`${getVerdictColor(verdict)} border font-medium text-xs`}>
+        <Tag
+          className={`${getVerdictColor(verdict)} border font-medium text-xs`}
+        >
           {verdict}
         </Tag>
       ),
@@ -246,11 +266,14 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
       dataIndex: "process_status",
       key: "process_status",
       width: 150,
-      filters: PROCESS_STATUS_OPTIONS.map(opt => ({ text: opt.label, value: opt.value })),
+      filters: PROCESS_STATUS_OPTIONS.map((opt) => ({
+        text: opt.label,
+        value: opt.value,
+      })),
       render: (status: string, record: DetectionItem) => {
         const isUpdating = updatingRows.has(record.id);
         const canChange = canChangeProcessStatus(status);
-        
+
         return (
           <Select
             value={status}
@@ -272,7 +295,7 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
       width: 130,
       render: (exception: string, record: DetectionItem) => {
         const isUpdating = updatingRows.has(record.id);
-        
+
         return (
           <Select
             value={exception}
@@ -294,7 +317,9 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
       return columns;
     }
     // On mobile, hide Server IP (index 4) and Exception (index 6) columns
-    return columns.filter((col, index) => index !== 4 && index !== 6);
+    return columns.filter(
+      (_, index) => index !== 4 && index !== 5 && index !== 6
+    );
   };
 
   return (
@@ -307,32 +332,58 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
         loading={loading}
         scroll={{ x: isDesktop ? 1200 : 800 }}
         pagination={false}
-        className="detection-table"
+        className="detection-table z-index-0"
         expandable={
-          !isDesktop ? {
-            expandedRowRender: (record) => (
-              <div className="bg-gray-50 p-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-600">Server IP:</span>
-                  <span className="font-mono text-sm">{record.server_ip}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-600">Exception:</span>
-                  <Select
-                    value={record.exception}
-                    size="small"
-                    className="w-32"
-                    options={EXCEPTION_OPTIONS}
-                    onChange={(value) => handleExceptionChange(record, value)}
-                    loading={updatingRows.has(record.id)}
-                    disabled={updatingRows.has(record.id)}
-                  />
-                </div>
-              </div>
-            ),
-            rowExpandable: () => !isDesktop,
-            columnTitle: "Details",
-          } : undefined
+          !isDesktop
+            ? {
+                expandedRowRender: (record) => (
+                  <div className="bg-gray-50 p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-600">
+                        Server IP:
+                      </span>
+                      <span className="font-mono text-sm">
+                        {record.server_ip}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-600">
+                        Process Status:
+                      </span>
+                      <span className="font-mono text-sm">
+                        <Select
+                          value={record.process_status}
+                          size="small"
+                          className="w-32"
+                          options={PROCESS_STATUS_OPTIONS}
+                          onChange={(value) =>
+                            handleProcessStatusChange(record, value)
+                          }
+                        />
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-600">
+                        Exception:
+                      </span>
+                      <Select
+                        value={record.exception}
+                        size="small"
+                        className="w-32"
+                        options={EXCEPTION_OPTIONS}
+                        onChange={(value) =>
+                          handleExceptionChange(record, value)
+                        }
+                        loading={updatingRows.has(record.id)}
+                        disabled={updatingRows.has(record.id)}
+                      />
+                    </div>
+                  </div>
+                ),
+                rowExpandable: () => !isDesktop,
+                columnTitle: "Details",
+              }
+            : undefined
         }
       />
 
@@ -341,7 +392,7 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
         <div className="text-sm text-gray-600">
           Total: {pagination.total} records
         </div>
-        
+
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">Page size:</span>
@@ -350,10 +401,12 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
               size="small"
               className="w-20"
               options={PAGE_SIZE_OPTIONS}
-              onChange={(value) => dispatch(updatePagination({ pageSize: value, current: 1 }))}
+              onChange={(value) =>
+                dispatch(updatePagination({ pageSize: value, current: 1 }))
+              }
             />
           </div>
-          
+
           <Pagination
             current={pagination.current}
             pageSize={pagination.pageSize}
@@ -361,7 +414,7 @@ const DetectionTable: React.FC<DetectionTableProps> = ({ filters, loading: exter
             onChange={(page) => dispatch(updatePagination({ current: page }))}
             showSizeChanger={false}
             showQuickJumper
-            showTotal={(total, range) => 
+            showTotal={(total, range) =>
               `${range[0]}-${range[1]} of ${total} items`
             }
           />

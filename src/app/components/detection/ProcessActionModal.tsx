@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Modal, Input, Button, Space } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { getActionMessage, getActionColor, getActionIcon } from "@/constants/alertActions";
+import { Modal, Input, Button } from "antd";
+import {
+  getActionMessage,
+  getActionColor,
+  getActionIcon,
+} from "@/constants/alertActions";
 
 const { TextArea } = Input;
 
@@ -25,7 +28,7 @@ const ProcessActionModal: React.FC<ProcessActionModalProps> = ({
 
   const handleConfirm = async () => {
     if (!alert) return;
-    
+
     setLoading(true);
     try {
       await onConfirm(alert.id, action, memo);
@@ -116,8 +119,9 @@ const ProcessActionModal: React.FC<ProcessActionModalProps> = ({
           >
             {loading
               ? "Processing..."
-              : `Confirm ${actionMessage.charAt(0).toUpperCase()}${actionMessage.slice(1)}`
-            }
+              : `Confirm ${actionMessage
+                  .charAt(0)
+                  .toUpperCase()}${actionMessage.slice(1)}`}
           </Button>
         </div>
       </div>

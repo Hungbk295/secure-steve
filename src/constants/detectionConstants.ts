@@ -10,14 +10,14 @@ export const TRIAGE_VERDICT_OPTIONS = [
   { value: "Benign", label: "Benign" },
   { value: "Suspicious", label: "Suspicious" },
   { value: "Unknown", label: "Unknown" },
-] as const;
+];
 
 // Risk Level Options (for multi-select)
 export const RISK_LEVEL_OPTIONS = [
   { value: "high", label: "High (80-100%)" },
   { value: "medium", label: "Medium (50-79%)" },
   { value: "low", label: "Low (0-49%)" },
-] as const;
+];
 
 // Process Status Options (reusing from alertActions but with different format)
 export const PROCESS_STATUS_OPTIONS = [
@@ -25,27 +25,27 @@ export const PROCESS_STATUS_OPTIONS = [
   { value: EAlertProcessStatus.NO_ACTION, label: "No Action" },
   { value: EAlertProcessStatus.QUARANTINE, label: "Quarantine" },
   { value: EAlertProcessStatus.DELETE, label: "Delete" },
-] as const;
+];
 
 // Exception Policy Options
 export const EXCEPTION_OPTIONS = [
   { value: "none", label: "None" },
   { value: "blacklist", label: "Blacklist" },
   { value: "whitelist", label: "Whitelist" },
-] as const;
+];
 
 // Blacklist Action Type Options (for blacklist exception modal)
 export const BLACKLIST_ACTION_OPTIONS = [
   { value: "delete", label: "Delete" },
   { value: "quarantine", label: "Quarantine" },
-] as const;
+];
 
 // Time Range Presets
 export const TIME_RANGE_PRESETS = [
   { value: "24h", label: "Last 24 hours" },
   { value: "7d", label: "Last 7 days" },
   { value: "30d", label: "Last 30 days" },
-] as const;
+];
 
 // Page Size Options
 export const PAGE_SIZE_OPTIONS = [
@@ -53,7 +53,7 @@ export const PAGE_SIZE_OPTIONS = [
   { value: 30, label: "30" },
   { value: 50, label: "50" },
   { value: 100, label: "100" },
-] as const;
+];
 
 // Table Sort Options
 export const SORT_OPTIONS = [
@@ -63,7 +63,7 @@ export const SORT_OPTIONS = [
   { value: "risk_asc", label: "Risk (Low to High)" },
   { value: "file_name_asc", label: "File Name (A-Z)" },
   { value: "file_name_desc", label: "File Name (Z-A)" },
-] as const;
+];
 
 /**
  * Helper Functions
@@ -86,8 +86,11 @@ export const getVerdictColor = (verdict: string): string => {
 };
 
 // Get risk level from percentage
-export const getRiskLevel = (risk: string | number): "high" | "medium" | "low" => {
-  const riskValue = typeof risk === "string" ? parseFloat(risk.replace("%", "")) : risk;
+export const getRiskLevel = (
+  risk: string | number
+): "high" | "medium" | "low" => {
+  const riskValue =
+    typeof risk === "string" ? parseFloat(risk.replace("%", "")) : risk;
   if (riskValue >= 80) return "high";
   if (riskValue >= 50) return "medium";
   return "low";
@@ -130,12 +133,12 @@ export const canChangeProcessStatus = (currentStatus: string): boolean => {
 
 // Get exception display text
 export const getExceptionLabel = (exception: string): string => {
-  const option = EXCEPTION_OPTIONS.find(opt => opt.value === exception);
+  const option = EXCEPTION_OPTIONS.find((opt) => opt.value === exception);
   return option?.label || exception;
 };
 
 // Get triage verdict label
 export const getVerdictLabel = (verdict: string): string => {
-  const option = TRIAGE_VERDICT_OPTIONS.find(opt => opt.value === verdict);
+  const option = TRIAGE_VERDICT_OPTIONS.find((opt) => opt.value === verdict);
   return option?.label || verdict;
 };

@@ -96,7 +96,10 @@ function AlertsPopup({
     onClose();
   };
 
-  const handleActionSelect = (alertId: string | number, action: EAlertProcessStatus) => {
+  const handleActionSelect = (
+    alertId: string | number,
+    action: EAlertProcessStatus
+  ) => {
     const alert = alerts.find((a) => a.id == alertId);
     if (!alert) return;
 
@@ -159,7 +162,7 @@ function AlertsPopup({
     <>
       <div
         ref={dropdownRef}
-        className="absolute top-full mt-2 w-[600px] bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[500px] flex flex-col"
+        className="absolute z-index-100 top-full mt-2 w-[600px] bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[500px] flex flex-col"
       >
         {/* Header */}
         <div className="px-4 py-3 border-b border-gray-200 flex-shrink-0">
@@ -231,7 +234,7 @@ function AlertsPopup({
                   <AlertListItem
                     key={alert.id}
                     alert={alert}
-                    onItemClick={handleItemClick}
+                    onItemClick={() => handleItemClick(alert.id)}
                     onActionSelect={handleActionSelect}
                     isUpdating={updatingAlerts.has(alert.id)}
                   />

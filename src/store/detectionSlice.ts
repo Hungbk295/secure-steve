@@ -1,9 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
-import request from "@/utils/request";
 import { DynamicKeyObject, EAlertProcessStatus } from "@/interfaces/app";
 import { MOCK_AnalysisDetectionList } from "@/constants/mockAlert";
-import { get } from "lodash";
 
 // Detection List State
 type IDetectionListState = {
@@ -67,8 +65,8 @@ export const actionGetDetectionList = createAsyncThunk(
       // });
 
       // Mock implementation
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
       // Simulate occasional errors
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
@@ -82,7 +80,9 @@ export const actionGetDetectionList = createAsyncThunk(
       };
     } catch (error) {
       return rejectWithValue(
-        error instanceof Error ? error.message : "Failed to fetch detection list"
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch detection list"
       );
     }
   }
@@ -94,8 +94,6 @@ export const actionUpdateProcessStatus = createAsyncThunk(
     {
       id,
       processStatus,
-      userId,
-      comments,
     }: {
       id: number | string;
       processStatus: EAlertProcessStatus;
@@ -113,8 +111,8 @@ export const actionUpdateProcessStatus = createAsyncThunk(
       // });
 
       // Mock implementation
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       if (Math.random() < 0.1) {
         throw new Error("Failed to update process status");
       }
@@ -126,7 +124,9 @@ export const actionUpdateProcessStatus = createAsyncThunk(
       };
     } catch (error) {
       return rejectWithValue(
-        error instanceof Error ? error.message : "Failed to update process status"
+        error instanceof Error
+          ? error.message
+          : "Failed to update process status"
       );
     }
   }
@@ -139,7 +139,6 @@ export const actionUpdateFilePolicy = createAsyncThunk(
       analysisRequestId,
       filePolicy,
       actionType,
-      comments,
     }: {
       analysisRequestId: number | string;
       filePolicy: "blacklist" | "whitelist";
@@ -157,8 +156,8 @@ export const actionUpdateFilePolicy = createAsyncThunk(
       // });
 
       // Mock implementation
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       if (Math.random() < 0.1) {
         throw new Error("Failed to update file policy");
       }
@@ -219,14 +218,16 @@ export const detectionListSlice = createSlice({
       })
       .addCase(actionUpdateProcessStatus.fulfilled, (state, action) => {
         const { id, processStatus } = action.payload;
-        const itemIndex = state.items.findIndex(item => item.id == id);
+        const itemIndex = state.items.findIndex((item) => item.id == id);
         if (itemIndex !== -1) {
           state.items[itemIndex].process_status = processStatus;
         }
       })
       .addCase(actionUpdateFilePolicy.fulfilled, (state, action) => {
         const { analysisRequestId, filePolicy } = action.payload;
-        const itemIndex = state.items.findIndex(item => item.id == analysisRequestId);
+        const itemIndex = state.items.findIndex(
+          (item) => item.id == analysisRequestId
+        );
         if (itemIndex !== -1) {
           state.items[itemIndex].exception = filePolicy;
         }
@@ -243,11 +244,17 @@ export const {
 } = detectionListSlice.actions;
 
 // Selectors
-export const selectDetectionItems = (state: RootState) => state.detectionList.items;
-export const selectDetectionLoading = (state: RootState) => state.detectionList.loading;
-export const selectDetectionError = (state: RootState) => state.detectionList.error;
-export const selectDetectionFilters = (state: RootState) => state.detectionList.filters;
-export const selectDetectionPagination = (state: RootState) => state.detectionList.pagination;
-export const selectDetectionSorting = (state: RootState) => state.detectionList.sorting;
+export const selectDetectionItems = (state: RootState) =>
+  state.detectionList.items;
+export const selectDetectionLoading = (state: RootState) =>
+  state.detectionList.loading;
+export const selectDetectionError = (state: RootState) =>
+  state.detectionList.error;
+export const selectDetectionFilters = (state: RootState) =>
+  state.detectionList.filters;
+export const selectDetectionPagination = (state: RootState) =>
+  state.detectionList.pagination;
+export const selectDetectionSorting = (state: RootState) =>
+  state.detectionList.sorting;
 
 export default detectionListSlice.reducer;

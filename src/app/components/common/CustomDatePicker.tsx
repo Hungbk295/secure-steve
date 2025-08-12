@@ -19,8 +19,10 @@ const dateOptions: DateOptionType[] = [
 ];
 
 interface CustomDatePickerProps {
-  form: FormInstance<any>;
-  name: string;
+  form?: FormInstance<any>;
+  name?: string;
+  value?: [Dayjs | null, Dayjs | null];
+  onChange?: (dates: [Dayjs | null, Dayjs | null]) => void;
   showTime?: boolean | RangePickerProps["showTime"];
   showQuickPicker?: boolean;
   disabled?: boolean;
@@ -31,6 +33,8 @@ function CustomDatePicker(props: CustomDatePickerProps) {
   const {
     form,
     name,
+    value,
+    onChange,
     showTime = false,
     showQuickPicker = true,
     disabled = false,
@@ -38,10 +42,19 @@ function CustomDatePicker(props: CustomDatePickerProps) {
   } = props;
   const [open, setOpen] = useState(false);
   const formatType = showTime ? "YYYY-MM-DD HH:mm" : "YYYY-MM-DD";
-  const isFieldError = form.getFieldError(name).length;
+  const isFieldError = form && name ? form.getFieldError(name).length : 0;
 
   const dateValues: [Dayjs | null, Dayjs | null] = useMemo(() => {
-    if (!form.getFieldValue(name)) return [null, null];
+    // If using local state mode
+    if (value) {
+      return [
+        value[0] ? dayjsKR(value[0]) : null,
+        value[1] ? dayjsKR(value[1]) : null,
+      ];
+    }
+
+    // If using form mode
+    if (!form?.getFieldValue(name)) return [null, null];
     return [
       form.getFieldValue(name)?.[0]
         ? dayjsKR(form.getFieldValue(name)?.[0])
@@ -50,13 +63,23 @@ function CustomDatePicker(props: CustomDatePickerProps) {
         ? dayjsKR(form.getFieldValue(name)?.[1])
         : null,
     ];
-  }, [form.getFieldValue(name)]);
+  }, [form?.getFieldValue(name), value, name]);
 
   function handleChangeFormValue([start, end]: [Dayjs | null, Dayjs | null]) {
     onModifyForm?.();
-    form.setFieldsValue({
-      [name]: [start, end],
-    });
+
+    // If using local state mode
+    if (onChange) {
+      onChange([start, end]);
+      return;
+    }
+
+    // If using form mode
+    if (form && name) {
+      form.setFieldsValue({
+        [name]: [start, end],
+      });
+    }
   }
 
   function handleDateOptionClick(

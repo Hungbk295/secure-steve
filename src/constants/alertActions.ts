@@ -13,7 +13,7 @@ export const ALERT_ACTION_OPTIONS = [
   { value: EAlertProcessStatus.DELETE, label: "Delete" },
 ];
 
-// For HTML select elements  
+// For HTML select elements
 export const ALERT_ACTION_HTML_OPTIONS = [
   { value: "pending", text: "Pending" },
   { value: "no_action", text: "No Action" },
@@ -22,13 +22,13 @@ export const ALERT_ACTION_HTML_OPTIONS = [
 ];
 
 // Simple label mapping
-export const getActionLabel = (action: EAlertProcessStatus): string => {
-  const option = ALERT_ACTION_OPTIONS.find(opt => opt.value === action);
+export const getActionLabel = (action: string): string => {
+  const option = ALERT_ACTION_OPTIONS.find((opt) => opt.value === action);
   return option?.label || action;
 };
 
 // Action messages for confirmation dialogs
-export const getActionMessage = (action: EAlertProcessStatus): string => {
+export const getActionMessage = (action: string): string => {
   switch (action) {
     case EAlertProcessStatus.PENDING:
       return "mark as pending";
@@ -44,7 +44,7 @@ export const getActionMessage = (action: EAlertProcessStatus): string => {
 };
 
 // Action colors for styling
-export const getActionColor = (action: EAlertProcessStatus): string => {
+export const getActionColor = (action: string): string => {
   switch (action) {
     case EAlertProcessStatus.PENDING:
       return "text-orange-700";
@@ -60,7 +60,7 @@ export const getActionColor = (action: EAlertProcessStatus): string => {
 };
 
 // Action icons
-export const getActionIcon = (action: EAlertProcessStatus): string => {
+export const getActionIcon = (action: string): string => {
   switch (action) {
     case EAlertProcessStatus.PENDING:
       return "ri-time-line";

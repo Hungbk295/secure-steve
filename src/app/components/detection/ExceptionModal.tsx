@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { Modal, Input, Button, Select, Space, Typography } from "antd";
-import { ExclamationCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { Modal, Input, Button, Select, Typography } from "antd";
+import {
+  ExclamationCircleOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
 import { BLACKLIST_ACTION_OPTIONS } from "@/constants/detectionConstants";
 
 const { TextArea } = Input;
@@ -9,7 +12,12 @@ const { Text } = Typography;
 interface ExceptionModalProps {
   visible: boolean;
   onCancel: () => void;
-  onConfirm: (alert: any, exceptionType: string, actionType?: string, memo?: string) => Promise<void>;
+  onConfirm: (
+    alert: any,
+    exceptionType: string,
+    actionType?: string,
+    memo?: string
+  ) => Promise<void>;
   alert: any;
   exceptionType: string;
 }
@@ -27,13 +35,13 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
 
   const handleConfirm = async () => {
     if (!alert) return;
-    
+
     setLoading(true);
     try {
       await onConfirm(
-        alert, 
-        exceptionType, 
-        exceptionType === "blacklist" ? actionType : undefined, 
+        alert,
+        exceptionType,
+        exceptionType === "blacklist" ? actionType : undefined,
         memo
       );
       setMemo("");
@@ -139,7 +147,7 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
             value={memo}
             onChange={(e) => setMemo(e.target.value)}
             placeholder={
-              isBlacklist 
+              isBlacklist
                 ? "Reason for blacklisting this file..."
                 : "Reason for whitelisting this file..."
             }
@@ -155,9 +163,12 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
             <div className="flex items-start space-x-2">
               <ExclamationCircleOutlined className="text-red-500 mt-1" />
               <div>
-                <Text className="text-red-700 font-medium text-sm">Warning</Text>
+                <Text className="text-red-700 font-medium text-sm">
+                  Warning
+                </Text>
                 <Text className="text-red-600 text-sm block">
-                  Blacklisting will affect all future detections of this file hash.
+                  Blacklisting will affect all future detections of this file
+                  hash.
                 </Text>
               </div>
             </div>
@@ -182,8 +193,9 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
           >
             {loading
               ? "Processing..."
-              : `Confirm ${exceptionType.charAt(0).toUpperCase()}${exceptionType.slice(1)}`
-            }
+              : `Confirm ${exceptionType
+                  .charAt(0)
+                  .toUpperCase()}${exceptionType.slice(1)}`}
           </Button>
         </div>
       </div>

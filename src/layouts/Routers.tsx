@@ -7,7 +7,7 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import PrivateLayout from "@/layouts/PrivateLayout";
 
 const Login = lazy(() => import("@/app/pages/Login"));
-const Detection = lazy(() => import("@/app/pages/Detection"));
+const Detection = lazy(() => import("@/app/pages/Analyze/Detection"));
 
 const PlaceholderPage = () => (
   <div className="flex items-center justify-center h-full">
