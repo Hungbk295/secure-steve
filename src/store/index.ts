@@ -6,6 +6,8 @@ import detectionSlice from "@/store/detectionSlice";
 import alertDetailSlice from "@/store/alertDetailSlice";
 import actionSlice from "@/store/actionSlice";
 import completeSlice from "@/store/completeSlice";
+import settingPolicySlice from "@/store/settingPolicySlice";
+import settingServerPolicySlice from "@/store/settingServerPolicySlice";
 
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
@@ -29,6 +31,8 @@ const reducers = {
   alertDetail: alertDetailSlice,
   action: actionSlice,
   complete: completeSlice,
+  settingPolicy: settingPolicySlice,
+  settingServerPolicy: settingServerPolicySlice,
 };
 
 const rootReducer = combineReducers(reducers);

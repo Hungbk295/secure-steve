@@ -10,15 +10,11 @@ const Action: React.FC = () => {
   const tabItems: TabsProps["items"] = [
     {
       key: "pending",
-      label: (
-        <span className="text-sm font-medium items-center px-2">
-          미조치 알림
-        </span>
-      ),
+      label: <span className="text-sm font-medium  px-2">미조치 알림</span>,
     },
     {
       key: "completed",
-      label: "조치 이력 조회",
+      label: <span className="text-sm font-medium  px-2">조치 이력 조회</span>,
     },
   ];
 
