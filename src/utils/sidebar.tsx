@@ -97,12 +97,6 @@ export const getAllMenuItems = (): MenuItem[] => [
     roles: [UserRole.USER, UserRole.ADMINISTRATOR],
     children: [
       {
-        id: "history-blacklist",
-        label: "Black / Whitelist",
-        route: ROUTES.History.BlacklistWhitelist,
-        roles: [UserRole.ADMINISTRATOR], // Admin can see all, User sees personal in different route
-      },
-      {
         id: "inspection-history",
         label: "Inspection history",
         route: ROUTES.History.Inspection,

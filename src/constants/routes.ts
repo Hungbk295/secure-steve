@@ -26,7 +26,6 @@ const ROUTES = {
     BlacklistWhitelist: "/policy/blacklist-whitelist",
   },
   History: {
-    BlacklistWhitelist: "/history/blacklist-whitelist",
     Inspection: "/history/inspection",
     Action: "/history/action",
     PolicyChanges: "/history/policy-changes",

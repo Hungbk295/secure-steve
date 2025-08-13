@@ -34,7 +34,6 @@ export const ADMIN_ROUTES = [
   "/history/policy-changes",
   "/history/ai-learning",
   "/history/authority",
-  "/history/blacklist-whitelist",
 
   "/report/list",
   "/report/system",
