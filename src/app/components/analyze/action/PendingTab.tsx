@@ -9,14 +9,12 @@ const PendingTab: React.FC = () => {
   const loading = useAppSelector(selectActionLoading);
   const [actionButtons, setActionButtons] = useState<React.ReactNode>(null);
 
-  // Handle action buttons render
   const handleActionsRender = (actionsElement: React.ReactNode) => {
     setActionButtons(actionsElement);
   };
 
   return (
     <div className="flex flex-col gap-4 py-4">
-      {/* Filter Bar */}
       <Card
         size="small"
         className="pending-filter-bar"
@@ -26,15 +24,12 @@ const PendingTab: React.FC = () => {
           borderRadius: "8px",
         }}
       >
-        <PendingFilterBar
-          loading={loading}
-        />
+        <PendingFilterBar loading={loading} />
       </Card>
 
       <div>
         {actionButtons && <div className="mb-1">{actionButtons}</div>}
 
-        {/* Pending Table */}
         <Card size="small" className="pending-table-card">
           <PendingTable
             loading={loading}

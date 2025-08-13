@@ -1,7 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
 import { DynamicKeyObject } from "@/interfaces/app";
-import { MOCK_ActionPending_Analysis, MOCK_TasksCompleted } from "@/constants/mockAlert";
+import {
+  MOCK_ActionPending_Analysis,
+  MOCK_TasksCompleted,
+} from "@/constants/mockAlert";
 
 // Action State Types
 type IActionState = {
@@ -55,51 +58,57 @@ export const actionGetPendingList = createAsyncThunk(
       // });
 
       // Mock implementation
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
       // Simulate occasional errors
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
       }
 
       // Transform mock data to include keys and IDs
-      const transformedData = MOCK_ActionPending_Analysis.map((item, index) => ({
-        id: `pending-${index}`,
-        key: `pending-${index}`,
-        time: item.time,
-        file_name: item.file_name,
-        risk: item.risk,
-        verdict: item.verdict,
-        server_ip: item.server_ip,
-        process_status: "pending",
-      }));
+      const transformedData = MOCK_ActionPending_Analysis.map(
+        (item, index) => ({
+          id: `pending-${index}`,
+          key: `pending-${index}`,
+          time: item.time,
+          file_name: item.file_name,
+          risk: item.risk,
+          verdict: item.verdict,
+          server_ip: item.server_ip,
+          process_status: "pending",
+        })
+      );
 
       // Apply filters
       let filteredData = transformedData;
-      
+
       if (filters.risk && filters.risk.length > 0) {
-        filteredData = filteredData.filter(item => {
-          const riskNum = parseFloat(item.risk.replace('%', ''));
+        filteredData = filteredData.filter((item) => {
+          const riskNum = parseFloat(item.risk.replace("%", ""));
           return filters.risk.some((riskLevel: string) => {
             switch (riskLevel) {
-              case 'high': return riskNum >= 80;
-              case 'medium': return riskNum >= 50 && riskNum < 80;
-              case 'low': return riskNum < 50;
-              default: return true;
+              case "high":
+                return riskNum >= 80;
+              case "medium":
+                return riskNum >= 50 && riskNum < 80;
+              case "low":
+                return riskNum < 50;
+              default:
+                return true;
             }
           });
         });
       }
 
       if (filters.verdict && filters.verdict.length > 0) {
-        filteredData = filteredData.filter(item => 
+        filteredData = filteredData.filter((item) =>
           filters.verdict.includes(item.verdict.toLowerCase())
         );
       }
 
       if (filters.serverIP) {
-        filteredData = filteredData.filter(item => 
-          item.server_ip === filters.serverIP
+        filteredData = filteredData.filter(
+          (item) => item.server_ip === filters.serverIP
         );
       }
 
@@ -124,8 +133,6 @@ export const actionBulkProcess = createAsyncThunk(
     {
       selectedIds,
       action,
-      memo,
-      userId,
     }: {
       selectedIds: string[];
       action: "delete" | "quarantine" | "no_action" | "pending";
@@ -143,8 +150,8 @@ export const actionBulkProcess = createAsyncThunk(
       // });
 
       // Mock implementation
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       if (Math.random() < 0.1) {
         throw new Error("Failed to process bulk action");
       }
@@ -176,7 +183,7 @@ export const actionGetCompletedList = createAsyncThunk(
       // });
 
       // Mock implementation
-      await new Promise(resolve => setTimeout(resolve, 600));
+      await new Promise((resolve) => setTimeout(resolve, 600));
 
       return {
         data: MOCK_TasksCompleted,
@@ -186,7 +193,9 @@ export const actionGetCompletedList = createAsyncThunk(
       };
     } catch (error) {
       return rejectWithValue(
-        error instanceof Error ? error.message : "Failed to fetch completed list"
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch completed list"
       );
     }
   }
@@ -237,7 +246,7 @@ export const actionSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      
+
       // Bulk Process
       .addCase(actionBulkProcess.pending, (state) => {
         state.bulkActionLoading = true;
@@ -246,15 +255,15 @@ export const actionSlice = createSlice({
       .addCase(actionBulkProcess.fulfilled, (state, action) => {
         state.bulkActionLoading = false;
         const { processedIds, action: processAction } = action.payload;
-        
+
         // If action is not "pending", remove items from pending list
         if (processAction !== "pending") {
           state.pendingItems = state.pendingItems.filter(
-            item => !processedIds.includes(item.id)
+            (item) => !processedIds.includes(item.id)
           );
           state.pagination.total = state.pendingItems.length;
         }
-        
+
         // Clear selected rows
         state.selectedRowKeys = [];
         state.error = null;
@@ -263,7 +272,7 @@ export const actionSlice = createSlice({
         state.bulkActionLoading = false;
         state.error = action.payload as string;
       })
-      
+
       // Get Completed List
       .addCase(actionGetCompletedList.pending, (state) => {
         state.loading = true;
@@ -291,14 +300,19 @@ export const {
 } = actionSlice.actions;
 
 // Selectors
-export const selectActionPendingItems = (state: RootState) => state.action.pendingItems;
-export const selectActionCompletedItems = (state: RootState) => state.action.completedItems;
+export const selectActionPendingItems = (state: RootState) =>
+  state.action.pendingItems;
+export const selectActionCompletedItems = (state: RootState) =>
+  state.action.completedItems;
 export const selectActionLoading = (state: RootState) => state.action.loading;
-export const selectActionBulkLoading = (state: RootState) => state.action.bulkActionLoading;
+export const selectActionBulkLoading = (state: RootState) =>
+  state.action.bulkActionLoading;
 export const selectActionError = (state: RootState) => state.action.error;
 export const selectActionFilters = (state: RootState) => state.action.filters;
-export const selectActionPagination = (state: RootState) => state.action.pagination;
-export const selectActionSelectedRowKeys = (state: RootState) => state.action.selectedRowKeys;
+export const selectActionPagination = (state: RootState) =>
+  state.action.pagination;
+export const selectActionSelectedRowKeys = (state: RootState) =>
+  state.action.selectedRowKeys;
 
 // Combined selectors
 export const selectActionState = (state: RootState) => ({

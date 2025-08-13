@@ -36,7 +36,7 @@ const Detection: React.FC = () => {
       </Card>
 
       <div className="flex flex-col gap-1">
-        <div className="flex justify-end">
+        <div className="flex justify-end mr-3">
           <Button
             icon={<DownloadOutlined />}
             disabled={true}

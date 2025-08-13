@@ -2,34 +2,45 @@ import { useEffect } from "react";
 import { Row, Col, Button, Form } from "antd";
 import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
 import Select from "@/app/components/common/Select";
+import CustomDatePicker from "@/app/components/common/CustomDatePicker";
 import { DynamicKeyObject } from "@/interfaces/app";
 import { useAppDispatch } from "@/store";
-import { actionGetPendingList } from "@/store/actionSlice";
+import { actionGetCompletedList } from "@/store/completeSlice";
 
-interface PendingFilterBarProps {
+interface CompletedFilterBarProps {
   loading?: boolean;
   className?: string;
 }
 
 const initialFormData = {
+  timeRange: null,
   risk: "all",
   triageVerdict: "all",
+  processStatus: "all",
   serverIP: "all",
 };
 
-function PendingFilterBar({
+function CompletedFilterBar({
   loading = false,
   className,
-}: PendingFilterBarProps) {
+}: CompletedFilterBarProps) {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
 
   function getPayload(values: DynamicKeyObject) {
-    const { risk, triageVerdict, serverIP } = values;
+    const { timeRange, risk, triageVerdict, processStatus, serverIP } = values;
 
     const payload = {
+      timeRange:
+        timeRange && timeRange.length === 2
+          ? [
+              timeRange[0].format("YYYY-MM-DD"),
+              timeRange[1].format("YYYY-MM-DD"),
+            ]
+          : null,
       risk: risk === "all" ? [] : [risk],
       verdict: triageVerdict === "all" ? [] : [triageVerdict],
+      processStatus: processStatus === "all" ? [] : [processStatus],
       serverIP: serverIP === "all" ? "" : serverIP,
     };
     return payload;
@@ -37,19 +48,19 @@ function PendingFilterBar({
 
   function onFinish(values: DynamicKeyObject) {
     const payload = getPayload(values);
-    dispatch(actionGetPendingList(payload));
+    dispatch(actionGetCompletedList(payload));
   }
 
   function onReset() {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
-    dispatch(actionGetPendingList(payload));
+    dispatch(actionGetCompletedList(payload));
   }
 
   useEffect(() => {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
-    dispatch(actionGetPendingList(payload));
+    dispatch(actionGetCompletedList(payload));
   }, [dispatch]);
 
   const riskLevelOptions = [
@@ -67,12 +78,20 @@ function PendingFilterBar({
     { label: "Unknown", value: "unknown" },
   ];
 
+  const processStatusOptions = [
+    { label: "All", value: "all" },
+    { label: "Delete", value: "delete" },
+    { label: "Quarantine", value: "quarantine" },
+    { label: "No Action", value: "no_action" },
+    { label: "Pending", value: "pending" },
+  ];
+
   const serverIPOptions = [
     { label: "All", value: "all" },
     { label: "66.211.75.1", value: "66.211.75.1" },
     { label: "66.211.75.2", value: "66.211.75.2" },
-    { label: "192.168.1.100", value: "192.168.1.100" },
-    { label: "192.168.1.101", value: "192.168.1.101" },
+    { label: "66.211.75.3", value: "66.211.75.3" },
+    { label: "66.211.75.4", value: "66.211.75.4" },
   ];
 
   return (
@@ -83,6 +102,19 @@ function PendingFilterBar({
       className={className}
     >
       <Row gutter={[16, 16]} align="middle">
+        <Col xs={24} sm={12} md={8} lg={4}>
+          <Form.Item label="Time Range" name="timeRange">
+            <CustomDatePicker
+              form={form}
+              showTime={false}
+              name="dateRange"
+              showQuickPicker={false}
+              placeholder={["Start Time", "End Time"]}
+            />
+          </Form.Item>
+        </Col>
+
+        {/* Risk Level Filter */}
         <Col xs={24} sm={8} md={6} lg={4}>
           <Form.Item label="Risk" name="risk">
             <Select
@@ -96,6 +128,7 @@ function PendingFilterBar({
           </Form.Item>
         </Col>
 
+        {/* Triage Verdict Filter */}
         <Col xs={24} sm={8} md={6} lg={4}>
           <Form.Item label="Triage Verdict" name="triageVerdict">
             <Select
@@ -109,6 +142,21 @@ function PendingFilterBar({
           </Form.Item>
         </Col>
 
+        {/* Process Status Filter */}
+        <Col xs={24} sm={8} md={6} lg={4}>
+          <Form.Item label="Process Status" name="processStatus">
+            <Select
+              placeholder="Process Status"
+              showSearch
+              options={processStatusOptions}
+              className="w-full"
+              size="middle"
+              disabled={loading}
+            />
+          </Form.Item>
+        </Col>
+
+        {/* Server IP Filter */}
         <Col xs={24} sm={8} md={6} lg={4}>
           <Form.Item label="Server IP" name="serverIP">
             <Select
@@ -122,7 +170,8 @@ function PendingFilterBar({
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={24} md={6} lg={12}>
+        {/* Action Buttons */}
+        <Col xs={24} sm={24} md={6} lg={4}>
           <div className="filter-actions flex justify-end space-x-2 flex-1">
             <Button
               className="!h-[45px] !w-12"
@@ -147,4 +196,4 @@ function PendingFilterBar({
   );
 }
 
-export default PendingFilterBar;
+export default CompletedFilterBar;

@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Table, Tag, message, Tooltip, Pagination } from "antd";
+import { Tag, message, Tooltip } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
   actionGetDetectionList,
   selectDetectionItems,
   selectDetectionLoading,
-  selectDetectionPagination,
-  updatePagination,
   actionUpdateProcessStatus,
   actionUpdateFilePolicy,
 } from "@/store/detectionSlice";
@@ -18,7 +16,6 @@ import {
   getTimeDisplay,
   canChangeProcessStatus,
   PROCESS_STATUS_OPTIONS,
-  PAGE_SIZE_OPTIONS,
   EXCEPTION_OPTIONS,
 } from "@/constants/detectionConstants";
 import AlertDetailModal from "./AlertDetailModal";
@@ -26,6 +23,7 @@ import ProcessActionModal from "./ProcessActionModal";
 import ExceptionModal from "./ExceptionModal";
 import useScreenWidth from "@/hooks/useScreenWidth";
 import Select from "../common/Select";
+import Table from "antd/lib/table/Table";
 
 interface DetectionItem {
   id: number;
@@ -50,7 +48,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
   const dispatch = useAppDispatch();
   const data = useAppSelector(selectDetectionItems);
   const internalLoading = useAppSelector(selectDetectionLoading);
-  const pagination = useAppSelector(selectDetectionPagination);
 
   // Combine external and internal loading states
   const loading = externalLoading || internalLoading;
@@ -322,7 +319,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
 
   return (
     <div className="bg-white rounded-lg border border-gray-200">
-      {/* Table */}
       <Table
         columns={getColumns()}
         dataSource={data}
@@ -330,7 +326,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
         loading={loading}
         scroll={{ x: isDesktop ? 1200 : 800 }}
         pagination={false}
-        className="detection-table z-index-0"
         expandable={
           !isDesktop
             ? {
@@ -384,40 +379,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
             : undefined
         }
       />
-
-      {/* Footer with Pagination */}
-      <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
-        <div className="text-sm text-gray-600">
-          Total: {pagination.total} records
-        </div>
-
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">Page size:</span>
-            <Select
-              value={pagination.pageSize}
-              size="small"
-              className="w-20"
-              options={PAGE_SIZE_OPTIONS}
-              onChange={(value) =>
-                dispatch(updatePagination({ pageSize: value, current: 1 }))
-              }
-            />
-          </div>
-
-          <Pagination
-            current={pagination.current}
-            pageSize={pagination.pageSize}
-            total={pagination.total}
-            onChange={(page) => dispatch(updatePagination({ current: page }))}
-            showSizeChanger={false}
-            showQuickJumper
-            showTotal={(total, range) =>
-              `${range[0]}-${range[1]} of ${total} items`
-            }
-          />
-        </div>
-      </div>
 
       {/* Process Action Modal */}
       <ProcessActionModal

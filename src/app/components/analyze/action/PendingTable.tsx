@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Table, Tag, Pagination, Button, Select, message } from "antd";
+import { Tag, Button, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { TableRowSelection } from "antd/es/table/interface";
 import {
@@ -17,13 +17,12 @@ import {
   selectActionPendingItems,
   selectActionLoading,
   selectActionBulkLoading,
-  selectActionPagination,
   selectActionSelectedRowKeys,
   setSelectedRowKeys,
-  updatePagination,
   actionBulkProcess,
 } from "@/store/actionSlice";
 import BulkActionModal from "./BulkActionModal";
+import Table from "../../common/Table";
 
 interface PendingItem {
   key: string;
@@ -47,21 +46,17 @@ const PendingTable: React.FC<PendingTableProps> = ({
   const data = useAppSelector(selectActionPendingItems);
   const loading = useAppSelector(selectActionLoading) || externalLoading;
   const bulkActionLoading = useAppSelector(selectActionBulkLoading);
-  const pagination = useAppSelector(selectActionPagination);
   const selectedRowKeys = useAppSelector(selectActionSelectedRowKeys);
 
   const [selectAll, setSelectAll] = useState(false);
 
-  // Modal states
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAction, setSelectedAction] = useState<string>("");
 
-  // Update selectAll state when selectedRowKeys changes
   useEffect(() => {
     setSelectAll(selectedRowKeys.length === data.length && data.length > 0);
   }, [selectedRowKeys, data.length]);
 
-  // Handle bulk action selection
   const handleBulkAction = useCallback(
     (action: string) => {
       if (selectedRowKeys.length === 0) return;
@@ -71,7 +66,6 @@ const PendingTable: React.FC<PendingTableProps> = ({
     [selectedRowKeys.length]
   );
 
-  // Handle bulk action confirm
   const handleBulkActionConfirm = async (action: string, memo: string) => {
     try {
       await dispatch(
@@ -87,11 +81,10 @@ const PendingTable: React.FC<PendingTableProps> = ({
       setModalVisible(false);
     } catch (error) {
       message.error("Failed to process bulk action");
-      console.error("Bulk action failed:", error);
+      console.error("Bulk action failed:", error, selectAll);
     }
   };
 
-  // Row selection configuration
   const rowSelection: TableRowSelection<PendingItem> = {
     selectedRowKeys,
     onChange: (newSelectedRowKeys: React.Key[]) => {
@@ -106,7 +99,6 @@ const PendingTable: React.FC<PendingTableProps> = ({
     }),
   };
 
-  // Table columns
   const columns: ColumnsType<PendingItem> = [
     {
       title: "Time",
@@ -166,18 +158,8 @@ const PendingTable: React.FC<PendingTableProps> = ({
     },
   ];
 
-  // Page size options
-  const pageSizeOptions = [
-    { label: "10", value: 10 },
-    { label: "20", value: 20 },
-    { label: "30", value: 30 },
-    { label: "40", value: 40 },
-    { label: "50", value: 50 },
-  ];
-
   const hasSelectedItems = selectedRowKeys.length > 0;
 
-  // Create action buttons element
   const actionButtons = useMemo(
     () => (
       <div className="flex items-center gap-2 justify-end">
@@ -246,7 +228,6 @@ const PendingTable: React.FC<PendingTableProps> = ({
     [hasSelectedItems, bulkActionLoading, selectedAction, handleBulkAction]
   );
 
-  // Pass action buttons to parent if callback provided
   useEffect(() => {
     if (onActionsRender) {
       onActionsRender(actionButtons);
@@ -254,55 +235,16 @@ const PendingTable: React.FC<PendingTableProps> = ({
   }, [onActionsRender, actionButtons]);
 
   return (
-    <div className="pending-table-container">
-      {/* Table */}
+    <div>
       <Table
         columns={columns}
         dataSource={data}
         rowSelection={rowSelection}
         loading={loading}
         pagination={false}
-        className="pending-alerts-table"
         scroll={{ x: 800 }}
-        size="small"
       />
 
-      {/* Footer with Pagination */}
-      <div className="flex items-center justify-between px-4 py-4 border-t border-gray-200">
-        <div className="text-sm text-gray-600">
-          Total: {pagination.total} records
-        </div>
-
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">Page size:</span>
-            <Select
-              value={pagination.pageSize}
-              onChange={(value) =>
-                dispatch(updatePagination({ pageSize: value, current: 1 }))
-              }
-              size="small"
-              className="w-20"
-              options={pageSizeOptions}
-            />
-          </div>
-
-          <Pagination
-            current={pagination.current}
-            pageSize={pagination.pageSize}
-            total={pagination.total}
-            onChange={(page) => dispatch(updatePagination({ current: page }))}
-            showSizeChanger={false}
-            showQuickJumper
-            showTotal={(total, range) =>
-              `${range[0]}-${range[1]} of ${total} items`
-            }
-            size="small"
-          />
-        </div>
-      </div>
-
-      {/* Bulk Action Modal */}
       <BulkActionModal
         visible={modalVisible}
         action={selectedAction}

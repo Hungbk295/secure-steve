@@ -1,20 +1,47 @@
-import React from "react";
-import { Card, Empty } from "antd";
+import React, { useState } from "react";
+import { Card } from "antd";
+import CompletedFilterBar from "./CompletedFilterBar";
+import CompletedTable from "./CompletedTable";
+import { useAppSelector } from "@/store";
+import { selectCompleteLoading } from "@/store/completeSlice";
 
 const CompletedTab: React.FC = () => {
+  const loading = useAppSelector(selectCompleteLoading);
+  const [csvDownloadButton, setCSVDownloadButton] =
+    useState<React.ReactNode>(null);
+
+  // Handle CSV download button render
+  const handleCSVDownloadRender = (csvButton: React.ReactNode) => {
+    setCSVDownloadButton(csvButton);
+  };
+
   return (
     <div className="flex flex-col gap-4 py-4">
-      <Card size="small" className="completed-actions-card">
-        <div className="flex items-center justify-center py-16">
-          <Empty
-            description={
-              <span className="text-gray-500">
-                조치 이력 조회 (Completed actions) will be implemented here
-              </span>
-            }
-          />
-        </div>
+      <Card
+        size="small"
+        className="completed-filter-bar"
+        style={{
+          backgroundColor: "var(--color-bg-secondary)",
+          border: "1px solid var(--color-border-100)",
+          borderRadius: "8px",
+        }}
+      >
+        <CompletedFilterBar loading={loading} />
       </Card>
+
+      <div>
+        {csvDownloadButton && (
+          <div className="mb-1 flex justify-end mr-3">{csvDownloadButton}</div>
+        )}
+
+        {/* Completed Table */}
+        <Card size="small" className="completed-table-card">
+          <CompletedTable
+            loading={loading}
+            onCSVDownloadRender={handleCSVDownloadRender}
+          />
+        </Card>
+      </div>
     </div>
   );
 };
