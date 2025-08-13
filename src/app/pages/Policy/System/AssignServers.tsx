@@ -13,13 +13,14 @@ import { selectSettingServerPolicyLoading } from "@/store/settingServerPolicySli
 
 const AssignServers: React.FC = () => {
   const assignServersLoading = useAppSelector(selectSettingPolicyLoading);
-  const serverSettingsLoading = useAppSelector(selectSettingServerPolicyLoading);
+  const serverSettingsLoading = useAppSelector(
+    selectSettingServerPolicyLoading
+  );
   const [assignClusterModalVisible, setAssignClusterModalVisible] =
     useState(false);
   const [assignManagerModalVisible, setAssignManagerModalVisible] =
     useState(false);
-  const [holdServersModalVisible, setHoldServersModalVisible] =
-    useState(false);
+  const [holdServersModalVisible, setHoldServersModalVisible] = useState(false);
   const [scanSettingsModalVisible, setScanSettingsModalVisible] =
     useState(false);
   const [quarantineFolderModalVisible, setQuarantineFolderModalVisible] =
@@ -76,7 +77,7 @@ const AssignServers: React.FC = () => {
         </h1>
       </div>
 
-      <div className="flex-1 py-6 flex flex-col gap-4">
+      <div className="flex-1 py-4 flex flex-col gap-4">
         <div className="bg-white rounded-lg border border-gray-200 !mb-0">
           <Tabs
             activeKey={activeTab}

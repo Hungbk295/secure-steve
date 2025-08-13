@@ -38,7 +38,7 @@ const Action: React.FC = () => {
       </div>
 
       {/* Tabs Content */}
-      <div className="flex-1 py-6">
+      <div className="flex-1 py-4">
         <div className="bg-white rounded-lg border border-gray-200 !mb-0">
           <Tabs
             activeKey={activeTab}
