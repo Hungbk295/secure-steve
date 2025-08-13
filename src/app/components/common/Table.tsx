@@ -14,6 +14,7 @@ type TTableProps = TableProps<any> & {
   showPagination?: boolean;
   total?: number;
   onRetrieve?: (size: number, current: number) => void;
+  expandable?: any;
 };
 
 const PAGE_SIZE_OPTIONS = [
@@ -40,6 +41,7 @@ const paginationItemRender: PaginationProps["itemRender"] = (
 function Table(props: TTableProps) {
   const {
     className,
+    expandable,
     dataSource = [],
     children,
     paginationProps,
@@ -73,6 +75,7 @@ function Table(props: TTableProps) {
         className={cn("custom-table", className)}
         pagination={false}
         locale={{ emptyText: "No search results found." }}
+        expandable={expandable}
         {...rest}
       />
       {showPagination && (

@@ -454,3 +454,76 @@ export const MOCK_ActionCompleted_Analysis = [
     actioned_by: "System",
   },
 ];
+
+export const MOCK_SettingPolicy_1 = [
+  {
+    server_id: "srv-001",
+    server_ip: "66.211.75.1",
+    server_cluster: "미지정",
+    manager: { id: "u001", name: "홍길동", dept: "보안" },
+    last_malware_detected_at: "2025-06-16T20:23:00",
+  },
+  {
+    server_id: "srv-002",
+    server_ip: "66.211.75.2",
+    server_cluster: "네트워크",
+    manager: { id: "u002", name: "김철수", dept: "서비스" },
+    last_malware_detected_at: "2025-06-16T17:23:00",
+  },
+  {
+    server_id: "srv-003",
+    server_ip: "66.211.75.3",
+    server_cluster: "서비스",
+    manager: { id: "u003", name: "아무개", dept: "시스템 운영팀" },
+    last_malware_detected_at: "2025-06-16T14:23:00",
+  },
+  {
+    server_id: "srv-004",
+    server_ip: "66.211.75.4",
+    server_cluster: "ERP",
+    manager: { id: "u001", name: "홍길동", dept: "보안" },
+    last_malware_detected_at: "2025-06-16T11:23:00",
+  },
+  {
+    server_id: "srv-005",
+    server_ip: "66.211.75.5",
+    server_cluster: "CRM",
+    manager: { id: "u002", name: "김철수", dept: "서비스" },
+    last_malware_detected_at: "2025-06-16T08:23:00",
+  },
+  {
+    server_id: "srv-006",
+    server_ip: "66.211.75.6",
+    server_cluster: "보안",
+    manager: { id: "u003", name: "아무개", dept: "시스템 운영팀" },
+    last_malware_detected_at: "2025-06-16T05:23:00",
+  },
+  {
+    server_id: "srv-007",
+    server_ip: "66.211.75.7",
+    server_cluster: "내부 서비스",
+    manager: { id: "u001", name: "홍길동", dept: "보안" },
+    last_malware_detected_at: "2025-06-16T02:23:00",
+  },
+  {
+    server_id: "srv-008",
+    server_ip: "66.211.75.8",
+    server_cluster: "미지정",
+    manager: { id: "u002", name: "김철수", dept: "서비스" },
+    last_malware_detected_at: "2025-06-15T23:23:00",
+  },
+  {
+    server_id: "srv-009",
+    server_ip: "66.211.75.9",
+    server_cluster: "네트워크",
+    manager: { id: "u003", name: "아무개", dept: "시스템 운영팀" },
+    last_malware_detected_at: "2025-06-15T20:23:00",
+  },
+  {
+    server_id: "srv-010",
+    server_ip: "66.211.75.10",
+    server_cluster: "서비스",
+    manager: { id: "u001", name: "홍길동", dept: "보안" },
+    last_malware_detected_at: "2025-06-15T17:23:00",
+  },
+];

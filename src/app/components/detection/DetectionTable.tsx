@@ -23,7 +23,7 @@ import ProcessActionModal from "./ProcessActionModal";
 import ExceptionModal from "./ExceptionModal";
 import useScreenWidth from "@/hooks/useScreenWidth";
 import Select from "../common/Select";
-import Table from "antd/lib/table/Table";
+import Table from "../common/Table";
 
 interface DetectionItem {
   id: number;
@@ -325,7 +325,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
         rowKey="id"
         loading={loading}
         scroll={{ x: isDesktop ? 1200 : 800 }}
-        pagination={false}
         expandable={
           !isDesktop
             ? {
