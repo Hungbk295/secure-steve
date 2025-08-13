@@ -3,72 +3,60 @@ import { Row, Col, Button, Form } from "antd";
 import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
 import Select from "@/app/components/common/Select";
 import { DynamicKeyObject } from "@/interfaces/app";
-import CustomDatePicker from "../common/CustomDatePicker";
-import { useAppDispatch } from "@/store";
-import { actionGetDetectionList } from "@/store/detectionSlice";
 
-interface DetectionFilterBarProps {
+interface PendingFilterBarProps {
+  onFilterChange: (filters: any) => void;
   loading?: boolean;
   className?: string;
 }
 
 const initialFormData = {
-  dateRange: null,
-  riskLevel: "all",
+  risk: "all",
   triageVerdict: "all",
-  processStatus: "all",
   serverIP: "all",
-  fileNameOrHash: "",
 };
 
-function DetectionFilterBar({ loading = false }: DetectionFilterBarProps) {
+function PendingFilterBar({
+  onFilterChange,
+  loading = false,
+  className,
+}: PendingFilterBarProps) {
   const [form] = Form.useForm();
-  const dispatch = useAppDispatch();
 
+  // Get formatted payload from form values
   function getPayload(values: DynamicKeyObject) {
-    const {
-      dateRange,
-      riskLevel,
-      triageVerdict,
-      processStatus,
-      serverIP,
-      fileNameOrHash,
-    } = values;
+    const { risk, triageVerdict, serverIP } = values;
 
     const payload = {
-      timeRange:
-        dateRange && dateRange.length === 2
-          ? [
-              dateRange[0].format("YYYY-MM-DD"),
-              dateRange[1].format("YYYY-MM-DD"),
-            ]
-          : null,
-      risk: riskLevel === "all" ? [] : [riskLevel],
+      risk: risk === "all" ? [] : [risk],
       verdict: triageVerdict === "all" ? [] : [triageVerdict],
-      processStatus: processStatus === "all" ? [] : [processStatus],
       serverIP: serverIP === "all" ? "" : serverIP,
-      fileNameOrHash: fileNameOrHash || "",
     };
     return payload;
   }
 
+  // Handle form submission (Apply button)
   function onFinish(values: DynamicKeyObject) {
     const payload = getPayload(values);
-    dispatch(actionGetDetectionList(payload));
+    onFilterChange(payload);
   }
 
+  // Handle form reset
   function onReset() {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
-    dispatch(actionGetDetectionList(payload));
+    onFilterChange(payload);
   }
 
+  // Initialize form on mount
   useEffect(() => {
     form.setFieldsValue(initialFormData);
+    // Trigger initial filter with default values
     const payload = getPayload(initialFormData);
-    dispatch(actionGetDetectionList(payload));
+    onFilterChange(payload);
   }, []);
 
+  // Filter options
   const riskLevelOptions = [
     { label: "All", value: "all" },
     { label: "High (80-100%)", value: "high" },
@@ -84,38 +72,25 @@ function DetectionFilterBar({ loading = false }: DetectionFilterBarProps) {
     { label: "Unknown", value: "unknown" },
   ];
 
-  const processStatusOptions = [
-    { label: "All", value: "all" },
-    { label: "Pending", value: "pending" },
-    { label: "No Action", value: "no_action" },
-    { label: "Quarantine", value: "quarantine" },
-    { label: "Delete", value: "delete" },
-  ];
-
   const serverIPOptions = [
     { label: "All", value: "all" },
+    { label: "66.211.75.1", value: "66.211.75.1" },
+    { label: "66.211.75.2", value: "66.211.75.2" },
     { label: "192.168.1.100", value: "192.168.1.100" },
     { label: "192.168.1.101", value: "192.168.1.101" },
-    { label: "10.0.0.50", value: "10.0.0.50" },
-    { label: "10.0.0.51", value: "10.0.0.51" },
   ];
 
   return (
-    <Form form={form} layout="vertical" onFinish={onFinish}>
+    <Form
+      form={form}
+      layout="vertical"
+      onFinish={onFinish}
+      className={className}
+    >
       <Row gutter={[16, 16]} align="middle">
-        <Col xs={24} sm={12} md={8} lg={4}>
-          <Form.Item label="Time Range" name="dateRange">
-            <CustomDatePicker
-              form={form}
-              name="dateRange"
-              showQuickPicker={false}
-              placeholder={["Start Time", "End Time"]}
-            />
-          </Form.Item>
-        </Col>
-
-        <Col xs={24} sm={12} md={6} lg={4}>
-          <Form.Item label="Risk" name="riskLevel">
+        {/* Risk Level Filter */}
+        <Col xs={24} sm={8} md={6} lg={4}>
+          <Form.Item label="Risk" name="risk">
             <Select
               placeholder="Risk Level"
               showSearch
@@ -127,7 +102,8 @@ function DetectionFilterBar({ loading = false }: DetectionFilterBarProps) {
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={12} md={6} lg={4}>
+        {/* Triage Verdict Filter */}
+        <Col xs={24} sm={8} md={6} lg={4}>
           <Form.Item label="Triage Verdict" name="triageVerdict">
             <Select
               placeholder="Triage Verdict"
@@ -140,20 +116,8 @@ function DetectionFilterBar({ loading = false }: DetectionFilterBarProps) {
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={12} md={6} lg={4}>
-          <Form.Item label="Process Status" name="processStatus">
-            <Select
-              placeholder="Process Status"
-              showSearch
-              options={processStatusOptions}
-              className="w-full"
-              size="middle"
-              disabled={loading}
-            />
-          </Form.Item>
-        </Col>
-
-        <Col xs={24} sm={12} md={6} lg={4}>
+        {/* Server IP Filter */}
+        <Col xs={24} sm={8} md={6} lg={4}>
           <Form.Item label="Server IP" name="serverIP">
             <Select
               placeholder="Server IP"
@@ -166,8 +130,9 @@ function DetectionFilterBar({ loading = false }: DetectionFilterBarProps) {
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={24} md={8} lg={4}>
-          <div className="filter-actions flex justify-end space-x-2">
+        {/* Action Buttons */}
+        <Col xs={24} sm={24} md={6} lg={12}>
+          <div className="filter-actions flex justify-end space-x-2 flex-1">
             <Button
               className="!h-[45px] !w-12"
               type="default"
@@ -191,4 +156,4 @@ function DetectionFilterBar({ loading = false }: DetectionFilterBarProps) {
   );
 }
 
-export default DetectionFilterBar;
+export default PendingFilterBar;

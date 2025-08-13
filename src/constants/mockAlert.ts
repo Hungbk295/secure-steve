@@ -270,3 +270,76 @@ export const MOCK_FilePolicyResponse_Sample = {
   action_type: "quarantine",
   applied_at: "2025-06-19T20:00:00Z",
 };
+
+export const MOCK_ActionPending_Analysis = [
+  {
+    time: "19 June 25 | 23:23",
+    file_name: "invoice2025.exe",
+    risk: "99.5%",
+    verdict: "Malware",
+    server_ip: "66.211.75.1",
+  },
+  {
+    time: "19 June 25 | 21:49",
+    file_name: "readme.txt",
+    risk: "0.5%",
+    verdict: "Benign",
+    server_ip: "66.211.75.1",
+  },
+  {
+    time: "19 June 25 | 19:53",
+    file_name: "clientdata.elf",
+    risk: "97.3%",
+    verdict: "Malware",
+    server_ip: "66.211.75.1",
+  },
+  {
+    time: "19 June 25 | 15:25",
+    file_name: "update_patch.bin",
+    risk: "99.2%",
+    verdict: "Malware",
+    server_ip: "66.211.75.1",
+  },
+  {
+    time: "19 June 25 | 11:13",
+    file_name: "config.yml",
+    risk: "98.1%",
+    verdict: "Malware",
+    server_ip: "66.211.75.1",
+  },
+  {
+    time: "19 June 25 | 09:59",
+    file_name: "manual_v2.pdf",
+    risk: "3.2%",
+    verdict: "Benign",
+    server_ip: "66.211.75.1",
+  },
+  {
+    time: "19 June 25 | 00:11",
+    file_name: "core_dump.log",
+    risk: "72.3%",
+    verdict: "Malware",
+    server_ip: "66.211.75.2",
+  },
+  {
+    time: "18 June 25 | 22:05",
+    file_name: "setup.exe",
+    risk: "97.3%",
+    verdict: "Malware",
+    server_ip: "66.211.75.2",
+  },
+  {
+    time: "18 June 25 | 04:03",
+    file_name: "debug_info.dat",
+    risk: "87.3%",
+    verdict: "Malware",
+    server_ip: "66.211.75.2",
+  },
+  {
+    time: "17 June 25 | 14:01",
+    file_name: "presentation.pptx",
+    risk: "81.3%",
+    verdict: "Malware",
+    server_ip: "66.211.75.2",
+  },
+];
