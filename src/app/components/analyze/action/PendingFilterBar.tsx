@@ -3,9 +3,10 @@ import { Row, Col, Button, Form } from "antd";
 import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
 import Select from "@/app/components/common/Select";
 import { DynamicKeyObject } from "@/interfaces/app";
+import { useAppDispatch } from "@/store";
+import { actionGetPendingList } from "@/store/actionSlice";
 
 interface PendingFilterBarProps {
-  onFilterChange: (filters: any) => void;
   loading?: boolean;
   className?: string;
 }
@@ -17,11 +18,11 @@ const initialFormData = {
 };
 
 function PendingFilterBar({
-  onFilterChange,
   loading = false,
   className,
 }: PendingFilterBarProps) {
   const [form] = Form.useForm();
+  const dispatch = useAppDispatch();
 
   // Get formatted payload from form values
   function getPayload(values: DynamicKeyObject) {
@@ -38,14 +39,14 @@ function PendingFilterBar({
   // Handle form submission (Apply button)
   function onFinish(values: DynamicKeyObject) {
     const payload = getPayload(values);
-    onFilterChange(payload);
+    dispatch(actionGetPendingList(payload));
   }
 
   // Handle form reset
   function onReset() {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
-    onFilterChange(payload);
+    dispatch(actionGetPendingList(payload));
   }
 
   // Initialize form on mount
@@ -53,8 +54,8 @@ function PendingFilterBar({
     form.setFieldsValue(initialFormData);
     // Trigger initial filter with default values
     const payload = getPayload(initialFormData);
-    onFilterChange(payload);
-  }, []);
+    dispatch(actionGetPendingList(payload));
+  }, [dispatch]);
 
   // Filter options
   const riskLevelOptions = [

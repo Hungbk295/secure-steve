@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Table, Tag, Pagination, Button, Select } from "antd";
+import { Table, Tag, Pagination, Button, Select, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { TableRowSelection } from "antd/es/table/interface";
 import {
@@ -8,11 +8,21 @@ import {
   CheckOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
-import { MOCK_ActionPending_Analysis } from "@/constants/mockAlert";
 import {
   getVerdictColor,
   getRiskBadgeColor,
 } from "@/constants/detectionConstants";
+import { useAppDispatch, useAppSelector } from "@/store";
+import {
+  selectActionPendingItems,
+  selectActionLoading,
+  selectActionBulkLoading,
+  selectActionPagination,
+  selectActionSelectedRowKeys,
+  setSelectedRowKeys,
+  updatePagination,
+  actionBulkProcess,
+} from "@/store/actionSlice";
 import BulkActionModal from "./BulkActionModal";
 
 interface PendingItem {
@@ -25,77 +35,31 @@ interface PendingItem {
 }
 
 interface PendingTableProps {
-  filters: any;
   loading: boolean;
   onActionsRender?: (actionsElement: React.ReactNode) => void;
 }
 
 const PendingTable: React.FC<PendingTableProps> = ({
-  filters,
-  loading,
+  loading: externalLoading,
   onActionsRender,
 }) => {
-  const [data, setData] = useState<PendingItem[]>([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const dispatch = useAppDispatch();
+  const data = useAppSelector(selectActionPendingItems);
+  const loading = useAppSelector(selectActionLoading) || externalLoading;
+  const bulkActionLoading = useAppSelector(selectActionBulkLoading);
+  const pagination = useAppSelector(selectActionPagination);
+  const selectedRowKeys = useAppSelector(selectActionSelectedRowKeys);
+
   const [selectAll, setSelectAll] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(30);
 
   // Modal states
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAction, setSelectedAction] = useState<string>("");
 
-  // Load and filter data
+  // Update selectAll state when selectedRowKeys changes
   useEffect(() => {
-    // Transform mock data to include keys
-    const transformedData: PendingItem[] = MOCK_ActionPending_Analysis.map(
-      (item, index) => ({
-        key: `pending-${index}`,
-        time: item.time,
-        file_name: item.file_name,
-        risk: item.risk,
-        verdict: item.verdict,
-        server_ip: item.server_ip,
-      })
-    );
-
-    // Apply filters
-    let filteredData = transformedData;
-
-    if (filters.risk && filters.risk.length > 0) {
-      filteredData = filteredData.filter((item) => {
-        const riskNum = parseFloat(item.risk.replace("%", ""));
-        return filters.risk.some((riskLevel: string) => {
-          switch (riskLevel) {
-            case "high":
-              return riskNum >= 80;
-            case "medium":
-              return riskNum >= 50 && riskNum < 80;
-            case "low":
-              return riskNum < 50;
-            default:
-              return true;
-          }
-        });
-      });
-    }
-
-    if (filters.verdict && filters.verdict.length > 0) {
-      filteredData = filteredData.filter((item) =>
-        filters.verdict.includes(item.verdict.toLowerCase())
-      );
-    }
-
-    if (filters.serverIP) {
-      filteredData = filteredData.filter(
-        (item) => item.server_ip === filters.serverIP
-      );
-    }
-
-    setData(filteredData);
-    setSelectedRowKeys([]);
-    setSelectAll(false);
-  }, [filters]);
+    setSelectAll(selectedRowKeys.length === data.length && data.length > 0);
+  }, [selectedRowKeys, data.length]);
 
   // Handle bulk action selection
   const handleBulkAction = useCallback(
@@ -110,24 +74,19 @@ const PendingTable: React.FC<PendingTableProps> = ({
   // Handle bulk action confirm
   const handleBulkActionConfirm = async (action: string, memo: string) => {
     try {
-      console.log("Bulk action:", {
-        action,
-        selectedItems: selectedRowKeys,
-        memo,
-        count: selectedRowKeys.length,
-        selectAll,
-      });
+      await dispatch(
+        actionBulkProcess({
+          selectedIds: selectedRowKeys as string[],
+          action: action as "delete" | "quarantine" | "no_action" | "pending",
+          memo,
+          userId: "current_user", // TODO: Get from auth state
+        })
+      ).unwrap();
 
-      // TODO: Implement API call
-      // await bulkActionAPI(selectedRowKeys, action, memo);
-
-      // Reset selections and close modal
-      setSelectedRowKeys([]);
-      setSelectAll(false);
+      message.success(`${selectedRowKeys.length} items processed successfully`);
       setModalVisible(false);
-
-      // TODO: Refresh data or remove processed items
     } catch (error) {
+      message.error("Failed to process bulk action");
       console.error("Bulk action failed:", error);
     }
   };
@@ -136,15 +95,11 @@ const PendingTable: React.FC<PendingTableProps> = ({
   const rowSelection: TableRowSelection<PendingItem> = {
     selectedRowKeys,
     onChange: (newSelectedRowKeys: React.Key[]) => {
-      setSelectedRowKeys(newSelectedRowKeys);
-      setSelectAll(
-        newSelectedRowKeys.length === data.length && data.length > 0
-      );
+      dispatch(setSelectedRowKeys(newSelectedRowKeys as string[]));
     },
     onSelectAll: (selected: boolean) => {
       const keys = selected ? data.map((item) => item.key) : [];
-      setSelectedRowKeys(keys);
-      setSelectAll(selected);
+      dispatch(setSelectedRowKeys(keys));
     },
     getCheckboxProps: (record: PendingItem) => ({
       name: record.file_name,
@@ -231,7 +186,8 @@ const PendingTable: React.FC<PendingTableProps> = ({
           type="primary"
           danger
           icon={<DeleteOutlined />}
-          disabled={!hasSelectedItems}
+          disabled={!hasSelectedItems || bulkActionLoading}
+          loading={bulkActionLoading && selectedAction === "delete"}
           onClick={() => handleBulkAction("delete")}
           size="middle"
         >
@@ -242,7 +198,8 @@ const PendingTable: React.FC<PendingTableProps> = ({
           className="!h-[45px]"
           type="default"
           icon={<SafetyOutlined />}
-          disabled={!hasSelectedItems}
+          disabled={!hasSelectedItems || bulkActionLoading}
+          loading={bulkActionLoading && selectedAction === "quarantine"}
           onClick={() => handleBulkAction("quarantine")}
           size="middle"
           style={{
@@ -257,7 +214,8 @@ const PendingTable: React.FC<PendingTableProps> = ({
           className="!h-[45px]"
           type="default"
           icon={<CheckOutlined />}
-          disabled={!hasSelectedItems}
+          disabled={!hasSelectedItems || bulkActionLoading}
+          loading={bulkActionLoading && selectedAction === "no_action"}
           onClick={() => handleBulkAction("no_action")}
           size="middle"
           style={{
@@ -272,7 +230,8 @@ const PendingTable: React.FC<PendingTableProps> = ({
           className="!h-[45px]"
           type="default"
           icon={<ClockCircleOutlined />}
-          disabled={!hasSelectedItems}
+          disabled={!hasSelectedItems || bulkActionLoading}
+          loading={bulkActionLoading && selectedAction === "pending"}
           onClick={() => handleBulkAction("pending")}
           size="middle"
           style={{
@@ -284,7 +243,7 @@ const PendingTable: React.FC<PendingTableProps> = ({
         </Button>
       </div>
     ),
-    [hasSelectedItems, handleBulkAction]
+    [hasSelectedItems, bulkActionLoading, selectedAction, handleBulkAction]
   );
 
   // Pass action buttons to parent if callback provided
@@ -311,15 +270,17 @@ const PendingTable: React.FC<PendingTableProps> = ({
       {/* Footer with Pagination */}
       <div className="flex items-center justify-between px-4 py-4 border-t border-gray-200">
         <div className="text-sm text-gray-600">
-          Total: {data.length} records
+          Total: {pagination.total} records
         </div>
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">Page size:</span>
             <Select
-              value={pageSize}
-              onChange={setPageSize}
+              value={pagination.pageSize}
+              onChange={(value) =>
+                dispatch(updatePagination({ pageSize: value, current: 1 }))
+              }
               size="small"
               className="w-20"
               options={pageSizeOptions}
@@ -327,10 +288,10 @@ const PendingTable: React.FC<PendingTableProps> = ({
           </div>
 
           <Pagination
-            current={currentPage}
-            pageSize={pageSize}
-            total={data.length}
-            onChange={setCurrentPage}
+            current={pagination.current}
+            pageSize={pagination.pageSize}
+            total={pagination.total}
+            onChange={(page) => dispatch(updatePagination({ current: page }))}
             showSizeChanger={false}
             showQuickJumper
             showTotal={(total, range) =>

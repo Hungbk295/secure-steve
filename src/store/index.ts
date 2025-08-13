@@ -4,6 +4,7 @@ import appSlice from "@/store/appSlide";
 import alertsSlice from "@/store/alertsSlice";
 import detectionSlice from "@/store/detectionSlice";
 import alertDetailSlice from "@/store/alertDetailSlice";
+import actionSlice from "@/store/actionSlice";
 
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
@@ -25,6 +26,7 @@ const reducers = {
   alerts: alertsSlice,
   detectionList: detectionSlice,
   alertDetail: alertDetailSlice,
+  action: actionSlice,
 };
 
 const rootReducer = combineReducers(reducers);

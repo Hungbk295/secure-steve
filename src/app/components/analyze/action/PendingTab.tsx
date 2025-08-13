@@ -2,27 +2,12 @@ import React, { useState } from "react";
 import { Card } from "antd";
 import PendingFilterBar from "./PendingFilterBar";
 import PendingTable from "./PendingTable";
-
-interface PendingFilters {
-  risk: string[];
-  verdict: string[];
-  serverIP: string;
-}
+import { useAppSelector } from "@/store";
+import { selectActionLoading } from "@/store/actionSlice";
 
 const PendingTab: React.FC = () => {
-  const [filters, setFilters] = useState<PendingFilters>({
-    risk: [],
-    verdict: [],
-    serverIP: "",
-  });
-  const [loading] = useState(false);
+  const loading = useAppSelector(selectActionLoading);
   const [actionButtons, setActionButtons] = useState<React.ReactNode>(null);
-
-  // Handle filter changes
-  const handleFilterChange = (newFilters: PendingFilters) => {
-    console.log("Pending filters changed:", newFilters);
-    setFilters(newFilters);
-  };
 
   // Handle action buttons render
   const handleActionsRender = (actionsElement: React.ReactNode) => {
@@ -42,7 +27,6 @@ const PendingTab: React.FC = () => {
         }}
       >
         <PendingFilterBar
-          onFilterChange={handleFilterChange}
           loading={loading}
         />
       </Card>
@@ -53,7 +37,6 @@ const PendingTab: React.FC = () => {
         {/* Pending Table */}
         <Card size="small" className="pending-table-card">
           <PendingTable
-            filters={filters}
             loading={loading}
             onActionsRender={handleActionsRender}
           />
