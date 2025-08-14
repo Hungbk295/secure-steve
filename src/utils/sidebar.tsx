@@ -102,12 +102,12 @@ export const getAllMenuItems = (): MenuItem[] => [
         route: ROUTES.History.Inspection,
         roles: [UserRole.USER, UserRole.ADMINISTRATOR], // Both can access, but see different data
       },
-      {
-        id: "action-history",
-        label: "Action history",
-        route: ROUTES.History.Action,
-        roles: [UserRole.USER, UserRole.ADMINISTRATOR], // Both can access, but see different data
-      },
+      // {
+      //   id: "action-history",
+      //   label: "Action history",
+      //   route: ROUTES.History.Action,
+      //   roles: [UserRole.USER, UserRole.ADMINISTRATOR], // Both can access, but see different data
+      // },
       {
         id: "policy-changes",
         label: "History of policy changes",

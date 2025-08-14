@@ -19,7 +19,7 @@ const SCREEN_TITLES: Record<string, string> = {
 
   [ROUTES.History.BlacklistWhitelist]: "Blacklist History",
   [ROUTES.History.Inspection]: "Inspection History",
-  [ROUTES.History.Action]: "Action History",
+  // [ROUTES.History.Action]: "Action History",
   [ROUTES.History.PolicyChanges]: "Policy Change History",
   [ROUTES.History.AiLearning]: "AI Learning History",
   [ROUTES.History.Authority]: "Authority History",

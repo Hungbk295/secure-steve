@@ -11,6 +11,8 @@ const Detection = lazy(() => import("@/app/pages/Analyze/Detection"));
 const Action = lazy(() => import("@/app/pages/Analyze/Action"));
 const AssignServers = lazy(() => import("@/app/pages/Policy/System/AssignServers"));
 const BlacklistWhitelist = lazy(() => import("@/app/pages/Policy/BlacklistWhitelist"));
+const History = lazy(() => import("@/app/pages/History"));
+const AILearningHistory = lazy(() => import("@/app/pages/History/AILearningHistory"));
 
 const PlaceholderPage = () => (
   <div className="flex items-center justify-center h-full">
@@ -105,13 +107,7 @@ const securityRoutes: ItemRoute[] = [
   },
   {
     key: ROUTES.History.Inspection,
-    components: <PlaceholderPage />,
-    layout: DEFAULT_LAYOUT,
-    private: true,
-  },
-  {
-    key: ROUTES.History.Action,
-    components: <PlaceholderPage />,
+    components: <History />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },
@@ -123,7 +119,7 @@ const securityRoutes: ItemRoute[] = [
   },
   {
     key: ROUTES.History.AiLearning,
-    components: <PlaceholderPage />,
+    components: <AILearningHistory />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },
