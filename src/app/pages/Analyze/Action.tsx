@@ -10,18 +10,22 @@ const Action: React.FC = () => {
   const tabItems: TabsProps["items"] = [
     {
       key: "pending",
-      label: <span className="text-sm font-medium  px-2">미조치 알림</span>,
+      label: (
+        <span className="text-base font-medium pl-4 px-2">미조치 알림</span>
+      ),
     },
     {
       key: "completed",
-      label: <span className="text-sm font-medium  px-2">조치 이력 조회</span>,
+      label: (
+        <span className="text-base font-medium  px-2">조치 이력 조회</span>
+      ),
     },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header with Breadcrumb */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white border-b border-gray-200 px-3 pb-4">
         <Breadcrumb className="text-sm">
           <Breadcrumb.Item>Analysis</Breadcrumb.Item>
           <Breadcrumb.Item className="font-medium">
@@ -44,7 +48,6 @@ const Action: React.FC = () => {
             activeKey={activeTab}
             onChange={setActiveTab}
             items={tabItems}
-            className="!mb-0"
             size="large"
           />
         </div>

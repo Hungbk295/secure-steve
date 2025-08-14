@@ -176,7 +176,7 @@ function DetectionFilterBar({ loading = false }: DetectionFilterBarProps) {
               disabled={loading}
             />
             <Button
-              className="!h-[45px]"
+              className="!h-[45px] !w-[240px]"
               type="primary"
               icon={<SearchOutlined />}
               htmlType="submit"

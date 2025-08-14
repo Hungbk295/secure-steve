@@ -80,7 +80,7 @@ const AssignClusterModal: React.FC<AssignClusterModalProps> = ({
       title={
         <div className="flex items-center gap-2">
           <ExclamationCircleOutlined className="text-orange-500" />
-          <span>클러스터 할당 (Assign Cluster)</span>
+          <span>클러스터 할당</span>
         </div>
       }
       open={visible}
@@ -94,7 +94,7 @@ const AssignClusterModal: React.FC<AssignClusterModalProps> = ({
         disabled: !selectedCluster,
       }}
     >
-      <div className="py-4">
+      <div className="py-4 flex flex-col gap-4">
         <Alert
           message={`선택된 서버 ${selectedCount}개의 클러스터를 변경하시겠습니까?`}
           description="이 작업은 선택된 모든 서버에 새로운 클러스터를 할당합니다."

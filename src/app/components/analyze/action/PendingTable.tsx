@@ -162,11 +162,9 @@ const PendingTable: React.FC<PendingTableProps> = ({
 
   const actionButtons = useMemo(
     () => (
-      <div className="flex items-center gap-2 justify-end">
+      <div className="flex flex-wrap items-center gap-2 justify-end">
         <Button
-          className="!h-[45px]"
-          type="primary"
-          danger
+          className="min-w-[120px]"
           icon={<DeleteOutlined />}
           disabled={!hasSelectedItems || bulkActionLoading}
           loading={bulkActionLoading && selectedAction === "delete"}
@@ -177,49 +175,34 @@ const PendingTable: React.FC<PendingTableProps> = ({
         </Button>
 
         <Button
-          className="!h-[45px]"
-          type="default"
+          className="min-w-[120px]"
           icon={<SafetyOutlined />}
           disabled={!hasSelectedItems || bulkActionLoading}
           loading={bulkActionLoading && selectedAction === "quarantine"}
           onClick={() => handleBulkAction("quarantine")}
           size="middle"
-          style={{
-            borderColor: hasSelectedItems ? "#fa8c16" : undefined,
-            color: hasSelectedItems ? "#fa8c16" : undefined,
-          }}
         >
           격리 (Quarantine)
         </Button>
 
         <Button
-          className="!h-[45px]"
-          type="default"
+          className="min-w-[120px]"
           icon={<CheckOutlined />}
           disabled={!hasSelectedItems || bulkActionLoading}
           loading={bulkActionLoading && selectedAction === "no_action"}
           onClick={() => handleBulkAction("no_action")}
           size="middle"
-          style={{
-            borderColor: hasSelectedItems ? "#52c41a" : undefined,
-            color: hasSelectedItems ? "#52c41a" : undefined,
-          }}
         >
           이상없음 (No Action)
         </Button>
 
         <Button
-          className="!h-[45px]"
-          type="default"
+          className="min-w-[120px]"
           icon={<ClockCircleOutlined />}
           disabled={!hasSelectedItems || bulkActionLoading}
           loading={bulkActionLoading && selectedAction === "pending"}
           onClick={() => handleBulkAction("pending")}
           size="middle"
-          style={{
-            borderColor: hasSelectedItems ? "#1890ff" : undefined,
-            color: hasSelectedItems ? "#1890ff" : undefined,
-          }}
         >
           보류 (Pending)
         </Button>

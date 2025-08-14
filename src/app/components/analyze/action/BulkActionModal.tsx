@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Modal, Input, Button, Alert } from "antd";
-import { 
-  DeleteOutlined, 
-  SafetyOutlined, 
-  CheckOutlined, 
+import {
+  DeleteOutlined,
+  SafetyOutlined,
+  CheckOutlined,
   ClockCircleOutlined,
-  ExclamationCircleOutlined 
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 
 const { TextArea } = Input;
@@ -48,57 +48,61 @@ const BulkActionModal: React.FC<BulkActionModalProps> = ({
   // Get action details
   const getActionConfig = (actionType: string) => {
     switch (actionType) {
-      case 'delete':
+      case "delete":
         return {
-          title: '삭제 확인 (Confirm Delete)',
+          title: "삭제 확인 (Confirm Delete)",
           icon: <DeleteOutlined className="text-red-500" />,
-          color: 'red',
-          description: selectedCount === 1 
-            ? `Delete file "${selectedItems[0]?.file_name}" on ${selectedItems[0]?.server_ip}?`
-            : `Delete ${selectedCount} selected files?`,
-          confirmText: 'Delete',
+          color: "red",
+          description:
+            selectedCount === 1
+              ? `Delete file "${selectedItems[0]?.file_name}" on ${selectedItems[0]?.server_ip}?`
+              : `Delete ${selectedCount} selected files?`,
+          confirmText: "Delete",
           danger: true,
         };
-      case 'quarantine':
+      case "quarantine":
         return {
-          title: '격리 확인 (Confirm Quarantine)',
+          title: "격리 확인 (Confirm Quarantine)",
           icon: <SafetyOutlined className="text-orange-500" />,
-          color: 'orange',
-          description: selectedCount === 1 
-            ? `Quarantine file "${selectedItems[0]?.file_name}" on ${selectedItems[0]?.server_ip}?`
-            : `Quarantine ${selectedCount} selected files?`,
-          confirmText: 'Quarantine',
+          color: "orange",
+          description:
+            selectedCount === 1
+              ? `Quarantine file "${selectedItems[0]?.file_name}" on ${selectedItems[0]?.server_ip}?`
+              : `Quarantine ${selectedCount} selected files?`,
+          confirmText: "Quarantine",
           danger: false,
         };
-      case 'no_action':
+      case "no_action":
         return {
-          title: '이상없음 확인 (Confirm No Action)',
+          title: "이상없음 확인 (Confirm No Action)",
           icon: <CheckOutlined className="text-green-500" />,
-          color: 'green',
-          description: selectedCount === 1 
-            ? `Mark as No Action for "${selectedItems[0]?.file_name}"?`
-            : `Mark ${selectedCount} selected files as No Action?`,
-          confirmText: 'No Action',
+          color: "green",
+          description:
+            selectedCount === 1
+              ? `Mark as No Action for "${selectedItems[0]?.file_name}"?`
+              : `Mark ${selectedCount} selected files as No Action?`,
+          confirmText: "No Action",
           danger: false,
         };
-      case 'pending':
+      case "pending":
         return {
-          title: '보류 확인 (Confirm Pending)',
+          title: "보류 확인 (Confirm Pending)",
           icon: <ClockCircleOutlined className="text-blue-500" />,
-          color: 'blue',
-          description: selectedCount === 1 
-            ? `Mark as Pending for "${selectedItems[0]?.file_name}"?`
-            : `Mark ${selectedCount} selected files as Pending?`,
-          confirmText: 'Pending',
+          color: "blue",
+          description:
+            selectedCount === 1
+              ? `Mark as Pending for "${selectedItems[0]?.file_name}"?`
+              : `Mark ${selectedCount} selected files as Pending?`,
+          confirmText: "Pending",
           danger: false,
         };
       default:
         return {
-          title: 'Confirm Action',
+          title: "Confirm Action",
           icon: <ExclamationCircleOutlined />,
-          color: 'gray',
-          description: 'Are you sure you want to perform this action?',
-          confirmText: 'Confirm',
+          color: "gray",
+          description: "Are you sure you want to perform this action?",
+          confirmText: "Confirm",
           danger: false,
         };
     }
@@ -133,7 +137,7 @@ const BulkActionModal: React.FC<BulkActionModalProps> = ({
       width={500}
       maskClosable={false}
     >
-      <div className="space-y-4">
+      <div className="space-y-4 flex flex-col gap-4 pt-4">
         {/* Action Description */}
         <Alert
           message={config.description}
@@ -179,7 +183,7 @@ const BulkActionModal: React.FC<BulkActionModalProps> = ({
         </div>
 
         {/* Warning for Delete Action */}
-        {action === 'delete' && (
+        {action === "delete" && (
           <Alert
             message="Warning: This action cannot be undone!"
             type="warning"

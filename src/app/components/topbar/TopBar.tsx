@@ -126,13 +126,13 @@ function TopBar({
 
   return (
     <div
-      className="top-bar h-19 px-6 flex items-center justify-between"
+      className="top-bar h-[85px] px-6 flex items-center justify-between"
       style={{
         backgroundColor: "var(--color-grey-8)",
         borderBottom: `1px solid var(--color-border-100)`,
       }}
     >
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 pl-1">
         {topBarFeatures.showAlarmNotifications && (
           <div className="relative">
             <button

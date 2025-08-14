@@ -328,7 +328,7 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
         expandable={
           !isDesktop
             ? {
-                expandedRowRender: (record) => (
+                expandedRowRender: (record: DetectionItem) => (
                   <div className="bg-gray-50 p-4 space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-gray-600">

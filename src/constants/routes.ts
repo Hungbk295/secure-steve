@@ -31,6 +31,7 @@ const ROUTES = {
     PolicyChanges: "/history/policy-changes",
     AiLearning: "/history/ai-learning",
     Authority: "/history/authority",
+    BlacklistWhitelist: "/history/blacklist-whitelist",
   },
   Alarm: {
     Notifications: "/alarm/notifications",

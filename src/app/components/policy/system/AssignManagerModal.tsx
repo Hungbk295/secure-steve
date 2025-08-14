@@ -87,7 +87,7 @@ const AssignManagerModal: React.FC<AssignManagerModalProps> = ({
       title={
         <div className="flex items-center gap-2">
           <ExclamationCircleOutlined className="text-orange-500" />
-          <span>매니저 할당 (Assign Manager)</span>
+          <span>매니저 할당</span>
         </div>
       }
       open={visible}
@@ -101,7 +101,7 @@ const AssignManagerModal: React.FC<AssignManagerModalProps> = ({
         disabled: !selectedManager,
       }}
     >
-      <div className="py-4">
+      <div className="py-4 flex flex-col gap-4">
         <Alert
           message={`선택된 서버 ${selectedCount}개의 매니저를 변경하시겠습니까?`}
           description="이 작업은 선택된 모든 서버에 새로운 매니저를 할당합니다."

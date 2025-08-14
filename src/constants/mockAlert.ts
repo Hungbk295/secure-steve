@@ -630,3 +630,161 @@ export const MOCK_SettingPolicy_2 = [
     scheduled: false,
   },
 ];
+
+// Blacklist/Whitelist Mock Data
+export const MOCK_FilePolicy_Blacklist = [
+  {
+    id: "fp_1001",
+    time: "2025-06-16T23:23:00Z",
+    file_name: "test.elf",
+    file_hash: "sha256:abc123def456...",
+    risk: 99.5,
+    verdict: "Malware",
+    server_ip: "66.211.75.1",
+    policy: "blacklist",
+    list_status: "Re-check",
+    actioned_by: "홍길동",
+    process_status: "delete",
+    comments: "IOC confirmed - auto delete"
+  },
+  {
+    id: "fp_1002",
+    time: "2025-06-16T19:53:00Z",
+    file_name: "malware.exe",
+    file_hash: "sha256:def456ghi789...",
+    risk: 97.3,
+    verdict: "Malware",
+    server_ip: "66.211.75.1",
+    policy: "blacklist",
+    list_status: "None",
+    actioned_by: "김철수",
+    process_status: "quarantine",
+    comments: "Suspicious behavior detected"
+  },
+  {
+    id: "fp_1003",
+    time: "2025-06-16T15:30:00Z",
+    file_name: "trojan.bin",
+    file_hash: "sha256:ghi789jkl012...",
+    risk: 95.8,
+    verdict: "Malware",
+    server_ip: "66.211.75.2",
+    policy: "blacklist",
+    list_status: "Active",
+    actioned_by: "박영수",
+    process_status: "delete",
+    comments: "Known trojan variant"
+  },
+  {
+    id: "fp_1004",
+    time: "2025-06-15T20:15:00Z",
+    file_name: "virus.dll",
+    file_hash: "sha256:jkl012mno345...",
+    risk: 88.9,
+    verdict: "Malware",
+    server_ip: "66.211.75.3",
+    policy: "blacklist",
+    list_status: "Re-check",
+    actioned_by: "이민수",
+    process_status: "quarantine",
+    comments: "DLL injection detected"
+  }
+];
+
+export const MOCK_FilePolicy_Whitelist = [
+  {
+    id: "fp_2001",
+    time: "2025-06-15T10:30:00Z",
+    file_name: "system.dll",
+    file_hash: "sha256:abc123system...",
+    risk: 2.1,
+    verdict: "Benign",
+    server_ip: "66.211.75.2",
+    policy: "whitelist",
+    list_status: "Active",
+    actioned_by: "관리자",
+    process_status: "no_action",
+    comments: "System file - trusted"
+  },
+  {
+    id: "fp_2002",
+    time: "2025-06-15T08:45:00Z",
+    file_name: "antivirus.exe",
+    file_hash: "sha256:def456antivirus...",
+    risk: 1.5,
+    verdict: "Benign",
+    server_ip: "66.211.75.1",
+    policy: "whitelist",
+    list_status: "Active",
+    actioned_by: "보안팀",
+    process_status: "no_action",
+    comments: "Corporate antivirus software"
+  },
+  {
+    id: "fp_2003",
+    time: "2025-06-14T16:20:00Z",
+    file_name: "backup.tool",
+    file_hash: "sha256:ghi789backup...",
+    risk: 3.2,
+    verdict: "Benign",
+    server_ip: "66.211.75.4",
+    policy: "whitelist",
+    list_status: "Active",
+    actioned_by: "시스템관리자",
+    process_status: "no_action",
+    comments: "Authorized backup utility"
+  }
+];
+
+export const MOCK_AnalysisRequests_WithException = [
+  {
+    id: "req_12345",
+    time: "2025-06-19T23:23:00Z",
+    file_name: "suspicious.exe",
+    risk: 99.5,
+    verdict: "Malware",
+    server_ip: "66.211.75.1",
+    process_status: "pending",
+    exception: "none"
+  },
+  {
+    id: "req_54321",
+    time: "2025-06-19T00:11:00Z",
+    file_name: "test55.elf",
+    risk: 72.3,
+    verdict: "Malware",
+    server_ip: "66.211.75.2",
+    process_status: "pending",
+    exception: "whitelist"
+  },
+  {
+    id: "req_67890",
+    time: "2025-06-18T14:30:00Z",
+    file_name: "unknown.bin",
+    risk: 85.7,
+    verdict: "Suspicious",
+    server_ip: "66.211.75.3",
+    process_status: "pending",
+    exception: "none"
+  },
+  {
+    id: "req_11111",
+    time: "2025-06-18T09:15:00Z",
+    file_name: "clean.txt",
+    risk: 0.8,
+    verdict: "Benign",
+    server_ip: "66.211.75.1",
+    process_status: "completed",
+    exception: "blacklist"
+  },
+  {
+    id: "req_22222",
+    time: "2025-06-17T18:45:00Z",
+    file_name: "installer.msi",
+    risk: 45.2,
+    verdict: "Suspicious",
+    server_ip: "66.211.75.4",
+    process_status: "pending",
+    exception: "none"
+  }
+];

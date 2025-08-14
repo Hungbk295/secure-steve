@@ -50,21 +50,27 @@ const AssignServers: React.FC = () => {
   const tabItems: TabsProps["items"] = [
     {
       key: "serverSetting",
-      label: <span className="text-sm font-medium  px-2">관리 서버 할당</span>,
+      label: (
+        <span className="text-base font-medium pl-4 px-2">관리 서버 할당</span>
+      ),
     },
     {
       key: "settingCluster",
-      label: <span className="text-sm font-medium  px-2">관리 서버 설정</span>,
+      label: (
+        <span className="text-base font-medium  px-2">관리 서버 설정</span>
+      ),
     },
     {
       key: "adminCluster",
-      label: <span className="text-sm font-medium  px-2">격리 폴더 설정</span>,
+      label: (
+        <span className="text-base font-medium  px-2">격리 폴더 설정</span>
+      ),
     },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white border-b border-gray-200 px-3 pb-4">
         <Breadcrumb className="text-sm">
           <Breadcrumb.Item>Policy</Breadcrumb.Item>
           <Breadcrumb.Item>System</Breadcrumb.Item>
@@ -83,7 +89,6 @@ const AssignServers: React.FC = () => {
             activeKey={activeTab}
             onChange={setActiveTab}
             items={tabItems}
-            className="!mb-0"
             size="large"
           />
         </div>

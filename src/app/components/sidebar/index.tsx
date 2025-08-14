@@ -4,6 +4,7 @@ import { cn } from "@/libs/utils";
 import { getMenuItems, findActiveMenuItem } from "@/utils/sidebar";
 import MenuItem from "./MenuItem";
 import UserSection from "./UserSection";
+import useScreenWidth from "@/hooks/useScreenWidth";
 
 function Sidebar() {
   const location = useLocation();
@@ -13,6 +14,7 @@ function Sidebar() {
     parentId?: string;
     childId?: string;
   }>({});
+  const isScreenWidth = useScreenWidth();
 
   const menuItems = getMenuItems();
 
@@ -50,6 +52,14 @@ function Sidebar() {
     }
   };
 
+  useEffect(() => {
+    if (isScreenWidth.isTablet || isScreenWidth.isMobile) {
+      setIsCollapsed(true);
+    } else {
+      setIsCollapsed(false);
+    }
+  }, [isScreenWidth.isTablet, isScreenWidth.isMobile]);
+
   return (
     <div
       className={cn(
@@ -61,7 +71,7 @@ function Sidebar() {
       }}
     >
       <div
-        className="security-logo-section p-5"
+        className={`security-logo-section ${isCollapsed ? "p-6.5" : "p-6"}`}
         style={{ borderBottom: `1px solid var(--color-border-100)` }}
       >
         <div className="flex items-center justify-between">

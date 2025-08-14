@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Row, Col, Form } from "antd";
+import { Row, Col, Form, Button as AntdButton } from "antd";
 import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
 import Select from "@/app/components/common/Select";
 import CustomDatePicker from "@/app/components/common/CustomDatePicker";
@@ -53,8 +53,6 @@ function AssignServersFilterBar({
 
   function onReset() {
     form.setFieldsValue(initialFormData);
-    const payload = getPayload(initialFormData);
-    dispatch(actionGetServersList(payload));
   }
 
   useEffect(() => {
@@ -139,9 +137,9 @@ function AssignServersFilterBar({
         </Col>
 
         {/* Action Buttons */}
-        <Col xs={24} sm={24} md={6} lg={8}>
-          <div className="filter-actions flex justify-end space-x-2 flex-1">
-            <Button
+        <Col xs={24} sm={16} md={6} lg={8}>
+          <div className="filter-actions flex justify-end space-x-2">
+            <AntdButton
               className="!h-[45px] !w-12"
               type="default"
               icon={<ReloadOutlined />}

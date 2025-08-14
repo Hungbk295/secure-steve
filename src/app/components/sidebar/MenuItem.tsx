@@ -77,7 +77,7 @@ function MenuItem({
   };
 
   return (
-    <div className="security-menu-item relative">
+    <div className="security-menu-item relative my-1">
       <div
         className={cn(
           "flex items-center px-8 py-2 cursor-pointer transition-colors duration-200 group",
@@ -118,7 +118,7 @@ function MenuItem({
           </div>
         )}
 
-        {!isCollapsed && <span className="flex-1 text-sm">{item.label}</span>}
+        {!isCollapsed && <span className="flex-1 text-base">{item.label}</span>}
 
         {item.children && item.children.length > 0 && !isCollapsed && (
           <div

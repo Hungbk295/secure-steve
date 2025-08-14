@@ -120,19 +120,20 @@ const AssignServersTable: React.FC<AssignServersTableProps> = ({
     () => (
       <div className="flex items-center gap-2 justify-end">
         <Button
-          type="primary"
+          className="min-w-[120px]"
           disabled={!hasSelectedItems}
           loading={assignClusterLoading}
           onClick={onAssignCluster}
         >
-          클러스터 할당 (Assign Cluster)
+          클러스터 할당
         </Button>
         <Button
+          className="min-w-[120px]"
           disabled={!hasSelectedItems}
           loading={assignManagerLoading}
           onClick={onAssignManager}
         >
-          매니저 할당 (Assign Manager)
+          매니저 할당
         </Button>
       </div>
     ),

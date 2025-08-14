@@ -1,5 +1,5 @@
-import { Modal, Alert, message, Form, Input } from "antd";
-import { ExclamationCircleOutlined, FolderOutlined } from "@ant-design/icons";
+import { Modal, Alert, message, Form } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
   selectSettingServerPolicySelectedRowKeys,
@@ -62,20 +62,20 @@ const QuarantineFolderModal: React.FC<QuarantineFolderModalProps> = ({
   };
 
   // Common quarantine folder paths
-  const commonPaths = [
-    "C:\\Quarantine",
-    "D:\\Quarantine",
-    "/var/quarantine",
-    "/opt/quarantine",
-    "C:\\Program Files\\AntiVirus\\Quarantine",
-  ];
+  // const commonPaths = [
+  //   "C:\\Quarantine",
+  //   "D:\\Quarantine",
+  //   "/var/quarantine",
+  //   "/opt/quarantine",
+  //   "C:\\Program Files\\AntiVirus\\Quarantine",
+  // ];
 
   return (
     <Modal
       title={
         <div className="flex items-center gap-2">
           <ExclamationCircleOutlined className="text-orange-500" />
-          <span>격리 폴더 설정 (Quarantine Folder Settings)</span>
+          <span>격리 폴더 설정</span>
         </div>
       }
       open={visible}
@@ -89,7 +89,7 @@ const QuarantineFolderModal: React.FC<QuarantineFolderModalProps> = ({
         disabled: loading,
       }}
     >
-      <div className="py-4">
+      <div className="py-4 flex flex-col gap-4">
         <Alert
           message={`선택된 서버 ${selectedCount}개의 격리 폴더를 설정하시겠습니까?`}
           description="이 작업은 선택된 모든 서버에 동일한 격리 폴더 경로를 적용합니다."
@@ -105,7 +105,7 @@ const QuarantineFolderModal: React.FC<QuarantineFolderModalProps> = ({
             folder_path: "C:\\Quarantine",
           }}
         >
-          <Form.Item
+          {/* <Form.Item
             label="격리 폴더 경로"
             name="folder_path"
             rules={[
@@ -120,13 +120,13 @@ const QuarantineFolderModal: React.FC<QuarantineFolderModalProps> = ({
               size="large"
               disabled={loading}
             />
-          </Form.Item>
+          </Form.Item> */}
 
           <div className="mb-4">
-            <div className="text-sm font-medium text-gray-700 mb-2">
+            {/* <div className="text-sm font-medium text-gray-700 mb-2">
               일반적인 격리 폴더 경로 예시:
-            </div>
-            <div className="grid grid-cols-1 gap-2">
+            </div> */}
+            {/* <div className="grid grid-cols-1 gap-2">
               {commonPaths.map((path, index) => (
                 <button
                   key={index}
@@ -138,7 +138,7 @@ const QuarantineFolderModal: React.FC<QuarantineFolderModalProps> = ({
                   {path}
                 </button>
               ))}
-            </div>
+            </div> */}
           </div>
         </Form>
 

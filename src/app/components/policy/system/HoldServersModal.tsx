@@ -21,7 +21,9 @@ const HoldServersModal: React.FC<HoldServersModalProps> = ({
   onCancel,
 }) => {
   const dispatch = useAppDispatch();
-  const selectedRowKeys = useAppSelector(selectSettingServerPolicySelectedRowKeys);
+  const selectedRowKeys = useAppSelector(
+    selectSettingServerPolicySelectedRowKeys
+  );
   const loading = useAppSelector(selectSettingServerPolicyHoldServersLoading);
 
   const selectedCount = selectedRowKeys.length;
@@ -34,13 +36,11 @@ const HoldServersModal: React.FC<HoldServersModalProps> = ({
         })
       ).unwrap();
 
-      message.success(
-        `${selectedCount}개 서버가 보류 상태로 변경되었습니다.`
-      );
+      message.success(`${selectedCount}개 서버가 보류 상태로 변경되었습니다.`);
 
       // Refresh the servers list
       dispatch(actionGetServerSettingsList({}));
-      
+
       onConfirm();
     } catch (error) {
       console.error("Failed to hold servers:", error);
@@ -53,7 +53,7 @@ const HoldServersModal: React.FC<HoldServersModalProps> = ({
       title={
         <div className="flex items-center gap-2">
           <ExclamationCircleOutlined className="text-orange-500" />
-          <span>서버 보류 (Hold Servers)</span>
+          <span>서버 보류</span>
         </div>
       }
       open={visible}
@@ -64,7 +64,7 @@ const HoldServersModal: React.FC<HoldServersModalProps> = ({
       confirmLoading={loading}
       width={500}
     >
-      <div className="py-4">
+      <div className="py-4 flex flex-col gap-4">
         <Alert
           message={`선택된 서버 ${selectedCount}개를 보류 상태로 변경하시겠습니까?`}
           description="이 작업은 선택된 모든 서버의 상태를 보류로 변경하며, 스캔 작업이 일시 중단됩니다."

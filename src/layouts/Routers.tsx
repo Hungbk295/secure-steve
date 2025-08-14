@@ -10,6 +10,7 @@ const Login = lazy(() => import("@/app/pages/Login"));
 const Detection = lazy(() => import("@/app/pages/Analyze/Detection"));
 const Action = lazy(() => import("@/app/pages/Analyze/Action"));
 const AssignServers = lazy(() => import("@/app/pages/Policy/System/AssignServers"));
+const BlacklistWhitelist = lazy(() => import("@/app/pages/Policy/BlacklistWhitelist"));
 
 const PlaceholderPage = () => (
   <div className="flex items-center justify-center h-full">
@@ -91,7 +92,7 @@ const securityRoutes: ItemRoute[] = [
   },
   {
     key: ROUTES.Policy.BlacklistWhitelist,
-    components: <PlaceholderPage />,
+    components: <BlacklistWhitelist />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },

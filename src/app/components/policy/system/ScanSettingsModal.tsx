@@ -91,7 +91,7 @@ const ScanSettingsModal: React.FC<ScanSettingsModalProps> = ({
       title={
         <div className="flex items-center gap-2">
           <ExclamationCircleOutlined className="text-blue-500" />
-          <span>스캔 설정 (Scan Settings)</span>
+          <span>스캔 설정</span>
         </div>
       }
       open={visible}
@@ -105,7 +105,7 @@ const ScanSettingsModal: React.FC<ScanSettingsModalProps> = ({
         disabled: loading,
       }}
     >
-      <div className="py-4">
+      <div className="py-4 flex flex-col gap-4">
         <Alert
           message={`선택된 서버 ${selectedCount}개의 스캔 설정을 변경하시겠습니까?`}
           description="이 작업은 선택된 모든 서버에 새로운 스캔 설정을 적용합니다."

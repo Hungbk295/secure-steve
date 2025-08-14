@@ -43,11 +43,20 @@ const ServerSettingsTable: React.FC<ServerSettingsTableProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const data = useAppSelector(selectSettingServerPolicyServers);
-  const loading = useAppSelector(selectSettingServerPolicyLoading) || externalLoading;
-  const selectedRowKeys = useAppSelector(selectSettingServerPolicySelectedRowKeys);
-  const holdServersLoading = useAppSelector(selectSettingServerPolicyHoldServersLoading);
-  const scanSettingsLoading = useAppSelector(selectSettingServerPolicyScanSettingsLoading);
-  const quarantineFolderLoading = useAppSelector(selectSettingServerPolicyQuarantineFolderLoading);
+  const loading =
+    useAppSelector(selectSettingServerPolicyLoading) || externalLoading;
+  const selectedRowKeys = useAppSelector(
+    selectSettingServerPolicySelectedRowKeys
+  );
+  const holdServersLoading = useAppSelector(
+    selectSettingServerPolicyHoldServersLoading
+  );
+  const scanSettingsLoading = useAppSelector(
+    selectSettingServerPolicyScanSettingsLoading
+  );
+  const quarantineFolderLoading = useAppSelector(
+    selectSettingServerPolicyQuarantineFolderLoading
+  );
 
   const hasSelectedItems = selectedRowKeys.length > 0;
 
@@ -112,9 +121,7 @@ const ServerSettingsTable: React.FC<ServerSettingsTableProps> = ({
       key: "mgmt_name",
       width: 150,
       sorter: true,
-      render: (name: string) => (
-        <span className="text-sm">{name}</span>
-      ),
+      render: (name: string) => <span className="text-sm">{name}</span>,
     },
     {
       title: "Server Manager",
@@ -194,26 +201,28 @@ const ServerSettingsTable: React.FC<ServerSettingsTableProps> = ({
     () => (
       <div className="flex items-center gap-2 justify-end">
         <Button
+          className="min-w-[120px]"
           disabled={!hasSelectedItems}
           loading={holdServersLoading}
           onClick={onHoldServers}
         >
-          보류 (Hold)
+          보류
         </Button>
         <Button
-          type="primary"
+          className="min-w-[120px]"
           disabled={!hasSelectedItems}
           loading={scanSettingsLoading}
           onClick={onScanSettings}
         >
-          Scan 설정 (Scan Settings)
+          Scan 설정
         </Button>
         <Button
+          className="min-w-[120px]"
           disabled={!hasSelectedItems}
           loading={quarantineFolderLoading}
           onClick={onQuarantineFolder}
         >
-          격리 폴더 설정 (Quarantine Folder Settings)
+          격리 폴더 설정
         </Button>
       </div>
     ),

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Row, Col, Form } from "antd";
+import { Row, Col, Form, Button as AntdButton } from "antd";
 import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
 import Select from "@/app/components/common/Select";
 import CustomDatePicker from "@/app/components/common/CustomDatePicker";
@@ -30,7 +30,8 @@ function ServerSettingsFilterBar({
   const dispatch = useAppDispatch();
 
   function getPayload(values: DynamicKeyObject) {
-    const { clusterName, serverManager, settingType, timeRange, searchText } = values;
+    const { clusterName, serverManager, settingType, timeRange, searchText } =
+      values;
 
     const payload = {
       clusterName: clusterName === "all" ? "" : clusterName,
@@ -163,7 +164,7 @@ function ServerSettingsFilterBar({
         {/* Action Buttons */}
         <Col xs={24} sm={24} md={6} lg={4}>
           <div className="filter-actions flex justify-end space-x-2 flex-1">
-            <Button
+            <AntdButton
               className="!h-[45px] !w-12"
               type="default"
               icon={<ReloadOutlined />}
