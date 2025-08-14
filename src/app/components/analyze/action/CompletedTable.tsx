@@ -181,8 +181,6 @@ const CompletedTable: React.FC<CompletedTableProps> = ({
   const csvDownloadButton = useMemo(
     () => (
       <Button
-        className="!h-[45px]"
-        type="primary"
         icon={<DownloadOutlined />}
         loading={csvLoading}
         onClick={handleCSVExport}
