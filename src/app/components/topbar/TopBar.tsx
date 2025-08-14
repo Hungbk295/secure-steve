@@ -13,6 +13,8 @@ import {
 } from "@/store/alertsSlice";
 import { EAlertProcessStatus } from "@/interfaces/app";
 import AlertsPopup from "./AlertsPopup";
+import useScreenWidth from "@/hooks/useScreenWidth";
+import { Button, Dropdown } from "antd";
 
 interface TopBarProps {
   verificationCount?: number;
@@ -40,7 +42,9 @@ function TopBar({
   const dispatch = useAppDispatch();
   const [showAlarmDropdown, setShowAlarmDropdown] = useState(false);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
+  const isScreenWidth = useScreenWidth();
+  const isMobile = isScreenWidth.isMobile || isScreenWidth.isTablet;
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const alertsState = useAppSelector(selectAlertsState);
   const topBarFeatures = getTopBarFeatures(userRole);
 
@@ -115,6 +119,39 @@ function TopBar({
   const handleClosePopup = useCallback(() => {
     setShowAlarmDropdown(false);
   }, []);
+
+  const userMenuItems: any["items"] = [
+    {
+      key: "role",
+      label: (
+        <div className="flex items-center space-x-2 py-2">
+          <i className="ri-user-line text-gray-500" />
+          <span className="font-medium">Role:</span>
+          <span>{userInfo.role}</span>
+        </div>
+      ),
+    },
+    {
+      key: "department",
+      label: (
+        <div className="flex items-center space-x-2 py-2">
+          <i className="ri-building-line text-gray-500" />
+          <span className="font-medium">Department:</span>
+          <span>{userInfo.department}</span>
+        </div>
+      ),
+    },
+    {
+      key: "name",
+      label: (
+        <div className="flex items-center space-x-2 py-2">
+          <i className="ri-account-circle-line text-gray-500" />
+          <span className="font-medium">Name:</span>
+          <span>{userInfo.name}</span>
+        </div>
+      ),
+    },
+  ];
 
   useEffect(() => {
     return () => {
@@ -199,18 +236,49 @@ function TopBar({
 
       <div className="flex items-center space-x-6">
         {topBarFeatures.showUserMenu && (
-          <div
-            className="flex items-center space-x-2 text-sm"
-            style={{ color: "var(--color-grey-80)" }}
-          >
-            <span>
-              {userInfo.role}/{userInfo.name}
-            </span>
-            <span style={{ color: "var(--color-grey-40)" }}>|</span>
-            <span>{userInfo.department}</span>
-            <span style={{ color: "var(--color-grey-40)" }}>|</span>
-            <span>{userInfo.name}</span>
-          </div>
+          <>
+            {/* Desktop Layout - Original */}
+            {!isMobile && (
+              <div
+                className="flex items-center space-x-2 text-sm"
+                style={{ color: "var(--color-grey-80)" }}
+              >
+                <span>
+                  {userInfo.role}/{userInfo.name}
+                </span>
+                <span style={{ color: "var(--color-grey-40)" }}>|</span>
+                <span>{userInfo.department}</span>
+                <span style={{ color: "var(--color-grey-40)" }}>|</span>
+                <span>{userInfo.name}</span>
+              </div>
+            )}
+
+            {/* Mobile Layout - Button with Dropdown */}
+            {isMobile && (
+              <Dropdown
+                menu={{ items: userMenuItems }}
+                trigger={["click"]}
+                open={showUserDropdown}
+                onOpenChange={setShowUserDropdown}
+                placement="bottomRight"
+                overlayClassName="user-menu-dropdown"
+              >
+                <Button
+                  type="text"
+                  className="flex items-center space-x-2 px-3 py-2 h-auto min-h-[44px]"
+                  style={{ color: "var(--color-grey-80)" }}
+                >
+                  <i className="ri-user-line text-lg" />
+                  <span className="text-sm font-medium">{userInfo.name}</span>
+                  <i
+                    className={`ri-arrow-down-s-line text-sm transition-transform ${
+                      showUserDropdown ? "rotate-180" : ""
+                    }`}
+                  />
+                </Button>
+              </Dropdown>
+            )}
+          </>
         )}
       </div>
     </div>
