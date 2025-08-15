@@ -59,8 +59,8 @@ const HoldServersModal: React.FC<HoldServersModalProps> = ({
       open={visible}
       onOk={handleConfirm}
       onCancel={onCancel}
-      okText="보류 (Hold)"
-      cancelText="취소 (Cancel)"
+      okText="보류"
+      cancelText="취소"
       confirmLoading={loading}
       width={500}
     >

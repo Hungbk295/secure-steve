@@ -28,13 +28,9 @@ const Action: React.FC = () => {
       <div className="bg-white border-b border-gray-200 px-3 pb-4">
         <Breadcrumb className="text-sm">
           <Breadcrumb.Item>Analysis</Breadcrumb.Item>
-          <Breadcrumb.Item className="font-medium">
-            조치 (Action)
-          </Breadcrumb.Item>
+          <Breadcrumb.Item className="font-medium">조치</Breadcrumb.Item>
           <Breadcrumb.Item className="font-medium">Tasks</Breadcrumb.Item>
-          <Breadcrumb.Item className="font-medium">
-            미조치 알림 (Pending)
-          </Breadcrumb.Item>
+          <Breadcrumb.Item className="font-medium">미조치 알림</Breadcrumb.Item>
         </Breadcrumb>
         <h1 className="text-2xl font-semibold text-gray-900 mt-2">
           Analysis Actions & Tasks

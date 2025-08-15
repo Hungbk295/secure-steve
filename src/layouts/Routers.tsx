@@ -13,6 +13,7 @@ const AssignServers = lazy(() => import("@/app/pages/Policy/System/AssignServers
 const BlacklistWhitelist = lazy(() => import("@/app/pages/Policy/BlacklistWhitelist"));
 const History = lazy(() => import("@/app/pages/History"));
 const AILearningHistory = lazy(() => import("@/app/pages/History/AILearningHistory"));
+const AdminPolicy = lazy(() => import("@/app/pages/Policy/AdminPolicy"));
 
 const PlaceholderPage = () => (
   <div className="flex items-center justify-center h-full">
@@ -82,7 +83,7 @@ const securityRoutes: ItemRoute[] = [
   },
   {
     key: ROUTES.Policy.AdminPolicy,
-    components: <PlaceholderPage />,
+    components: <AdminPolicy />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },

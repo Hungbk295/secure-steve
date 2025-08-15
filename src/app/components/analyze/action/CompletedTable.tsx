@@ -186,7 +186,7 @@ const CompletedTable: React.FC<CompletedTableProps> = ({
         onClick={handleCSVExport}
         size="middle"
       >
-        CSV 다운로드 (CSV Download)
+        CSV 다운로드
       </Button>
     ),
     [csvLoading]

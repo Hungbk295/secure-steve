@@ -204,7 +204,7 @@ const PendingTable: React.FC<PendingTableProps> = ({
           onClick={() => handleBulkAction("pending")}
           size="middle"
         >
-          보류 (Pending)
+          보류
         </Button>
       </div>
     ),
