@@ -1,145 +1,107 @@
-import { useCallback, useRef, useState, useEffect } from "react";
-import { Progress, Typography, Tooltip } from "antd";
-
-const { Text } = Typography;
+import React, { useState, useRef, useEffect } from "react";
 
 interface DraggableProgressProps {
   value: number;
-  minValue: number;
-  maxValue?: number;
+  min?: number;
+  max?: number;
   onChange: (value: number) => void;
   disabled?: boolean;
+  className?: string;
 }
 
-function DraggableProgress({
+const DraggableProgress: React.FC<DraggableProgressProps> = ({
   value,
-  minValue,
-  maxValue = 100,
+  min = 0,
+  max = 100,
   onChange,
   disabled = false,
-}: DraggableProgressProps) {
-  const progressRef = useRef<HTMLDivElement>(null);
+  className = "",
+}) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [tempValue, setTempValue] = useState(value);
+  const [currentValue, setCurrentValue] = useState(value);
+  const progressRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setTempValue(value);
+    setCurrentValue(value);
   }, [value]);
 
-  const calculateValueFromPosition = useCallback(
-    (clientX: number) => {
-      if (!progressRef.current) return value;
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (disabled) return;
+    setIsDragging(true);
+    updateValue(e);
+  };
 
-      const rect = progressRef.current.getBoundingClientRect();
-      const percentage = Math.max(
-        0,
-        Math.min(1, (clientX - rect.left) / rect.width)
-      );
-      const newValue = Math.round(percentage * maxValue);
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging || disabled) return;
+    updateValue(e);
+  };
 
-      // Enforce minimum constraint
-      return Math.max(minValue, newValue);
-    },
-    [maxValue, minValue, value]
-  );
+  const handleMouseUp = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      onChange(currentValue);
+    }
+  };
 
-  const handleMouseDown = useCallback(
-    (e: React.MouseEvent) => {
-      if (disabled) return;
+  const updateValue = (e: MouseEvent | React.MouseEvent) => {
+    if (!progressRef.current) return;
 
-      e.preventDefault();
-      setIsDragging(true);
+    const rect = progressRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    const newValue = Math.round((percentage / 100) * (max - min) + min);
 
-      const newValue = calculateValueFromPosition(e.clientX);
-      setTempValue(newValue);
-    },
-    [disabled, calculateValueFromPosition]
-  );
+    setCurrentValue(newValue);
+  };
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (!isDragging || disabled) return;
-
-      const newValue = calculateValueFromPosition(e.clientX);
-      setTempValue(newValue);
-    },
-    [isDragging, disabled, calculateValueFromPosition]
-  );
-
-  const handleMouseUp = useCallback(() => {
-    if (!isDragging) return;
-
-    setIsDragging(false);
-    onChange(tempValue);
-  }, [isDragging, tempValue, onChange]);
+  const handleClick = (e: React.MouseEvent) => {
+    if (disabled) return;
+    updateValue(e);
+    onChange(currentValue);
+  };
 
   useEffect(() => {
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
-
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-      };
     }
-  }, [isDragging, handleMouseMove, handleMouseUp]);
 
-  const displayValue = isDragging ? tempValue : value;
-  const isValidValue = displayValue >= minValue;
-  const strokeColor = isValidValue ? "#1890ff" : "#ff4d4f";
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging]);
+
+  const percentage = ((currentValue - min) / (max - min)) * 100;
 
   return (
-    <div className="draggable-progress">
-      <div className="flex flex-wrap gap-2 w-full">
-        <div className="flex-1 min-w-[200px] sm:min-w-0 sm:w-auto">
-          <Tooltip title={`${displayValue}% (Min: ${minValue}%)`}>
-            <div
-              ref={progressRef}
-              className={`flex-1 ${
-                !disabled ? "cursor-pointer" : "cursor-not-allowed"
-              }`}
-              onMouseDown={handleMouseDown}
-              style={{ userSelect: "none" }}
-            >
-              <Progress
-                percent={displayValue}
-                showInfo={false}
-                strokeColor={strokeColor}
-                trailColor="#f0f0f0"
-                strokeWidth={12}
-                className="draggable-progress-bar"
-              />
-            </div>
-          </Tooltip>
-        </div>
+    <div className={`relative ${className}`}>
+      <div
+        ref={progressRef}
+        className={`relative h-3 bg-gray-200 rounded-full cursor-pointer ${
+          disabled ? "cursor-not-allowed opacity-60" : ""
+        }`}
+        onMouseDown={handleMouseDown}
+        onClick={handleClick}
+      >
+        <div
+          className="h-full bg-gray-400 rounded-full transition-all duration-200"
+          style={{ width: `${percentage}%` }}
+        />
+        <div
+          className={`absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white border-2 border-gray-400 rounded-full shadow-md ${
+            isDragging ? "scale-110" : ""
+          } transition-transform duration-200`}
+          style={{ left: `calc(${percentage}% - 8px)` }}
+        />
       </div>
-
-      <div className="min-w-16 text-right sm:text-left w-full sm:w-auto">
-        <Text
-          strong
-          style={{
-            color: isValidValue ? "#1890ff" : "#ff4d4f",
-            fontSize: "14px",
-          }}
-        >
-          {displayValue}%
-        </Text>
+      <div className="flex justify-between mt-1 text-xs">
+        <span>{min}%</span>
+        <span className="font-medium">{currentValue}%</span>
+        <span>{max}%</span>
       </div>
-
-      {!isValidValue && (
-        <Text type="danger" className="text-xs mt-1 block">
-          Must be ≥ {minValue}%
-        </Text>
-      )}
-
-      {isDragging && (
-        <Text className="text-xs text-gray-500 mt-1 block">
-          Dragging... Release to set value
-        </Text>
-      )}
     </div>
   );
-}
+};
 
 export default DraggableProgress;

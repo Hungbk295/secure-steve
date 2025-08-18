@@ -9,6 +9,7 @@ import completeSlice from "@/store/completeSlice";
 import settingPolicySlice from "@/store/settingPolicySlice";
 import settingServerPolicySlice from "@/store/settingServerPolicySlice";
 import blacklistSlice from "@/store/blacklistSlice";
+import adminPolicySlice from "@/store/adminPolicySlice";
 
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
@@ -35,6 +36,7 @@ const reducers = {
   settingPolicy: settingPolicySlice,
   settingServerPolicy: settingServerPolicySlice,
   blacklist: blacklistSlice,
+  adminPolicy: adminPolicySlice,
 };
 
 const rootReducer = combineReducers(reducers);

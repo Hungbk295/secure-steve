@@ -75,12 +75,12 @@ export const getAllMenuItems = (): MenuItem[] => [
         route: ROUTES.Policy.AdminPolicy,
         roles: [UserRole.ADMINISTRATOR], // Admin only
       },
-      {
-        id: "user-policy",
-        label: "User Policy Settings",
-        route: ROUTES.Policy.UserPolicy,
-        roles: [UserRole.USER, UserRole.ADMINISTRATOR],
-      },
+      // {
+      //   id: "user-policy",
+      //   label: "User Policy Settings",
+      //   route: ROUTES.Policy.UserPolicy,
+      //   roles: [UserRole.USER, UserRole.ADMINISTRATOR],
+      // },
       {
         id: "blacklist-whitelist",
         label: "Black / Whitelist",
@@ -108,12 +108,12 @@ export const getAllMenuItems = (): MenuItem[] => [
       //   route: ROUTES.History.Action,
       //   roles: [UserRole.USER, UserRole.ADMINISTRATOR], // Both can access, but see different data
       // },
-      {
-        id: "policy-changes",
-        label: "History of policy changes",
-        route: ROUTES.History.PolicyChanges,
-        roles: [UserRole.ADMINISTRATOR], // Admin only
-      },
+      // {
+      //   id: "policy-changes",
+      //   label: "History of policy changes",
+      //   route: ROUTES.History.PolicyChanges,
+      //   roles: [UserRole.ADMINISTRATOR], // Admin only
+      // },
       {
         id: "ai-learning",
         label: "AI learning history",
