@@ -2,31 +2,30 @@ import { useEffect } from "react";
 import { Row, Col, Button, Form } from "antd";
 import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
 import Select from "@/app/components/common/Select";
-import Input from "@/app/components/common/Input";
-import { DynamicKeyObject } from "@/interfaces/app";
 import CustomDatePicker from "@/app/components/common/CustomDatePicker";
+import { DynamicKeyObject } from "@/interfaces/app";
 
-interface AuthorityHistoryFilterBarProps {
+interface AlarmScheduleFilterBarProps {
   loading?: boolean;
   className?: string;
 }
 
 const initialFormData = {
   timeRange: null,
-  department: "all",
-  userType: "all",
-  status: "all",
-  searchText: "",
+  risk: "all",
+  triageVerdict: "all",
+  processStatus: "all",
+  serverIP: "all",
 };
 
-function AuthorityHistoryFilterBar({
+function AlarmScheduleFilterBar({
   loading = false,
   className,
-}: AuthorityHistoryFilterBarProps) {
+}: AlarmScheduleFilterBarProps) {
   const [form] = Form.useForm();
 
   function getPayload(values: DynamicKeyObject) {
-    const { timeRange, department, userType, status, searchText } = values;
+    const { timeRange, risk, triageVerdict, processStatus, serverIP } = values;
 
     const payload = {
       timeRange:
@@ -36,52 +35,69 @@ function AuthorityHistoryFilterBar({
               timeRange[1].format("YYYY-MM-DD"),
             ]
           : null,
-      department: department === "all" ? "" : department,
-      userType: userType === "all" ? "" : userType,
-      status: status === "all" ? "" : status,
-      searchText: searchText || "",
+      risk: risk === "all" ? "" : risk,
+      triageVerdict: triageVerdict === "all" ? "" : triageVerdict,
+      processStatus: processStatus === "all" ? "" : processStatus,
+      serverIP: serverIP === "all" ? "" : serverIP,
     };
     return payload;
   }
 
   function onFinish(values: DynamicKeyObject) {
     const payload = getPayload(values);
-    console.log("Authority History Filter:", payload);
-    // TODO: Dispatch action to fetch authority history data
+    console.log("Alarm Schedule Filter:", payload);
+    // TODO: Dispatch action to fetch alarm schedule data
   }
 
   function onReset() {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
-    console.log("Reset Authority History Filter:", payload);
-    // TODO: Dispatch action to fetch authority history data
+    console.log("Reset Alarm Schedule Filter:", payload);
+    // TODO: Dispatch action to fetch alarm schedule data
   }
 
   useEffect(() => {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
-    console.log("Initialize Authority History Filter:", payload);
-    // TODO: Dispatch action to fetch authority history data
+    console.log("Initialize Alarm Schedule Filter:", payload);
+    // TODO: Dispatch action to fetch alarm schedule data
   }, []);
 
-  const departmentOptions = [
+  const riskOptions = [
     { label: "All", value: "all" },
-    { label: "보안", value: "보안" },
-    { label: "시스템 운영팀", value: "시스템 운영팀" },
-    { label: "개발팀", value: "개발팀" },
+    { label: "High (80-100%)", value: "high" },
+    { label: "Medium (50-79%)", value: "medium" },
+    { label: "Low (0-49%)", value: "low" },
+    { label: "Critical", value: "critical" },
   ];
 
-  const userTypeOptions = [
+  const triageVerdictOptions = [
     { label: "All", value: "all" },
-    { label: "사용자", value: "사용자" },
-    { label: "관리자", value: "관리자" },
+    { label: "Malware", value: "malware" },
+    { label: "Benign", value: "benign" },
+    { label: "Suspicious", value: "suspicious" },
+    { label: "Unknown", value: "unknown" },
   ];
 
-  const statusOptions = [
+  const processStatusOptions = [
     { label: "All", value: "all" },
+    { label: "Pending", value: "pending" },
+    { label: "No Action", value: "no_action" },
+    { label: "Quarantine", value: "quarantine" },
+    { label: "Delete", value: "delete" },
     { label: "신규 승인", value: "신규 승인" },
-    { label: "반려", value: "반려" },
+    { label: "보류", value: "보류" },
     { label: "삭제(퇴사)", value: "삭제(퇴사)" },
+  ];
+
+  const serverIPOptions = [
+    { label: "All", value: "all" },
+    { label: "66.211.75.1", value: "66.211.75.1" },
+    { label: "66.211.75.2", value: "66.211.75.2" },
+    { label: "66.211.75.3", value: "66.211.75.3" },
+    { label: "66.211.75.4", value: "66.211.75.4" },
+    { label: "192.168.1.10", value: "192.168.1.10" },
+    { label: "192.168.1.20", value: "192.168.1.20" },
   ];
 
   return (
@@ -95,20 +111,22 @@ function AuthorityHistoryFilterBar({
         <Col xs={24} sm={12} md={8} lg={4}>
           <Form.Item label="Time Range" name="timeRange">
             <CustomDatePicker
-              placeholder={["From Date", "To Date"]}
-              disabled={loading}
+              form={form}
               showTime={false}
+              name="timeRange"
               showQuickPicker={false}
+              placeholder={["Start Date", "End Date"]}
+              disabled={loading}
             />
           </Form.Item>
         </Col>
 
         <Col xs={24} sm={8} md={6} lg={4}>
-          <Form.Item label="Department" name="department">
+          <Form.Item label="Risk" name="risk">
             <Select
-              placeholder="Select Department"
+              placeholder="Select Risk Level"
               showSearch
-              options={departmentOptions}
+              options={riskOptions}
               className="w-full"
               size="middle"
               disabled={loading}
@@ -117,11 +135,11 @@ function AuthorityHistoryFilterBar({
         </Col>
 
         <Col xs={24} sm={8} md={6} lg={4}>
-          <Form.Item label="User Type" name="userType">
+          <Form.Item label="Triage Verdict" name="triageVerdict">
             <Select
-              placeholder="Select User Type"
+              placeholder="Select Triage Verdict"
               showSearch
-              options={userTypeOptions}
+              options={triageVerdictOptions}
               className="w-full"
               size="middle"
               disabled={loading}
@@ -130,11 +148,11 @@ function AuthorityHistoryFilterBar({
         </Col>
 
         <Col xs={24} sm={8} md={6} lg={4}>
-          <Form.Item label="Status" name="status">
+          <Form.Item label="Process Status" name="processStatus">
             <Select
-              placeholder="Select Status"
+              placeholder="Select Process Status"
               showSearch
-              options={statusOptions}
+              options={processStatusOptions}
               className="w-full"
               size="middle"
               disabled={loading}
@@ -143,9 +161,11 @@ function AuthorityHistoryFilterBar({
         </Col>
 
         <Col xs={24} sm={8} md={6} lg={4}>
-          <Form.Item label="Search" name="searchText">
-            <Input
-              placeholder="Search users..."
+          <Form.Item label="Server IP" name="serverIP">
+            <Select
+              placeholder="Select Server IP"
+              showSearch
+              options={serverIPOptions}
               className="w-full"
               size="middle"
               disabled={loading}
@@ -178,4 +198,4 @@ function AuthorityHistoryFilterBar({
   );
 }
 
-export default AuthorityHistoryFilterBar;
+export default AlarmScheduleFilterBar;
