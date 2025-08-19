@@ -3,29 +3,31 @@ import { Row, Col, Button, Form } from "antd";
 import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
 import Select from "@/app/components/common/Select";
 import RangePicker from "@/app/components/common/RangePicker";
+import Input from "@/app/components/common/Input";
 import { DynamicKeyObject } from "@/interfaces/app";
+import CustomDatePicker from "@/app/components/common/CustomDatePicker";
 
-interface ActionHistoryFilterBarProps {
+interface AuthorityHistoryFilterBarProps {
   loading?: boolean;
   className?: string;
 }
 
 const initialFormData = {
   timeRange: null,
-  risk: "all",
-  triageVerdict: "all",
-  processStatus: "all",
-  serverIP: "all",
+  department: "all",
+  userType: "all",
+  status: "all",
+  searchText: "",
 };
 
-function ActionHistoryFilterBar({
+function AuthorityHistoryFilterBar({
   loading = false,
   className,
-}: ActionHistoryFilterBarProps) {
+}: AuthorityHistoryFilterBarProps) {
   const [form] = Form.useForm();
 
   function getPayload(values: DynamicKeyObject) {
-    const { timeRange, risk, triageVerdict, processStatus, serverIP } = values;
+    const { timeRange, department, userType, status, searchText } = values;
 
     const payload = {
       timeRange:
@@ -35,63 +37,52 @@ function ActionHistoryFilterBar({
               timeRange[1].format("YYYY-MM-DD"),
             ]
           : null,
-      risk: risk === "all" ? "" : risk,
-      triageVerdict: triageVerdict === "all" ? "" : triageVerdict,
-      processStatus: processStatus === "all" ? "" : processStatus,
-      serverIP: serverIP === "all" ? "" : serverIP,
+      department: department === "all" ? "" : department,
+      userType: userType === "all" ? "" : userType,
+      status: status === "all" ? "" : status,
+      searchText: searchText || "",
     };
     return payload;
   }
 
   function onFinish(values: DynamicKeyObject) {
     const payload = getPayload(values);
-    console.log("Action History Filter:", payload);
-    // TODO: Dispatch action to fetch action history data
+    console.log("Authority History Filter:", payload);
+    // TODO: Dispatch action to fetch authority history data
   }
 
   function onReset() {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
-    console.log("Reset Action History Filter:", payload);
-    // TODO: Dispatch action to fetch action history data
+    console.log("Reset Authority History Filter:", payload);
+    // TODO: Dispatch action to fetch authority history data
   }
 
   useEffect(() => {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
-    console.log("Initialize Action History Filter:", payload);
-    // TODO: Dispatch action to fetch action history data
+    console.log("Initialize Authority History Filter:", payload);
+    // TODO: Dispatch action to fetch authority history data
   }, []);
 
-  const riskLevelOptions = [
+  const departmentOptions = [
     { label: "All", value: "all" },
-    { label: "High (80-100%)", value: "high" },
-    { label: "Medium (50-79%)", value: "medium" },
-    { label: "Low (0-49%)", value: "low" },
+    { label: "보안", value: "보안" },
+    { label: "시스템 운영팀", value: "시스템 운영팀" },
+    { label: "개발팀", value: "개발팀" },
   ];
 
-  const triageVerdictOptions = [
+  const userTypeOptions = [
     { label: "All", value: "all" },
-    { label: "Malware", value: "malware" },
-    { label: "Benign", value: "benign" },
-    { label: "Suspicious", value: "suspicious" },
-    { label: "Unknown", value: "unknown" },
+    { label: "사용자", value: "사용자" },
+    { label: "관리자", value: "관리자" },
   ];
 
-  const processStatusOptions = [
+  const statusOptions = [
     { label: "All", value: "all" },
-    { label: "Delete", value: "delete" },
-    { label: "Quarantine", value: "quarantine" },
-    { label: "No Action", value: "no_action" },
-    { label: "Pending", value: "pending" },
-  ];
-
-  const serverIPOptions = [
-    { label: "All", value: "all" },
-    { label: "66.211.75.1", value: "66.211.75.1" },
-    { label: "66.211.75.2", value: "66.211.75.2" },
-    { label: "66.211.75.3", value: "66.211.75.3" },
-    { label: "66.211.75.4", value: "66.211.75.4" },
+    { label: "신규 승인", value: "신규 승인" },
+    { label: "반려", value: "반려" },
+    { label: "삭제(퇴사)", value: "삭제(퇴사)" },
   ];
 
   return (
@@ -104,8 +95,21 @@ function ActionHistoryFilterBar({
       <Row gutter={[16, 16]} align="middle">
         <Col xs={24} sm={12} md={8} lg={4}>
           <Form.Item label="Time Range" name="timeRange">
-            <RangePicker
-              placeholder={["Start Time", "End Time"]}
+            <CustomDatePicker
+              placeholder={["From Date", "To Date"]}
+              disabled={loading}
+              showTime={false}
+              showQuickPicker={false}
+            />
+          </Form.Item>
+        </Col>
+
+        <Col xs={24} sm={8} md={6} lg={4}>
+          <Form.Item label="Department" name="department">
+            <Select
+              placeholder="Select Department"
+              showSearch
+              options={departmentOptions}
               className="w-full"
               size="middle"
               disabled={loading}
@@ -114,11 +118,11 @@ function ActionHistoryFilterBar({
         </Col>
 
         <Col xs={24} sm={8} md={6} lg={4}>
-          <Form.Item label="Risk" name="risk">
+          <Form.Item label="User Type" name="userType">
             <Select
-              placeholder="Risk Level"
+              placeholder="Select User Type"
               showSearch
-              options={riskLevelOptions}
+              options={userTypeOptions}
               className="w-full"
               size="middle"
               disabled={loading}
@@ -127,11 +131,11 @@ function ActionHistoryFilterBar({
         </Col>
 
         <Col xs={24} sm={8} md={6} lg={4}>
-          <Form.Item label="Triage Verdict" name="triageVerdict">
+          <Form.Item label="Status" name="status">
             <Select
-              placeholder="Triage Verdict"
+              placeholder="Select Status"
               showSearch
-              options={triageVerdictOptions}
+              options={statusOptions}
               className="w-full"
               size="middle"
               disabled={loading}
@@ -140,24 +144,9 @@ function ActionHistoryFilterBar({
         </Col>
 
         <Col xs={24} sm={8} md={6} lg={4}>
-          <Form.Item label="Process Status" name="processStatus">
-            <Select
-              placeholder="Process Status"
-              showSearch
-              options={processStatusOptions}
-              className="w-full"
-              size="middle"
-              disabled={loading}
-            />
-          </Form.Item>
-        </Col>
-
-        <Col xs={24} sm={8} md={6} lg={4}>
-          <Form.Item label="Server IP" name="serverIP">
-            <Select
-              placeholder="Server IP"
-              showSearch
-              options={serverIPOptions}
+          <Form.Item label="Search" name="searchText">
+            <Input
+              placeholder="Search users..."
               className="w-full"
               size="middle"
               disabled={loading}
@@ -190,4 +179,4 @@ function ActionHistoryFilterBar({
   );
 }
 
-export default ActionHistoryFilterBar;
+export default AuthorityHistoryFilterBar;
