@@ -158,20 +158,22 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
                 </div>
 
                 {/* Timestamps */}
-                <div className="flex-shrink-0 text-right">
+                {/* <div className="flex-shrink-0 text-right">
                   <div className="text-xs text-gray-500">
                     Created: {formatDateTime(alert.file_created_at)}
                   </div>
                   <div className="text-xs text-gray-500">
                     Analyzed: {formatDateTime(alert.analysis_time)}
                   </div>
-                </div>
+                </div> */}
 
                 {/* Actions Dropdown */}
                 <div className="flex-shrink-0 w-32">
                   <Select
                     value={alert.process_status}
-                    onChange={(value) => handleProcessStatusChange(value, alert.id)}
+                    onChange={(value) =>
+                      handleProcessStatusChange(value, alert.id)
+                    }
                     placeholder="조치 (actions ▾)"
                     options={processStatusOptions}
                     size="small"
