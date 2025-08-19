@@ -26,6 +26,9 @@ const AuthorityHistory = lazy(
 const AlarmSchedule = lazy(
   () => import("@/app/pages/Alarm/Schedule")
 );
+const Dashboard = lazy(
+  () => import("@/app/pages/Home/Dashboard")
+);
 
 const PlaceholderPage = () => (
   <div className="flex items-center justify-center h-full">
@@ -41,13 +44,13 @@ const PlaceholderPage = () => (
 const securityRoutes: ItemRoute[] = [
   {
     key: ROUTES.Home.Index,
-    components: <PlaceholderPage />,
+    components: <Dashboard />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },
   {
     key: ROUTES.Home.Dashboard,
-    components: <PlaceholderPage />,
+    components: <Dashboard />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },

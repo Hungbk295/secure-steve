@@ -21,21 +21,21 @@ const mockAILearningHistoryData: AILearningHistoryItem[] = [
     agent_release: "Completed",
   },
   {
-    id: "ai_learning_002", 
+    id: "ai_learning_002",
     time: "14 June 25 | 14:01",
     model_version: "model_v250713",
     agent_release: "Fail(Error)",
   },
   {
     id: "ai_learning_003",
-    time: "10 June 25 | 09:45", 
+    time: "10 June 25 | 09:45",
     model_version: "model_v250710",
     agent_release: "Completed",
   },
   {
     id: "ai_learning_004",
     time: "08 June 25 | 21:15",
-    model_version: "model_v250708", 
+    model_version: "model_v250708",
     agent_release: "Completed",
   },
   {
@@ -52,46 +52,47 @@ const mockAILearningHistoryData: AILearningHistoryItem[] = [
   },
 ];
 
-const getAgentReleaseColor = (status: string) => {
-  switch (status) {
-    case "Completed":
-      return "green";
-    case "Fail(Error)":
-      return "red";
-    default:
-      return "default";
-  }
-};
+const columns = [
+  {
+    title: "Time",
+    dataIndex: "time",
+    key: "time",
+    sorter: true,
+    render: (text: string) => <Text>{text}</Text>,
+  },
+  {
+    title: "Model Version",
+    dataIndex: "model_version",
+    key: "model_version",
+    sorter: true,
+    render: (text: string) => <Text>{text}</Text>,
+  },
+  {
+    title: "Agent Release",
+    dataIndex: "agent_release",
+    key: "agent_release",
+    sorter: true,
+    render: (status: string) => <Tag>{status}</Tag>,
+  },
+];
 
-function AILearningHistoryTable({ loading, onCSVDownloadRender }: AILearningHistoryTableProps) {
+// const getAgentReleaseColor = (status: string) => {
+//   switch (status) {
+//     case "Completed":
+//       return "green";
+//     case "Fail(Error)":
+//       return "red";
+//     default:
+//       return "default";
+//   }
+// };
+
+function AILearningHistoryTable({
+  loading,
+  onCSVDownloadRender,
+}: AILearningHistoryTableProps) {
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
   const [data] = useState(mockAILearningHistoryData);
-
-  const columns = [
-    {
-      title: "Time",
-      dataIndex: "time",
-      key: "time",
-      sorter: true,
-      render: (text: string) => <Text>{text}</Text>,
-    },
-    {
-      title: "Model Version", 
-      dataIndex: "model_version",
-      key: "model_version",
-      sorter: true,
-      render: (text: string) => <Text>{text}</Text>,
-    },
-    {
-      title: "Agent Release",
-      dataIndex: "agent_release", 
-      key: "agent_release",
-      sorter: true,
-      render: (status: string) => (
-        <Tag color={getAgentReleaseColor(status)}>{status}</Tag>
-      ),
-    },
-  ];
 
   const rowSelection = {
     selectedRowKeys,
@@ -111,18 +112,14 @@ function AILearningHistoryTable({ loading, onCSVDownloadRender }: AILearningHist
         columns={columns}
         fileName="ai_learning_history"
       >
-        <Button
-          type="primary"
-          icon={<DownloadOutlined />}
-          disabled={loading}
-        >
+        <Button type="primary" icon={<DownloadOutlined />} disabled={loading}>
           CSV 다운로드
         </Button>
       </CustomExcelExport>
     );
-    
+
     onCSVDownloadRender?.(csvButton);
-  }, [csvData, columns, loading, onCSVDownloadRender]);
+  }, [csvData, loading, onCSVDownloadRender]);
 
   const handleRowClick = (record: DynamicKeyObject) => {
     console.log("AI Learning history clicked:", record);

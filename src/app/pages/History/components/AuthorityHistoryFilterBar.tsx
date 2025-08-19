@@ -117,7 +117,7 @@ function AuthorityHistoryFilterBar({
         </Col>
 
         <Col xs={24} sm={8} md={6} lg={4}>
-          <Form.Item label="User Type" name="userType">
+          <Form.Item label="User Type)" name="userType">
             <Select
               placeholder="Select User Type"
               showSearch

@@ -7,7 +7,7 @@ export const useQueryParams = () => {
 
   return useMemo(() => {
     const params: DynamicKeyObject = {};
-    searchParams.forEach((value, key) => {
+    searchParams.forEach((value: string, key: string) => {
       params[key] = value;
     });
     return params;

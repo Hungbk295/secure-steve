@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { Row, Col, Button, Form } from "antd";
 import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
 import Select from "@/app/components/common/Select";
-import RangePicker from "@/app/components/common/RangePicker";
 import { DynamicKeyObject } from "@/interfaces/app";
+import CustomDatePicker from "@/app/components/common/CustomDatePicker";
 
 interface ActionHistoryFilterBarProps {
   loading?: boolean;
@@ -104,11 +104,12 @@ function ActionHistoryFilterBar({
       <Row gutter={[16, 16]} align="middle">
         <Col xs={24} sm={12} md={8} lg={4}>
           <Form.Item label="Time Range" name="timeRange">
-            <RangePicker
+            <CustomDatePicker
+              form={form}
+              showTime={false}
+              name="dateRange"
+              showQuickPicker={false}
               placeholder={["Start Time", "End Time"]}
-              className="w-full"
-              size="middle"
-              disabled={loading}
             />
           </Form.Item>
         </Col>

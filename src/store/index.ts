@@ -12,6 +12,7 @@ import blacklistSlice from "@/store/blacklistSlice";
 import adminPolicySlice from "@/store/adminPolicySlice";
 import authorityHistorySlice from "@/store/authorityHistorySlice";
 import alarmScheduleSlice from "@/store/alarmScheduleSlice";
+import dashboardSlice from "@/store/dashboardSlice";
 
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
@@ -41,6 +42,7 @@ const reducers = {
   adminPolicy: adminPolicySlice,
   authorityHistory: authorityHistorySlice,
   alarmSchedule: alarmScheduleSlice,
+  dashboard: dashboardSlice,
 };
 
 const rootReducer = combineReducers(reducers);

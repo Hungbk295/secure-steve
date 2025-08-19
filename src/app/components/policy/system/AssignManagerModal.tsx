@@ -9,6 +9,7 @@ import {
   actionAssignManager,
   actionGetServersList,
 } from "@/store/settingPolicySlice";
+import Input from "../../common/Input";
 
 interface AssignManagerModalProps {
   visible: boolean;
@@ -109,7 +110,12 @@ const AssignManagerModal: React.FC<AssignManagerModalProps> = ({
           showIcon
           className="mb-6"
         />
-
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Manager
+          </label>
+          <Input placeholder="Manager" disabled={loading} />
+        </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             할당할 매니저 선택 *

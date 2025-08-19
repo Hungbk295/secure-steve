@@ -44,18 +44,18 @@ const mockScanHistoryData: ScanHistoryItem[] = [
   },
 ];
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "Completed":
-      return "green";
-    case "Fail(Error)":
-      return "red";
-    case "Fail(None exe)":
-      return "orange";
-    default:
-      return "default";
-  }
-};
+// const getStatusColor = (status: string) => {
+//   switch (status) {
+//     case "Completed":
+//       return "green";
+//     case "Fail(Error)":
+//       return "red";
+//     case "Fail(None exe)":
+//       return "orange";
+//     default:
+//       return "default";
+//   }
+// };
 
 function ScanHistoryTable({ loading }: ScanHistoryTableProps) {
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
@@ -81,9 +81,7 @@ function ScanHistoryTable({ loading }: ScanHistoryTableProps) {
       dataIndex: "test_status",
       key: "test_status",
       sorter: true,
-      render: (status: string) => (
-        <Tag color={getStatusColor(status)}>{status}</Tag>
-      ),
+      render: (status: string) => <Tag>{status}</Tag>,
     },
     {
       title: "Type",

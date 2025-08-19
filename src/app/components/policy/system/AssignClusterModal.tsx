@@ -9,6 +9,7 @@ import {
   actionAssignCluster,
   actionGetServersList,
 } from "@/store/settingPolicySlice";
+import Input from "../../common/Input";
 
 interface AssignClusterModalProps {
   visible: boolean;
@@ -102,7 +103,16 @@ const AssignClusterModal: React.FC<AssignClusterModalProps> = ({
           showIcon
           className="mb-6"
         />
-
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Cluster
+          </label>
+          <Input
+            placeholder="Cluster"
+            value={selectedCluster}
+            disabled={loading}
+          />
+        </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             할당할 클러스터 선택 *

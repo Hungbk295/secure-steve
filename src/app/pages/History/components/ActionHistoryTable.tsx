@@ -54,35 +54,35 @@ const mockActionHistoryData: ActionHistoryItem[] = [
   },
 ];
 
-const getVerdictColor = (verdict: string) => {
-  switch (verdict) {
-    case "Malware":
-      return "red";
-    case "Suspicious":
-      return "orange";
-    case "Benign":
-      return "green";
-    case "Unknown":
-      return "default";
-    default:
-      return "default";
-  }
-};
+// const getVerdictColor = (verdict: string) => {
+//   switch (verdict) {
+//     case "Malware":
+//       return "red";
+//     case "Suspicious":
+//       return "orange";
+//     case "Benign":
+//       return "green";
+//     case "Unknown":
+//       return "default";
+//     default:
+//       return "default";
+//   }
+// };
 
-const getProcessStatusColor = (status: string) => {
-  switch (status) {
-    case "delete":
-      return "red";
-    case "quarantine":
-      return "orange";
-    case "no_action":
-      return "green";
-    case "pending":
-      return "blue";
-    default:
-      return "default";
-  }
-};
+// const getProcessStatusColor = (status: string) => {
+//   switch (status) {
+//     case "delete":
+//       return "red";
+//     case "quarantine":
+//       return "orange";
+//     case "no_action":
+//       return "green";
+//     case "pending":
+//       return "blue";
+//     default:
+//       return "default";
+//   }
+// };
 
 const getProcessStatusText = (status: string) => {
   switch (status) {
@@ -136,9 +136,7 @@ function ActionHistoryTable({ loading }: ActionHistoryTableProps) {
       title: "Verdict",
       dataIndex: "verdict",
       key: "verdict",
-      render: (verdict: string) => (
-        <Tag color={getVerdictColor(verdict)}>{verdict}</Tag>
-      ),
+      render: (verdict: string) => <Tag>{verdict}</Tag>,
     },
     {
       title: "Server IP",
@@ -150,11 +148,7 @@ function ActionHistoryTable({ loading }: ActionHistoryTableProps) {
       title: "Process Status",
       dataIndex: "process_status",
       key: "process_status",
-      render: (status: string) => (
-        <Tag color={getProcessStatusColor(status)}>
-          {getProcessStatusText(status)}
-        </Tag>
-      ),
+      render: (status: string) => <Tag>{getProcessStatusText(status)}</Tag>,
     },
     {
       title: "Actioned by",

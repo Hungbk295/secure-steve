@@ -49,24 +49,24 @@ const AuthorityHistoryTable: React.FC<AuthorityHistoryTableProps> = ({
   const getStatusTag = (status: string) => {
     switch (status) {
       case "신규 승인":
-        return <Tag color="green">{status}</Tag>;
+        return <Tag>{status}</Tag>;
       case "반려":
-        return <Tag color="red">{status}</Tag>;
+        return <Tag>{status}</Tag>;
       case "삭제(퇴사)":
-        return <Tag color="orange">{status}</Tag>;
+        return <Tag>{status}</Tag>;
       default:
-        return <Tag color="default">{status}</Tag>;
+        return <Tag>{status}</Tag>;
     }
   };
 
   const getUserTypeTag = (userType: string) => {
     switch (userType) {
       case "관리자":
-        return <Tag color="blue">{userType}</Tag>;
+        return <Tag>{userType}</Tag>;
       case "사용자":
-        return <Tag color="cyan">{userType}</Tag>;
+        return <Tag>{userType}</Tag>;
       default:
-        return <Tag color="default">{userType}</Tag>;
+        return <Tag>{userType}</Tag>;
     }
   };
 
@@ -116,29 +116,37 @@ const AuthorityHistoryTable: React.FC<AuthorityHistoryTableProps> = ({
   ];
 
   const handleTableChange = (paginationConfig: any, filters: any) => {
-    dispatch(updatePagination({
-      current: paginationConfig.current,
-      pageSize: paginationConfig.pageSize,
-    }));
-    
-    dispatch(actionGetAuthorityHistoryList({
-      ...filters,
-      page: paginationConfig.current,
-      pageSize: paginationConfig.pageSize,
-    }));
+    dispatch(
+      updatePagination({
+        current: paginationConfig.current,
+        pageSize: paginationConfig.pageSize,
+      })
+    );
+
+    dispatch(
+      actionGetAuthorityHistoryList({
+        ...filters,
+        page: paginationConfig.current,
+        pageSize: paginationConfig.pageSize,
+      })
+    );
   };
 
   const handlePageSizeChange = (value: number) => {
-    dispatch(updatePagination({
-      current: 1,
-      pageSize: value,
-    }));
-    
-    dispatch(actionGetAuthorityHistoryList({
-      ...filters,
-      page: 1,
-      pageSize: value,
-    }));
+    dispatch(
+      updatePagination({
+        current: 1,
+        pageSize: value,
+      })
+    );
+
+    dispatch(
+      actionGetAuthorityHistoryList({
+        ...filters,
+        page: 1,
+        pageSize: value,
+      })
+    );
   };
 
   const handleCSVDownload = () => {
@@ -195,8 +203,14 @@ const AuthorityHistoryTable: React.FC<AuthorityHistoryTableProps> = ({
       {/* Footer Controls */}
       <div className="flex justify-between items-center pt-2 border-t">
         <div className="text-sm text-gray-600">
-          Showing {Math.min((pagination.current - 1) * pagination.pageSize + 1, pagination.total)}-
-          {Math.min(pagination.current * pagination.pageSize, pagination.total)} of {pagination.total} entries
+          Showing{" "}
+          {Math.min(
+            (pagination.current - 1) * pagination.pageSize + 1,
+            pagination.total
+          )}
+          -
+          {Math.min(pagination.current * pagination.pageSize, pagination.total)}{" "}
+          of {pagination.total} entries
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">Rows per page:</span>
