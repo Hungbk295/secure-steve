@@ -3,7 +3,6 @@ import { Row, Col, Button, Form } from "antd";
 import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
 import Select from "@/app/components/common/Select";
 import CustomDatePicker from "@/app/components/common/CustomDatePicker";
-import { DynamicKeyObject } from "@/interfaces/app";
 
 interface ScanHistoryFilterBarProps {
   loading?: boolean;
@@ -24,43 +23,33 @@ function ScanHistoryFilterBar({
 }: ScanHistoryFilterBarProps) {
   const [form] = Form.useForm();
 
-  function getPayload(values: DynamicKeyObject) {
-    const { timeRange, serverIP, testStatus, testType, owner } = values;
+  // function getPayload(values: DynamicKeyObject) {
+  //   const { timeRange, serverIP, testStatus, testType, owner } = values;
 
-    const payload = {
-      timeRange:
-        timeRange && timeRange.length === 2
-          ? [
-              timeRange[0].format("YYYY-MM-DD"),
-              timeRange[1].format("YYYY-MM-DD"),
-            ]
-          : null,
-      serverIP: serverIP === "all" ? "" : serverIP,
-      testStatus: testStatus === "all" ? "" : testStatus,
-      testType: testType === "all" ? "" : testType,
-      owner: owner === "all" ? "" : owner,
-    };
-    return payload;
-  }
+  //   const payload = {
+  //     timeRange:
+  //       timeRange && timeRange.length === 2
+  //         ? [
+  //             timeRange[0].format("YYYY-MM-DD"),
+  //             timeRange[1].format("YYYY-MM-DD"),
+  //           ]
+  //         : null,
+  //     serverIP: serverIP === "all" ? "" : serverIP,
+  //     testStatus: testStatus === "all" ? "" : testStatus,
+  //     testType: testType === "all" ? "" : testType,
+  //     owner: owner === "all" ? "" : owner,
+  //   };
+  //   return payload;
+  // }
 
-  function onFinish(values: DynamicKeyObject) {
-    const payload = getPayload(values);
-    console.log("Scan History Filter:", payload);
-    // TODO: Dispatch action to fetch scan history data
-  }
+  function onFinish() {}
 
   function onReset() {
     form.setFieldsValue(initialFormData);
-    const payload = getPayload(initialFormData);
-    console.log("Reset Scan History Filter:", payload);
-    // TODO: Dispatch action to fetch scan history data
   }
 
   useEffect(() => {
     form.setFieldsValue(initialFormData);
-    const payload = getPayload(initialFormData);
-    console.log("Initialize Scan History Filter:", payload);
-    // TODO: Dispatch action to fetch scan history data
   }, []);
 
   const serverIPOptions = [

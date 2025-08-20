@@ -7,6 +7,7 @@ import {
   selectLatestAlerts,
   actionUpdateAnalysisAction,
 } from "@/store/dashboardSlice";
+import useScreenWidth from "@/hooks/useScreenWidth";
 
 interface LatestAlertCardProps {
   loading: boolean;
@@ -18,7 +19,8 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [deleteComments, setDeleteComments] = useState("");
   const [selectedAlertId, setSelectedAlertId] = useState<string>("");
-
+  const isScreenWidth = useScreenWidth();
+  const isMobile = isScreenWidth.isMobile || isScreenWidth.isTablet;
   const processStatusOptions = [
     { label: "Pending", value: "pending" },
     { label: "No Action", value: "no_action" },
@@ -87,16 +89,16 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
     return <Tag color={color}>{status}</Tag>;
   };
 
-  const formatDateTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
+  // const formatDateTime = (dateString: string) => {
+  //   const date = new Date(dateString);
+  //   return date.toLocaleString("ko-KR", {
+  //     year: "numeric",
+  //     month: "2-digit",
+  //     day: "2-digit",
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //   });
+  // };
 
   const isActionDisabled = (processStatus: string) => {
     return ["no_action", "quarantine", "delete"].includes(processStatus);
@@ -114,13 +116,13 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
     <>
       <Card
         loading={loading}
-        title={`Latest Alerts (${latestAlerts.length})`}
+        title={`Latest Alerts`}
         className="latest-alert-card"
       >
         <List
           dataSource={latestAlerts}
           renderItem={(alert) => (
-            <List.Item className="px-0">
+            <List.Item className={`${isMobile ? "overflow-x-auto" : ""} px-4`}>
               <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg w-full">
                 {/* Risk Icon */}
                 <div className="flex-shrink-0">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Table, Select, Tag } from "antd";
+import { Button, Tag } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { useAppSelector, useAppDispatch } from "@/store";
@@ -8,11 +8,8 @@ import {
   selectAuthorityHistoryPagination,
   updatePagination,
   actionGetAuthorityHistoryList,
-  actionExportCSV,
-  selectAuthorityHistoryFilters,
 } from "@/store/authorityHistorySlice";
-
-const { Option } = Select;
+import Table from "@/app/components/common/Table";
 
 interface AuthorityHistoryItem {
   key: string;
@@ -34,7 +31,6 @@ const AuthorityHistoryTable: React.FC<AuthorityHistoryTableProps> = ({
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectAuthorityHistoryItems);
   const pagination = useAppSelector(selectAuthorityHistoryPagination);
-  const filters = useAppSelector(selectAuthorityHistoryFilters);
 
   const formatDateTime = (dateString: string) => {
     const date = new Date(dateString);
@@ -132,38 +128,6 @@ const AuthorityHistoryTable: React.FC<AuthorityHistoryTableProps> = ({
     );
   };
 
-  const handlePageSizeChange = (value: number) => {
-    dispatch(
-      updatePagination({
-        current: 1,
-        pageSize: value,
-      })
-    );
-
-    dispatch(
-      actionGetAuthorityHistoryList({
-        ...filters,
-        page: 1,
-        pageSize: value,
-      })
-    );
-  };
-
-  const handleCSVDownload = () => {
-    dispatch(actionExportCSV(items));
-  };
-
-  const paginationConfig = {
-    current: pagination.current,
-    total: pagination.total,
-    pageSize: pagination.pageSize,
-    showSizeChanger: false,
-    showQuickJumper: true,
-    showTotal: (total: number, range: [number, number]) =>
-      `${range[0]}-${range[1]} of ${total} items`,
-    pageSizeOptions: ["10", "20", "30", "50", "100"],
-  };
-
   return (
     <div className="flex flex-col gap-4">
       {/* Action Bar */}
@@ -176,7 +140,7 @@ const AuthorityHistoryTable: React.FC<AuthorityHistoryTableProps> = ({
         <div className="flex items-center gap-2">
           <Button
             icon={<DownloadOutlined />}
-            onClick={handleCSVDownload}
+            // onClick={handleCSVDownload}
             loading={loading}
             disabled={items.length === 0}
           >
@@ -191,43 +155,10 @@ const AuthorityHistoryTable: React.FC<AuthorityHistoryTableProps> = ({
           columns={columns}
           dataSource={items}
           loading={loading}
-          pagination={paginationConfig}
           onChange={handleTableChange}
           scroll={{ x: 800 }}
-          rowKey="key"
-          size="middle"
-          className="authority-history-table"
+          showPagination={true}
         />
-      </div>
-
-      {/* Footer Controls */}
-      <div className="flex justify-between items-center pt-2 border-t">
-        <div className="text-sm text-gray-600">
-          Showing{" "}
-          {Math.min(
-            (pagination.current - 1) * pagination.pageSize + 1,
-            pagination.total
-          )}
-          -
-          {Math.min(pagination.current * pagination.pageSize, pagination.total)}{" "}
-          of {pagination.total} entries
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium">Rows per page:</span>
-          <Select
-            value={pagination.pageSize}
-            onChange={handlePageSizeChange}
-            size="small"
-            style={{ width: 80 }}
-            disabled={loading}
-          >
-            <Option value={10}>10개</Option>
-            <Option value={20}>20개</Option>
-            <Option value={30}>30개</Option>
-            <Option value={50}>50개</Option>
-            <Option value={100}>100개</Option>
-          </Select>
-        </div>
       </div>
     </div>
   );

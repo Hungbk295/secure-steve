@@ -77,7 +77,7 @@ const BlacklistWhitelist: React.FC = () => {
         {/* Filter Bar */}
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg border border-gray-200 !mb-0">
+        <div className="bg-white rounded-lg border border-gray-200 !mb-0 overflow-x-auto">
           <Tabs
             activeKey={activeTab}
             onChange={handleTabChange}

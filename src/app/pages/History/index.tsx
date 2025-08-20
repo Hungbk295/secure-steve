@@ -31,7 +31,7 @@ const History: React.FC = () => {
         </h1>
       </div>
       <div className="flex-1 py-4 flex flex-col gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 !mb-0">
+        <div className="bg-white rounded-lg border border-gray-200 !mb-0 overflow-x-auto">
           <Tabs
             activeKey={activeTab}
             onChange={handleTabChange}

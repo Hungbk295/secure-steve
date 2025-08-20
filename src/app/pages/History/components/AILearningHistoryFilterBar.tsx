@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Row, Col, Button, Form } from "antd";
 import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
 import CustomDatePicker from "@/app/components/common/CustomDatePicker";
-import { DynamicKeyObject } from "@/interfaces/app";
 
 interface AILearningHistoryFilterBarProps {
   loading?: boolean;
@@ -19,39 +18,29 @@ function AILearningHistoryFilterBar({
 }: AILearningHistoryFilterBarProps) {
   const [form] = Form.useForm();
 
-  function getPayload(values: DynamicKeyObject) {
-    const { timeRange } = values;
+  // function getPayload(values: DynamicKeyObject) {
+  //   const { timeRange } = values;
 
-    const payload = {
-      timeRange:
-        timeRange && timeRange.length === 2
-          ? [
-              timeRange[0].format("YYYY-MM-DD"),
-              timeRange[1].format("YYYY-MM-DD"),
-            ]
-          : null,
-    };
-    return payload;
-  }
+  //   const payload = {
+  //     timeRange:
+  //       timeRange && timeRange.length === 2
+  //         ? [
+  //             timeRange[0].format("YYYY-MM-DD"),
+  //             timeRange[1].format("YYYY-MM-DD"),
+  //           ]
+  //         : null,
+  //   };
+  //   return payload;
+  // }
 
-  function onFinish(values: DynamicKeyObject) {
-    const payload = getPayload(values);
-    console.log("AI Learning History Filter:", payload);
-    // TODO: Dispatch action to fetch AI learning history data
-  }
+  function onFinish() {}
 
   function onReset() {
     form.setFieldsValue(initialFormData);
-    const payload = getPayload(initialFormData);
-    console.log("Reset AI Learning History Filter:", payload);
-    // TODO: Dispatch action to fetch AI learning history data
   }
 
   useEffect(() => {
     form.setFieldsValue(initialFormData);
-    const payload = getPayload(initialFormData);
-    console.log("Initialize AI Learning History Filter:", payload);
-    // TODO: Dispatch action to fetch AI learning history data
   }, []);
 
   return (

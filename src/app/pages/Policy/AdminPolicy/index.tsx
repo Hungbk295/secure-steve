@@ -25,15 +25,11 @@ const AdminPolicy: React.FC = () => {
     },
     {
       key: "importance",
-      label: (
-        <span className="text-base font-medium px-2">중요도 템플릿</span>
-      ),
+      label: <span className="text-base font-medium px-2">중요도 템플릿</span>,
     },
     {
       key: "operation",
-      label: (
-        <span className="text-base font-medium px-2">운영 정책</span>
-      ),
+      label: <span className="text-base font-medium px-2">운영 정책</span>,
     },
   ];
 
@@ -52,7 +48,7 @@ const AdminPolicy: React.FC = () => {
       </div>
 
       <div className="flex-1 py-4 flex flex-col gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 !mb-0">
+        <div className="bg-white rounded-lg border border-gray-200 !mb-0 overflow-x-auto">
           <Tabs
             activeKey={activeTab}
             onChange={setActiveTab}
@@ -60,25 +56,17 @@ const AdminPolicy: React.FC = () => {
             size="large"
           />
         </div>
-        
+
         {activeTab === "sensitivity" && (
-          <SensitivitySettings 
+          <SensitivitySettings
             loading={loading}
             onPolicyAdd={handlePolicyAdd}
           />
         )}
-        
-        {activeTab === "importance" && (
-          <ImportanceTemplate 
-            loading={loading}
-          />
-        )}
-        
-        {activeTab === "operation" && (
-          <OperationPolicy 
-            loading={loading}
-          />
-        )}
+
+        {activeTab === "importance" && <ImportanceTemplate loading={loading} />}
+
+        {activeTab === "operation" && <OperationPolicy loading={loading} />}
       </div>
 
       <PolicyAddModal

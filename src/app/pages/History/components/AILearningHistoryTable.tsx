@@ -1,8 +1,6 @@
-import { useEffect, useState, useMemo } from "react";
-import { Button, Typography, Tag } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { Typography, Tag } from "antd";
 import Table from "@/app/components/common/Table";
-import CustomExcelExport from "@/app/components/common/CustomExcelExport";
 import { DynamicKeyObject } from "@/interfaces/app";
 import { AILearningHistoryItem } from "@/interfaces/history";
 
@@ -89,8 +87,8 @@ const columns = [
 
 function AILearningHistoryTable({
   loading,
-  onCSVDownloadRender,
-}: AILearningHistoryTableProps) {
+}: // onCSVDownloadRender,
+AILearningHistoryTableProps) {
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
   const [data] = useState(mockAILearningHistoryData);
 
@@ -99,27 +97,27 @@ function AILearningHistoryTable({
     onChange: (keys: any[]) => setSelectedRowKeys(keys),
   };
 
-  const csvData = useMemo(() => {
-    return selectedRowKeys.length > 0
-      ? data.filter((item) => selectedRowKeys.includes(item.id))
-      : data;
-  }, [data, selectedRowKeys]);
+  // const csvData = useMemo(() => {
+  //   return selectedRowKeys.length > 0
+  //     ? data.filter((item) => selectedRowKeys.includes(item.id))
+  //     : data;
+  // }, [data, selectedRowKeys]);
 
-  useEffect(() => {
-    const csvButton = (
-      <CustomExcelExport
-        data={csvData}
-        columns={columns}
-        fileName="ai_learning_history"
-      >
-        <Button type="primary" icon={<DownloadOutlined />} disabled={loading}>
-          CSV 다운로드
-        </Button>
-      </CustomExcelExport>
-    );
+  // useEffect(() => {
+  //   const csvButton = (
+  //     <CustomExcelExport
+  //       data={csvData}
+  //       columns={columns}
+  //       fileName="ai_learning_history"
+  //     >
+  //       <Button type="primary" icon={<DownloadOutlined />} disabled={loading}>
+  //         CSV 다운로드
+  //       </Button>
+  //     </CustomExcelExport>
+  //   );
 
-    onCSVDownloadRender?.(csvButton);
-  }, [csvData, loading, onCSVDownloadRender]);
+  //   onCSVDownloadRender?.(csvButton);
+  // }, [csvData, loading, onCSVDownloadRender]);
 
   const handleRowClick = (record: DynamicKeyObject) => {
     console.log("AI Learning history clicked:", record);
