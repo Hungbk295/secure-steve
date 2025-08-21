@@ -48,12 +48,12 @@ export const getAllMenuItems = (): MenuItem[] => [
         route: ROUTES.Analysis.Action,
         roles: [UserRole.USER, UserRole.ADMINISTRATOR],
       },
-      {
-        id: "requests",
-        label: "Analysis Requests",
-        route: ROUTES.Analysis.Requests,
-        roles: [UserRole.USER, UserRole.ADMINISTRATOR],
-      },
+      // {
+      //   id: "requests",
+      //   label: "Analysis Requests",
+      //   route: ROUTES.Analysis.Requests,
+      //   roles: [UserRole.USER, UserRole.ADMINISTRATOR],
+      // },
     ],
   },
   {

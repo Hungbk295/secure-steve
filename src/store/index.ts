@@ -13,7 +13,7 @@ import adminPolicySlice from "@/store/adminPolicySlice";
 import authorityHistorySlice from "@/store/authorityHistorySlice";
 import alarmScheduleSlice from "@/store/alarmScheduleSlice";
 import dashboardSlice from "@/store/dashboardSlice";
-
+import alarmNotificationsSlice from "@/store/alarmNotificationsSlice";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
@@ -43,6 +43,7 @@ const reducers = {
   authorityHistory: authorityHistorySlice,
   alarmSchedule: alarmScheduleSlice,
   dashboard: dashboardSlice,
+  alarmNotifications: alarmNotificationsSlice,
 };
 
 const rootReducer = combineReducers(reducers);

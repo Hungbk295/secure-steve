@@ -10,10 +10,11 @@ import { useLocation } from "react-router-dom";
 
 interface ISignInFormProps {
   onForgotPassword: () => void;
+  isForgot: boolean;
 }
 
 function SignInForm(props: ISignInFormProps) {
-  const { onForgotPassword } = props;
+  const { onForgotPassword, isForgot } = props;
   const dispatch = useAppDispatch();
   const [form] = Form.useForm();
   const location = useLocation();
@@ -24,10 +25,14 @@ function SignInForm(props: ISignInFormProps) {
   const submitForm = (values: DynamicKeyObject) => {
     const { userRole, ...rest } = values;
     pageLoading.on();
-    dispatch(
-      actionLogin({ ...rest, userRole: userRole || EUserRole.MASTER })
-    ).finally(() => pageLoading.off());
+    dispatch(actionLogin({ ...rest, userRole: userRole })).finally(() =>
+      pageLoading.off()
+    );
   };
+
+  if (isForgot) {
+    console.log("isForgot", isForgot);
+  }
 
   return (
     <>

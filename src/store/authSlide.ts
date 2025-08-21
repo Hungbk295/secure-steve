@@ -114,7 +114,7 @@ export const slice = createSlice({
       })
       .addCase(actionLogin.rejected, (state) => {
         state.infoLogin = initialState.infoLogin;
-        state.isLogin = false;
+        state.isLogin = true;
       })
       // .addCase(actionRefreshToken.fulfilled, (state, action) => {
       //   const data = get(action, "payload.data.data", initialState.infoLogin);
@@ -130,6 +130,9 @@ export const slice = createSlice({
       //   state.isLogin = false;
       // })
       .addCase(actionLogout.pending, (state) => {
+        state.isLogin = false;
+      })
+      .addCase(actionLogout.rejected, (state) => {
         state.isLogin = false;
       });
   },

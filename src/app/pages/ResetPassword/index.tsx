@@ -1,4 +1,3 @@
-import AlbusLogoLogin from "@/assets/svgs/albus-logo-login.svg";
 import { Form } from "antd";
 import CustomButton from "@/app/components/common/Button";
 import {
@@ -7,7 +6,6 @@ import {
   EModalMode,
   ENotificationType,
 } from "@/interfaces/app";
-import AlbusCover from "../Login/AlbusCover";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { notify, pageLoading } from "@/utils/appStateHandle";
 import CustomInputPassword from "@/app/components/common/CustomInputPassword";
@@ -68,10 +66,8 @@ function ResetPassword() {
 
   return (
     <div className="flex items-center h-screen">
-      <AlbusCover />
       <div className="flex-1">
         <div className="w-[400px] mx-auto flex flex-col gap-8 items-center">
-          <AlbusLogoLogin />
           <Form
             form={form}
             layout="vertical"

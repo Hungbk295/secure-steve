@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { actionLogout, selectInfoLogin } from "@/store/authSlide";
 import { notify } from "@/utils/appStateHandle";
 import { ENotificationType, EModalMode } from "@/interfaces/app";
+import { useNavigate } from "react-router-dom";
 
 interface SecurityUserSectionProps {
   isCollapsed?: boolean;
@@ -12,7 +13,7 @@ function SecurityUserSection({
 }: SecurityUserSectionProps) {
   const dispatch = useAppDispatch();
   const infoLogin = useAppSelector(selectInfoLogin);
-
+  const navigate = useNavigate();
   const handleLogout = () => {
     notify({
       message: "Are you sure you want to log out?",
@@ -26,7 +27,9 @@ function SecurityUserSection({
             userRole: infoLogin.role,
             accessToken: infoLogin.accessToken,
           })
-        );
+        ).finally(() => {
+          navigate("/sign-in");
+        });
       },
     });
   };
