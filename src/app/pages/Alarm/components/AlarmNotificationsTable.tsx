@@ -52,7 +52,7 @@ const AlarmNotificationsTable: React.FC<AlarmNotificationsTableProps> = ({
       key: "role",
       width: 120,
       render: (role: string) => {
-        return <Tag color="blue">{role}</Tag>;
+        return <Tag>{role}</Tag>;
       },
     },
   ];
@@ -63,12 +63,7 @@ const AlarmNotificationsTable: React.FC<AlarmNotificationsTableProps> = ({
       dataSource={dataSource}
       loading={loading}
       rowKey="id"
-      pagination={{
-        total: 0,
-        pageSize: 10,
-        showSizeChanger: true,
-        showTotal: (total: number) => `Total ${total} items`,
-      }}
+      showPagination={true}
     />
   );
 };
