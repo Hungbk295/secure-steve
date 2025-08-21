@@ -6,7 +6,8 @@ import { useAppDispatch } from "@/store";
 import { actionLogin } from "@/store/authSlide";
 import { pageLoading } from "@/utils/appStateHandle";
 import { Form, Radio } from "antd";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import ROUTES from "@/constants/routes";
 
 interface ISignInFormProps {
   onForgotPassword: () => void;
@@ -16,6 +17,7 @@ interface ISignInFormProps {
 function SignInForm(props: ISignInFormProps) {
   const { onForgotPassword, isForgot } = props;
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   const location = useLocation();
   const isMaster = location.pathname.includes("/sign-in");
@@ -36,7 +38,7 @@ function SignInForm(props: ISignInFormProps) {
 
   return (
     <>
-      <h1 className="text-[32px] font-bold">Sign in to your account</h1>
+      <h1 className="text-[32px] font-bold">로그인하기</h1>
       <Form
         form={form}
         layout="vertical"
@@ -51,10 +53,10 @@ function SignInForm(props: ISignInFormProps) {
           ]}
           // validateTrigger={["onSubmit"]}
         >
-          <Input placeholder="Enter your email address" />
+          <Input placeholder="input 박스" />
         </Form.Item>
         <Form.Item label="Password" name="password">
-          <CustomInputPassword placeholder="Enter your password" />
+          <CustomInputPassword placeholder="input 박스, 비밀번호" />
         </Form.Item>
         {!isMaster && (
           <Form.Item
@@ -70,11 +72,11 @@ function SignInForm(props: ISignInFormProps) {
         )}
         <div>
           <CustomButton
-            className="w-full mb-4"
+            className="w-full"
             htmlType="submit"
             disabled={!username || !password}
           >
-            Sign in
+            로그인
           </CustomButton>
           {!isMaster && (
             <span
@@ -84,6 +86,19 @@ function SignInForm(props: ISignInFormProps) {
               Forgot password?
             </span>
           )}
+        </div>
+        <div className="flex flex-col items-center mb-4">
+          <span>회원가입</span>
+          <span>
+            비밀번호 찾기 및 아이디 찾기는
+          </span>
+          <span>관리자에게 문의하세요</span>
+          <button
+            className="text-blue-600 hover:text-blue-800 underline cursor-pointer mt-2"
+            onClick={() => navigate(ROUTES.SignUp)}
+          >
+            회원가입하기
+          </button>
         </div>
       </Form>
     </>

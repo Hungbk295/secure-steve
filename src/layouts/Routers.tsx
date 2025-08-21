@@ -28,6 +28,7 @@ const AlarmSchedule = lazy(() => import("@/app/pages/Alarm/Schedule"));
 const Dashboard = lazy(() => import("@/app/pages/Home/Dashboard"));
 const ReportList = lazy(() => import("@/app/pages/Report/List"));
 const ReportRegular = lazy(() => import("@/app/pages/Report/Regular"));
+const SignUp = lazy(() => import("@/app/pages/Login/SignUpForm"));
 const PersonalSettings = lazy(
   () => import("@/app/pages/User/PersonalSettings")
 );
@@ -189,6 +190,12 @@ const securityRoutes: ItemRoute[] = [
     key: ROUTES.User.ChangeInfo,
     components: <PersonalSettings />,
     layout: DEFAULT_LAYOUT,
+    private: false,
+  },
+  {
+    key: ROUTES.SignUp,
+    components: <SignUp />,
+    layout: NONE_LAYOUT,
     private: false,
   },
 ];

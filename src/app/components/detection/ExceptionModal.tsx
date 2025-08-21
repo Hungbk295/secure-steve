@@ -132,16 +132,16 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
               options={BLACKLIST_ACTION_OPTIONS}
               className="w-full"
             />
-            <Text type="secondary" className="text-xs mt-1 block">
+            {/* <Text type="secondary" className="text-xs mt-1 block">
               Choose what action to take when this file is detected again
-            </Text>
+            </Text> */}
           </div>
         )}
 
         {/* Memo Input */}
-        <div>
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Memo {isWhitelist ? "(Optional)" : "(Required for Blacklist)"}
+            Memo {isWhitelist ? "(Optional)" : "(Required)"}
           </label>
           <TextArea
             value={memo}
@@ -159,7 +159,7 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
 
         {/* Warning for Blacklist */}
         {isBlacklist && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mt-4">
             <div className="flex items-start space-x-2">
               <ExclamationCircleOutlined className="text-red-500 mt-1" />
               <div>
