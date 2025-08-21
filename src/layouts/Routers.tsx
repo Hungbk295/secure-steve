@@ -26,6 +26,11 @@ const AuthorityHistory = lazy(
 );
 const AlarmSchedule = lazy(() => import("@/app/pages/Alarm/Schedule"));
 const Dashboard = lazy(() => import("@/app/pages/Home/Dashboard"));
+const ReportList = lazy(() => import("@/app/pages/Report/List"));
+const ReportRegular = lazy(() => import("@/app/pages/Report/Regular"));
+const PersonalSettings = lazy(
+  () => import("@/app/pages/User/PersonalSettings")
+);
 
 const PlaceholderPage = () => (
   <div className="flex items-center justify-center h-full">
@@ -155,13 +160,6 @@ const securityRoutes: ItemRoute[] = [
     layout: DEFAULT_LAYOUT,
     private: true,
   },
-
-  {
-    key: ROUTES.User.ChangeInfo,
-    components: <PlaceholderPage />,
-    layout: DEFAULT_LAYOUT,
-    private: true,
-  },
   {
     key: ROUTES.User.Permissions,
     components: <PlaceholderPage />,
@@ -170,13 +168,13 @@ const securityRoutes: ItemRoute[] = [
   },
   {
     key: ROUTES.Report.List,
-    components: <PlaceholderPage />,
+    components: <ReportList />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },
   {
     key: ROUTES.Report.Regular,
-    components: <PlaceholderPage />,
+    components: <ReportRegular />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },
@@ -185,6 +183,12 @@ const securityRoutes: ItemRoute[] = [
     key: ROUTES.SignIn,
     components: <Login />,
     layout: NONE_LAYOUT,
+    private: false,
+  },
+  {
+    key: ROUTES.User.ChangeInfo,
+    components: <PersonalSettings />,
+    layout: DEFAULT_LAYOUT,
     private: false,
   },
 ];

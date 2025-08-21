@@ -183,12 +183,12 @@ export const getAllMenuItems = (): MenuItem[] => [
         route: ROUTES.User.ChangeInfo,
         roles: [UserRole.USER, UserRole.ADMINISTRATOR],
       },
-      {
-        id: "permissions",
-        label: "Modify Permissions",
-        route: ROUTES.User.Permissions,
-        roles: [UserRole.ADMINISTRATOR], // Admin only
-      },
+      // {
+      //   id: "permissions",
+      //   label: "Modify Permissions",
+      //   route: ROUTES.User.Permissions,
+      //   roles: [UserRole.ADMINISTRATOR], // Admin only
+      // },
     ],
   },
 ];
