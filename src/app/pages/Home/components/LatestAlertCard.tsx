@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Space, Tag, Modal, Input, List } from "antd";
+import { Card, Space, Tag, List } from "antd";
 import { ExclamationCircleOutlined, BugOutlined } from "@ant-design/icons";
 import Select from "@/app/components/common/Select";
 import { useAppSelector, useAppDispatch } from "@/store";
@@ -8,6 +8,7 @@ import {
   actionUpdateAnalysisAction,
 } from "@/store/dashboardSlice";
 import useScreenWidth from "@/hooks/useScreenWidth";
+import BulkActionModal from "@/app/components/analyze/action/BulkActionModal";
 
 interface LatestAlertCardProps {
   loading: boolean;
@@ -16,9 +17,10 @@ interface LatestAlertCardProps {
 const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
   const dispatch = useAppDispatch();
   const latestAlerts = useAppSelector(selectLatestAlerts);
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [deleteComments, setDeleteComments] = useState("");
+  const [showActionModal, setShowActionModal] = useState(false);
+  const [selectedAction, setSelectedAction] = useState<string>("");
   const [selectedAlertId, setSelectedAlertId] = useState<string>("");
+  const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const isScreenWidth = useScreenWidth();
   const isMobile = isScreenWidth.isMobile || isScreenWidth.isTablet;
   const processStatusOptions = [
@@ -29,37 +31,41 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
   ];
 
   const handleProcessStatusChange = (value: string, alertId: string) => {
-    if (value === "delete") {
-      setSelectedAlertId(alertId);
-      setDeleteModalVisible(true);
-    } else {
-      dispatch(
-        actionUpdateAnalysisAction({
-          id: alertId,
-          process_status: value,
-          comments: "",
-        })
-      );
-    }
+    const alert = latestAlerts.find((a) => a.id === alertId);
+    setSelectedAlertId(alertId);
+    setSelectedAction(value);
+    setSelectedItems(
+      alert
+        ? [
+            {
+              file_name: alert.file_name,
+              server_ip: alert.client_server_ip,
+            },
+          ]
+        : []
+    );
+    setShowActionModal(true);
   };
 
-  const handleDeleteConfirm = () => {
+  const handleActionConfirm = async (action: string, memo: string) => {
     dispatch(
       actionUpdateAnalysisAction({
         id: selectedAlertId,
-        process_status: "delete",
-        comments: deleteComments,
+        process_status: action,
+        comments: memo,
       })
     );
-    setDeleteModalVisible(false);
-    setDeleteComments("");
+    setShowActionModal(false);
+    setSelectedAction("");
     setSelectedAlertId("");
+    setSelectedItems([]);
   };
 
-  const handleDeleteCancel = () => {
-    setDeleteModalVisible(false);
-    setDeleteComments("");
+  const handleActionCancel = () => {
+    setShowActionModal(false);
+    setSelectedAction("");
     setSelectedAlertId("");
+    setSelectedItems([]);
   };
 
   const handleAlertClick = () => {
@@ -124,12 +130,10 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
           renderItem={(alert) => (
             <List.Item className={`${isMobile ? "overflow-x-auto" : ""} px-4`}>
               <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg w-full">
-                {/* Risk Icon */}
                 <div className="flex-shrink-0">
                   {getRiskIcon(alert.malware_status)}
                 </div>
 
-                {/* Alert Name - Clickable */}
                 <div className="flex-shrink-0">
                   <button
                     onClick={handleAlertClick}
@@ -139,19 +143,16 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
                   </button>
                 </div>
 
-                {/* Malware Icon */}
                 <div className="flex-shrink-0">
                   {getMalwareIcon(alert.malware_status)}
                 </div>
 
-                {/* File Info */}
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium text-gray-900 truncate">
                     {alert.file_name} | {alert.client_server_ip}
                   </div>
                 </div>
 
-                {/* Risk and Status */}
                 <div className="flex-shrink-0">
                   <Space>
                     {getRiskTag(alert.risk)}
@@ -159,7 +160,6 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
                   </Space>
                 </div>
 
-                {/* Timestamps */}
                 {/* <div className="flex-shrink-0 text-right">
                   <div className="text-xs text-gray-500">
                     Created: {formatDateTime(alert.file_created_at)}
@@ -169,7 +169,6 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
                   </div>
                 </div> */}
 
-                {/* Actions Dropdown */}
                 <div className="flex-shrink-0 w-32">
                   <Select
                     value={alert.process_status}
@@ -189,31 +188,14 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
         />
       </Card>
 
-      {/* Delete Confirmation Modal */}
-      <Modal
-        title="파일 삭제 확인"
-        open={deleteModalVisible}
-        onOk={handleDeleteConfirm}
-        onCancel={handleDeleteCancel}
-        okText="확인"
-        cancelText="취소"
-        width={400}
-      >
-        <div className="space-y-4">
-          <p>파일명을 서버IP에서 삭제 하시겠습니까?</p>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              메모 (선택사항)
-            </label>
-            <Input.TextArea
-              value={deleteComments}
-              onChange={(e) => setDeleteComments(e.target.value)}
-              placeholder="삭제 사유를 입력하세요..."
-              rows={3}
-            />
-          </div>
-        </div>
-      </Modal>
+      <BulkActionModal
+        visible={showActionModal}
+        action={selectedAction}
+        selectedCount={selectedItems.length}
+        selectedItems={selectedItems}
+        onConfirm={handleActionConfirm}
+        onCancel={handleActionCancel}
+      />
     </>
   );
 };
