@@ -24,11 +24,11 @@ const SCREEN_TITLES: Record<string, string> = {
   [ROUTES.History.AiLearning]: "AI Learning History",
   [ROUTES.History.Authority]: "Authority History",
 
-  [ROUTES.Alarm.Notifications]: "Alarm Notifications",
-  [ROUTES.Alarm.Schedule]: "Alarm Schedule",
+  [ROUTES.AlarmAndReport.Notifications]: "Alarm Notifications",
+  [ROUTES.AlarmAndReport.Schedule]: "Alarm Schedule",
 
-  [ROUTES.Report.List]: "Security Reports",
-  [ROUTES.Report.Regular]: "Regular Reports",
+  [ROUTES.AlarmAndReport.List]: "Security Reports",
+  [ROUTES.AlarmAndReport.Regular]: "Regular Reports",
 
   [ROUTES.User.ChangeInfo]: "User Information",
   [ROUTES.User.Permissions]: "User Permissions",

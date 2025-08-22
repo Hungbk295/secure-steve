@@ -25,7 +25,7 @@ import storage from "redux-persist/lib/storage";
 const authPersistConfig = {
   key: "auth",
   storage,
-  whitelist: ["infoLogin", "isLogin", "emailResend"],
+  whitelist: ["infoLogin", "isLogin", "emailResend", "currentUser"],
   version: 1,
 };
 

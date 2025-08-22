@@ -33,17 +33,19 @@ const ROUTES = {
     Authority: "/history/authority",
     BlacklistWhitelist: "/history/blacklist-whitelist",
   },
-  Alarm: {
-    Notifications: "/alarm/notifications",
-    Schedule: "/alarm/schedule",
-  },
+  // Alarm: {
+  //   Notifications: "/alarm/notifications",
+  //   Schedule: "/alarm/schedule",
+  // },
   User: {
     ChangeInfo: "/user/change-info",
     Permissions: "/user/permissions",
   },
-  Report: {
-    List: "/report/list",
-    Regular: "/report/regular",
+  AlarmAndReport: {
+    Notifications: "/alarm-report/notifications",
+    Schedule: "/alarm-report/schedule",
+    List: "/alarm-report/list",
+    Regular: "/alarm-report/regular",
   },
 };
 

@@ -36,12 +36,13 @@ export const ADMIN_ROUTES = [
   "/history/ai-learning",
   "/history/authority",
 
-  "/report/list",
+  "/alarm-report/list",
 
   "/user/permissions",
 
-  "/alarm/notifications",
-  "/alarm/schedule",
+  "/alarm-report/notifications",
+  "/alarm-report/schedule",
+  "/alarm-report/regular",
 ];
 
 export const OPERATOR_ROUTES = [
@@ -61,11 +62,11 @@ export const OPERATOR_ROUTES = [
   "/history/action",
   "/history/blacklist-whitelist",
 
-  "/report/regular",
-  "/report/list",
+  "/alarm-report/regular",
+  "/alarm-report/list",
 
-  "/alarm/notifications",
-  "/alarm/schedule",
+  "/alarm-report/notifications",
+  "/alarm-report/schedule",
 
   "/user/change-info",
 
@@ -75,9 +76,15 @@ export const OPERATOR_ROUTES = [
 ];
 
 export const OPERATOR_SIDEBAR_MENUS = [
-  "home","dashboard","analyze","policy","history","alarm","report","user"
+  "home",
+  "dashboard",
+  "analyze",
+  "policy",
+  "history",
+  "alarm",
+  "report",
+  "user",
 ];
-
 
 export const USER_SIDEBAR_MENUS = [
   "home",
@@ -270,7 +277,7 @@ export const COMPONENT_FILTERS = {
 
 export function canAccessRoute(role: UserRole, route: string): boolean {
   let allowedRoutes: string[];
-  
+
   switch (role) {
     case UserRole.ADMINISTRATOR:
       allowedRoutes = ADMIN_ROUTES;
@@ -283,19 +290,19 @@ export function canAccessRoute(role: UserRole, route: string): boolean {
       allowedRoutes = USER_ROUTES;
       break;
   }
-  
+
   const hasAccess = allowedRoutes.some((allowedRoute) => {
     return route === allowedRoute || route.startsWith(allowedRoute + "/");
   });
 
   // Debug logging
-  console.log('canAccessRoute Debug:', {
+  console.log("canAccessRoute Debug:", {
     role,
     route,
     allowedRoutes,
-    hasAccess
+    hasAccess,
   });
-  
+
   return hasAccess;
 }
 
@@ -319,7 +326,10 @@ export function getComponentFilter(
   component: keyof typeof COMPONENT_FILTERS,
   role: UserRole
 ) {
-  return COMPONENT_FILTERS[component][role] || COMPONENT_FILTERS[component][UserRole.USER];
+  return (
+    COMPONENT_FILTERS[component][role] ||
+    COMPONENT_FILTERS[component][UserRole.USER]
+  );
 }
 
 export const CURRENT_USER_ROLE = UserRole.ADMINISTRATOR;

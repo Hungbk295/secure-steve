@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from "@/store";
-import { actionLogout, selectInfoLogin } from "@/store/authSlide";
+import { useAppDispatch } from "@/store";
+import { actionLogoutLocal } from "@/store/authSlide";
 import { notify } from "@/utils/appStateHandle";
 import { ENotificationType, EModalMode } from "@/interfaces/app";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,6 @@ function SecurityUserSection({
   isCollapsed = false,
 }: SecurityUserSectionProps) {
   const dispatch = useAppDispatch();
-  const infoLogin = useAppSelector(selectInfoLogin);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -23,14 +22,12 @@ function SecurityUserSection({
       okText: "Yes, Log out",
       cancelText: "Cancel",
       onOk: () => {
-        dispatch(
-          actionLogout({
-            userRole: infoLogin.role,
-            accessToken: infoLogin.accessToken,
-          })
-        ).finally(() => {
-          navigate("/sign-in");
-        });
+        // Set logout flag to prevent auto-login
+        localStorage.setItem("hasLoggedOut", "true");
+        // Clear localStorage and logout locally
+        localStorage.removeItem("persist:auth");
+        dispatch(actionLogoutLocal());
+        navigate("/sign-in");
       },
     });
   };

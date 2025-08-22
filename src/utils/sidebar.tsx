@@ -24,7 +24,11 @@ export const getAllMenuItems = (): MenuItem[] => [
         id: "dashboard",
         label: "Dashboard",
         route: ROUTES.Home.Dashboard,
-        roles: [UserRole.USER, UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
+        roles: [
+          UserRole.USER,
+          UserRole.SECURITY_OPERATOR,
+          UserRole.ADMINISTRATOR,
+        ],
       },
     ],
   },
@@ -40,13 +44,21 @@ export const getAllMenuItems = (): MenuItem[] => [
         id: "detection",
         label: "Detection",
         route: ROUTES.Analysis.Detection,
-        roles: [UserRole.USER, UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
+        roles: [
+          UserRole.USER,
+          UserRole.SECURITY_OPERATOR,
+          UserRole.ADMINISTRATOR,
+        ],
       },
       {
         id: "action",
         label: "Action",
         route: ROUTES.Analysis.Action,
-        roles: [UserRole.USER, UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
+        roles: [
+          UserRole.USER,
+          UserRole.SECURITY_OPERATOR,
+          UserRole.ADMINISTRATOR,
+        ],
       },
     ],
   },
@@ -73,7 +85,11 @@ export const getAllMenuItems = (): MenuItem[] => [
         id: "blacklist-whitelist",
         label: "Black / Whitelist",
         route: ROUTES.Policy.BlacklistWhitelist,
-        roles: [UserRole.USER, UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
+        roles: [
+          UserRole.USER,
+          UserRole.SECURITY_OPERATOR,
+          UserRole.ADMINISTRATOR,
+        ],
       },
     ],
   },
@@ -88,7 +104,11 @@ export const getAllMenuItems = (): MenuItem[] => [
         id: "inspection-history",
         label: "Inspection history",
         route: ROUTES.History.Inspection,
-        roles: [UserRole.USER, UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
+        roles: [
+          UserRole.USER,
+          UserRole.SECURITY_OPERATOR,
+          UserRole.ADMINISTRATOR,
+        ],
       },
       {
         id: "ai-learning",
@@ -104,45 +124,61 @@ export const getAllMenuItems = (): MenuItem[] => [
       },
     ],
   },
+  // {
+  //   id: "alarm",
+  //   label: "Alarm",
+  //   route: "/alarm",
+  //   icon: <i className="ri-alarm-warning-line text-lg" />,
+  //   roles: [UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR], // Operator and Admin
+  //   children: [
+  //     {
+  //       id: "notifications",
+  //       label: "Notification List",
+  //       route: ROUTES.AlarmAndReport.Notifications,
+  //       roles: [UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
+  //     },
+  //     {
+  //       id: "schedule",
+  //       label: "Schedule",
+  //       route: ROUTES.AlarmAndReport.Schedule,
+  //       roles: [UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
+  //     },
+  //   ],
+  // },
   {
-    id: "alarm",
-    label: "Alarm",
-    route: "/alarm",
-    icon: <i className="ri-alarm-warning-line text-lg" />,
-    roles: [UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR], // Operator and Admin
+    id: "report",
+    label: "Alarm & Report",
+    route: "/alarm-report",
+    icon: <i className="ri-file-text-line text-lg" />,
+    roles: [UserRole.USER, UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
     children: [
       {
         id: "notifications",
         label: "Notification List",
-        route: ROUTES.Alarm.Notifications,
+        route: ROUTES.AlarmAndReport.Notifications,
         roles: [UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
       },
       {
         id: "schedule",
         label: "Schedule",
-        route: ROUTES.Alarm.Schedule,
+        route: ROUTES.AlarmAndReport.Schedule,
         roles: [UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
       },
-    ],
-  },
-  {
-    id: "report",
-    label: "Report",
-    route: "/report",
-    icon: <i className="ri-file-text-line text-lg" />,
-    roles: [UserRole.USER, UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
-    children: [
       {
         id: "report-list",
         label: "List of reports",
-        route: ROUTES.Report.List,
+        route: ROUTES.AlarmAndReport.List,
         roles: [UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR], // Operator and Admin see all reports
       },
       {
         id: "regular-report",
         label: "Regular Report",
-        route: ROUTES.Report.Regular,
-        roles: [UserRole.USER, UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR], // All can access
+        route: ROUTES.AlarmAndReport.Regular,
+        roles: [
+          UserRole.USER,
+          UserRole.SECURITY_OPERATOR,
+          UserRole.ADMINISTRATOR,
+        ], // All can access
       },
     ],
   },
@@ -157,7 +193,11 @@ export const getAllMenuItems = (): MenuItem[] => [
         id: "change-info",
         label: "Change Information",
         route: ROUTES.User.ChangeInfo,
-        roles: [UserRole.USER, UserRole.SECURITY_OPERATOR, UserRole.ADMINISTRATOR],
+        roles: [
+          UserRole.USER,
+          UserRole.SECURITY_OPERATOR,
+          UserRole.ADMINISTRATOR,
+        ],
       },
     ],
   },
@@ -166,8 +206,8 @@ export const getAllMenuItems = (): MenuItem[] => [
 // Filter menu items based on user role
 export function getMenuItems(role: UserRole = CURRENT_USER_ROLE): MenuItem[] {
   return getAllMenuItems()
-    .map(item => filterMenuByRole(item, role))
-    .filter(item => item !== null) as MenuItem[];
+    .map((item) => filterMenuByRole(item, role))
+    .filter((item) => item !== null) as MenuItem[];
 }
 
 function filterMenuByRole(item: MenuItem, role: UserRole): MenuItem | null {
@@ -182,11 +222,11 @@ function filterMenuByRole(item: MenuItem, role: UserRole): MenuItem | null {
   // Filter children if they exist
   if (item.children) {
     const filteredChildren = item.children
-      .map(child => filterMenuByRole(child, role))
-      .filter(child => child !== null) as MenuItem[];
-    
+      .map((child) => filterMenuByRole(child, role))
+      .filter((child) => child !== null) as MenuItem[];
+
     filteredItem.children = filteredChildren;
-    
+
     // If no children remain and this is a parent-only item, hide it
     if (filteredChildren.length === 0 && item.route.endsWith("/*")) {
       return null;

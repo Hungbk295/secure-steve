@@ -25,16 +25,20 @@ function SignInForm(props: ISignInFormProps) {
   const password = Form.useWatch("password", form);
 
   const submitForm = (values: DynamicKeyObject) => {
-    console.log('SignIn Debug - Form values:', values);
-    
+    console.log("SignIn Debug - Form values:", values);
+
     const { userRole, ...rest } = values;
     pageLoading.on();
+
+    // Clear logout flag when user manually logs in
+    localStorage.removeItem("hasLoggedOut");
+
     dispatch(actionLogin({ ...rest, userRole: userRole }))
       .then((result) => {
-        console.log('SignIn Debug - Login result:', result);
+        console.log("SignIn Debug - Login result:", result);
       })
       .catch((error) => {
-        console.log('SignIn Debug - Login error:', error);
+        console.log("SignIn Debug - Login error:", error);
       })
       .finally(() => pageLoading.off());
   };
@@ -96,9 +100,7 @@ function SignInForm(props: ISignInFormProps) {
         </div>
         <div className="flex flex-col items-center mb-4">
           <span>회원가입</span>
-          <span>
-            비밀번호 찾기 및 아이디 찾기는
-          </span>
+          <span>비밀번호 찾기 및 아이디 찾기는</span>
           <span>관리자에게 문의하세요</span>
           <button
             className="text-blue-600 hover:text-blue-800 underline cursor-pointer mt-2"
@@ -107,7 +109,7 @@ function SignInForm(props: ISignInFormProps) {
             회원가입하기
           </button>
         </div>
-        
+
         {/* Debug info for testing */}
         <div className="text-xs text-gray-500 mt-4 p-2 bg-gray-100 rounded">
           <div>Test Accounts:</div>

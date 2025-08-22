@@ -150,13 +150,13 @@ const securityRoutes: ItemRoute[] = [
   },
 
   {
-    key: ROUTES.Alarm.Notifications,
+    key: ROUTES.AlarmAndReport.Notifications,
     components: <Notifications />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },
   {
-    key: ROUTES.Alarm.Schedule,
+    key: ROUTES.AlarmAndReport.Schedule,
     components: <AlarmSchedule />,
     layout: DEFAULT_LAYOUT,
     private: true,
@@ -168,13 +168,13 @@ const securityRoutes: ItemRoute[] = [
     private: true,
   },
   {
-    key: ROUTES.Report.List,
+    key: ROUTES.AlarmAndReport.List,
     components: <ReportList />,
     layout: DEFAULT_LAYOUT,
     private: true,
   },
   {
-    key: ROUTES.Report.Regular,
+    key: ROUTES.AlarmAndReport.Regular,
     components: <ReportRegular />,
     layout: DEFAULT_LAYOUT,
     private: true,
