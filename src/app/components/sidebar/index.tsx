@@ -42,7 +42,6 @@ function Sidebar() {
         return prev.filter((id) => id !== itemId);
       } else {
         // If opening a new item, close all others and open this one
-        // This implements the auto-collapse behavior like albus-fe
         return [itemId];
       }
     });

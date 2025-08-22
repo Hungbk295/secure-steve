@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import ForgotPasswordForm from "@/app/pages/Login/ForgotPasswordForm";
 import SignInForm from "@/app/pages/Login/SignInForm";
-import "@/styles/login.css";
 import ROUTES from "@/constants/routes";
 
 function Login() {

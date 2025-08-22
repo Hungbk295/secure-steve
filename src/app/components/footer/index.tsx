@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import { Divider } from "antd";
-import AlbusLogoBlackWhite from "@/assets/svgs/albus-logo_black-white.svg";
 import { cn } from "@/libs/utils";
 
 function Footer() {
@@ -16,7 +15,6 @@ function Footer() {
 
   return (
     <footer className="p-8 flex items-center gap-2 border-t border-grey-10 -translate-x-10 w-[calc(100%+72px)]">
-      <AlbusLogoBlackWhite />
       <div className="flex gap-2 items-center">
         {FOOTER_LIST.map((item, index) => {
           const isLastItem = index === FOOTER_LIST.length - 1;

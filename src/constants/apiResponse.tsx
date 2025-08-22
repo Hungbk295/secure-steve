@@ -28,6 +28,6 @@ export const CUSTOM_API_MESSAGE: DynamicKeyObject = {
     },
   },
   c04000: {
-    message: "Your account is not active. Please contact ALBUS Master.",
+    message: "Your account is not active. Please contact Admin.",
   },
 };
