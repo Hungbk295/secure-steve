@@ -1,5 +1,6 @@
 export enum UserRole {
   USER = "user",
+  SECURITY_OPERATOR = "security_operator",
   ADMINISTRATOR = "administrator",
 }
 
@@ -7,8 +8,8 @@ export const USER_ROUTES = [
   "/",
   "/dashboard",
 
-  "/analyze/detection",
-  "/analyze/action",
+  "/analysis/detection",
+  "/analysis/action",
 
   "/policy/user-policy",
   "/policy/blacklist-whitelist",
@@ -16,12 +17,12 @@ export const USER_ROUTES = [
   "/history/inspection",
   "/history/action",
 
-  "/report/personal",
   "/report/regular",
 
   "/user/change-info",
 
   "/sign-in",
+  "/sign-up",
   "/forbidden",
 ];
 
@@ -36,16 +37,47 @@ export const ADMIN_ROUTES = [
   "/history/authority",
 
   "/report/list",
-  "/report/system",
 
   "/user/permissions",
-  "/account/management",
-  "/account/approval",
 
-  "/system/settings",
-  "/system/servers",
-  "/system/agents",
+  "/alarm/notifications",
+  "/alarm/schedule",
 ];
+
+export const OPERATOR_ROUTES = [
+  "/",
+  "/dashboard",
+
+  "/analysis/requests",
+  "/analysis/requests/:id",
+  "/analysis/detection",
+  "/analysis/action",
+  "/analysis/action/pending",
+  "/analysis/action/completed",
+
+  "/policy/blacklist-whitelist",
+
+  "/history/inspection",
+  "/history/action",
+  "/history/blacklist-whitelist",
+
+  "/report/regular",
+  "/report/list",
+
+  "/alarm/notifications",
+  "/alarm/schedule",
+
+  "/user/change-info",
+
+  "/sign-in",
+  "/sign-up",
+  "/forbidden",
+];
+
+export const OPERATOR_SIDEBAR_MENUS = [
+  "home","dashboard","analyze","policy","history","alarm","report","user"
+];
+
 
 export const USER_SIDEBAR_MENUS = [
   "home",
@@ -80,6 +112,15 @@ export const TOPBAR_FEATURES = {
     maxAlarmCount: 50,
     canManageAlerts: false,
   },
+  [UserRole.SECURITY_OPERATOR]: {
+    showVerificationCounter: true,
+    showAlarmNotifications: true,
+    showServerStatus: true,
+    showUserMenu: true,
+    alarmTypes: ["personal", "group", "security"],
+    maxAlarmCount: 200,
+    canManageAlerts: true,
+  },
   [UserRole.ADMINISTRATOR]: {
     showVerificationCounter: true,
     showAlarmNotifications: true,
@@ -101,6 +142,14 @@ export const COMPONENT_FILTERS = {
       showUserManagement: false,
       dataScope: "personal_and_group",
     },
+    [UserRole.SECURITY_OPERATOR]: {
+      showPersonalMetrics: true,
+      showGroupMetrics: true,
+      showSystemMetrics: true,
+      showVerificationQueue: true,
+      showUserManagement: false,
+      dataScope: "security_operations",
+    },
     [UserRole.ADMINISTRATOR]: {
       showPersonalMetrics: true,
       showGroupMetrics: true,
@@ -120,6 +169,14 @@ export const COMPONENT_FILTERS = {
       canExport: true,
       dataScope: "personal_and_group",
     },
+    [UserRole.SECURITY_OPERATOR]: {
+      canViewPersonal: true,
+      canViewGroup: true,
+      canViewSystem: true,
+      canDelete: false,
+      canExport: true,
+      dataScope: "security_operations",
+    },
     [UserRole.ADMINISTRATOR]: {
       canViewPersonal: true,
       canViewGroup: true,
@@ -138,6 +195,14 @@ export const COMPONENT_FILTERS = {
       canCreateReports: false,
       canDeleteReports: false,
       availableTemplates: ["personal", "group_summary"],
+    },
+    [UserRole.SECURITY_OPERATOR]: {
+      canViewPersonal: true,
+      canViewGroup: true,
+      canViewSystem: true,
+      canCreateReports: true,
+      canDeleteReports: false,
+      availableTemplates: ["personal", "group_summary", "security_audit"],
     },
     [UserRole.ADMINISTRATOR]: {
       canViewPersonal: true,
@@ -162,6 +227,13 @@ export const COMPONENT_FILTERS = {
       canManagePermissions: false,
       canApproveUsers: false,
     },
+    [UserRole.SECURITY_OPERATOR]: {
+      canEditOwnProfile: true,
+      canEditOtherProfiles: false,
+      canViewUserList: true,
+      canManagePermissions: false,
+      canApproveUsers: false,
+    },
     [UserRole.ADMINISTRATOR]: {
       canEditOwnProfile: true,
       canEditOtherProfiles: true,
@@ -179,6 +251,13 @@ export const COMPONENT_FILTERS = {
       canViewPolicyHistory: false,
       scope: "user_only",
     },
+    [UserRole.SECURITY_OPERATOR]: {
+      canEditUserPolicy: true,
+      canEditSystemPolicy: false,
+      canEditAdminPolicy: false,
+      canViewPolicyHistory: true,
+      scope: "security_operations",
+    },
     [UserRole.ADMINISTRATOR]: {
       canEditUserPolicy: true,
       canEditSystemPolicy: true,
@@ -190,28 +269,57 @@ export const COMPONENT_FILTERS = {
 };
 
 export function canAccessRoute(role: UserRole, route: string): boolean {
-  const allowedRoutes =
-    role === UserRole.ADMINISTRATOR ? ADMIN_ROUTES : USER_ROUTES;
-  return allowedRoutes.some((allowedRoute) => {
+  let allowedRoutes: string[];
+  
+  switch (role) {
+    case UserRole.ADMINISTRATOR:
+      allowedRoutes = ADMIN_ROUTES;
+      break;
+    case UserRole.SECURITY_OPERATOR:
+      allowedRoutes = OPERATOR_ROUTES;
+      break;
+    case UserRole.USER:
+    default:
+      allowedRoutes = USER_ROUTES;
+      break;
+  }
+  
+  const hasAccess = allowedRoutes.some((allowedRoute) => {
     return route === allowedRoute || route.startsWith(allowedRoute + "/");
   });
+
+  // Debug logging
+  console.log('canAccessRoute Debug:', {
+    role,
+    route,
+    allowedRoutes,
+    hasAccess
+  });
+  
+  return hasAccess;
 }
 
 export function getSidebarMenus(role: UserRole): string[] {
-  return role === UserRole.ADMINISTRATOR
-    ? ADMIN_SIDEBAR_MENUS
-    : USER_SIDEBAR_MENUS;
+  switch (role) {
+    case UserRole.ADMINISTRATOR:
+      return ADMIN_SIDEBAR_MENUS;
+    case UserRole.SECURITY_OPERATOR:
+      return OPERATOR_SIDEBAR_MENUS;
+    case UserRole.USER:
+    default:
+      return USER_SIDEBAR_MENUS;
+  }
 }
 
 export function getTopBarFeatures(role: UserRole) {
-  return TOPBAR_FEATURES[role];
+  return TOPBAR_FEATURES[role] || TOPBAR_FEATURES[UserRole.USER];
 }
 
 export function getComponentFilter(
   component: keyof typeof COMPONENT_FILTERS,
   role: UserRole
 ) {
-  return COMPONENT_FILTERS[component][role];
+  return COMPONENT_FILTERS[component][role] || COMPONENT_FILTERS[component][UserRole.USER];
 }
 
 export const CURRENT_USER_ROLE = UserRole.ADMINISTRATOR;

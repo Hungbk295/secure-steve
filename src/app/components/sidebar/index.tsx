@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { cn } from "@/libs/utils";
 import { getMenuItems, findActiveMenuItem } from "@/utils/sidebar";
 import MenuItem from "./MenuItem";
 import UserSection from "./UserSection";
 import useScreenWidth from "@/hooks/useScreenWidth";
+import { useAppSelector } from "@/store";
+import { selectUserRole } from "@/store/authSlide";
 
 function Sidebar() {
   const location = useLocation();
+  const userRole = useAppSelector(selectUserRole);
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [activeMenuInfo, setActiveMenuInfo] = useState<{
@@ -16,10 +19,11 @@ function Sidebar() {
   }>({});
   const isScreenWidth = useScreenWidth();
 
-  const menuItems = getMenuItems();
+  // Get menu items based on current user role - memoized to prevent infinite re-renders
+  const menuItems = useMemo(() => getMenuItems(userRole), [userRole]);
 
   useEffect(() => {
-    const activeInfo = findActiveMenuItem(location.pathname);
+    const activeInfo = findActiveMenuItem(location.pathname, menuItems);
     setActiveMenuInfo(activeInfo);
 
     if (activeInfo.parentId && activeInfo.childId) {
@@ -29,7 +33,7 @@ function Sidebar() {
           : [...prev, activeInfo.parentId!]
       );
     }
-  }, [location.pathname]);
+  }, [location.pathname, menuItems]);
 
   const handleToggleExpand = (itemId: string) => {
     setExpandedMenus((prev) => {

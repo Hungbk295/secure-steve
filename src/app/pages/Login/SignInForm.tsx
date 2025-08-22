@@ -25,11 +25,18 @@ function SignInForm(props: ISignInFormProps) {
   const password = Form.useWatch("password", form);
 
   const submitForm = (values: DynamicKeyObject) => {
+    console.log('SignIn Debug - Form values:', values);
+    
     const { userRole, ...rest } = values;
     pageLoading.on();
-    dispatch(actionLogin({ ...rest, userRole: userRole })).finally(() =>
-      pageLoading.off()
-    );
+    dispatch(actionLogin({ ...rest, userRole: userRole }))
+      .then((result) => {
+        console.log('SignIn Debug - Login result:', result);
+      })
+      .catch((error) => {
+        console.log('SignIn Debug - Login error:', error);
+      })
+      .finally(() => pageLoading.off());
   };
 
   if (isForgot) {
@@ -99,6 +106,14 @@ function SignInForm(props: ISignInFormProps) {
           >
             회원가입하기
           </button>
+        </div>
+        
+        {/* Debug info for testing */}
+        <div className="text-xs text-gray-500 mt-4 p-2 bg-gray-100 rounded">
+          <div>Test Accounts:</div>
+          <div>Admin: admin@company.com / admin123!@#</div>
+          <div>Operator: operator@company.com / operator123!@#</div>
+          <div>User: user@company.com / user123!@#</div>
         </div>
       </Form>
     </>

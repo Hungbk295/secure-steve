@@ -13,8 +13,6 @@ import {
 } from "@/store/alertsSlice";
 import { EAlertProcessStatus } from "@/interfaces/app";
 import AlertsPopup from "./AlertsPopup";
-import useScreenWidth from "@/hooks/useScreenWidth";
-import { Button, Dropdown } from "antd";
 
 interface TopBarProps {
   verificationCount?: number;
@@ -42,9 +40,6 @@ function TopBar({
   const dispatch = useAppDispatch();
   const [showAlarmDropdown, setShowAlarmDropdown] = useState(false);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isScreenWidth = useScreenWidth();
-  const isMobile = isScreenWidth.isMobile || isScreenWidth.isTablet;
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const alertsState = useAppSelector(selectAlertsState);
   const topBarFeatures = getTopBarFeatures(userRole);
 
@@ -120,38 +115,38 @@ function TopBar({
     setShowAlarmDropdown(false);
   }, []);
 
-  const userMenuItems: any["items"] = [
-    {
-      key: "role",
-      label: (
-        <div className="flex items-center space-x-2 py-2">
-          <i className="ri-user-line text-gray-500" />
-          <span className="font-medium">Role:</span>
-          <span>{userInfo.role}</span>
-        </div>
-      ),
-    },
-    {
-      key: "department",
-      label: (
-        <div className="flex items-center space-x-2 py-2">
-          <i className="ri-building-line text-gray-500" />
-          <span className="font-medium">Department:</span>
-          <span>{userInfo.department}</span>
-        </div>
-      ),
-    },
-    {
-      key: "name",
-      label: (
-        <div className="flex items-center space-x-2 py-2">
-          <i className="ri-account-circle-line text-gray-500" />
-          <span className="font-medium">Name:</span>
-          <span>{userInfo.name}</span>
-        </div>
-      ),
-    },
-  ];
+  // const userMenuItems: any["items"] = [
+  //   {
+  //     key: "role",
+  //     label: (
+  //       <div className="flex items-center space-x-2 py-2">
+  //         <i className="ri-user-line text-gray-500" />
+  //         <span className="font-medium">Role:</span>
+  //         <span>{userInfo.role}</span>
+  //       </div>
+  //     ),
+  //   },
+  //   {
+  //     key: "department",
+  //     label: (
+  //       <div className="flex items-center space-x-2 py-2">
+  //         <i className="ri-building-line text-gray-500" />
+  //         <span className="font-medium">Department:</span>
+  //         <span>{userInfo.department}</span>
+  //       </div>
+  //     ),
+  //   },
+  //   {
+  //     key: "name",
+  //     label: (
+  //       <div className="flex items-center space-x-2 py-2">
+  //         <i className="ri-account-circle-line text-gray-500" />
+  //         <span className="font-medium">Name:</span>
+  //         <span>{userInfo.name}</span>
+  //       </div>
+  //     ),
+  //   },
+  // ];
 
   useEffect(() => {
     return () => {
@@ -233,11 +228,10 @@ function TopBar({
           </button>
         )}
       </div>
-
+{/* 
       <div className="flex items-center space-x-6">
         {topBarFeatures.showUserMenu && (
           <>
-            {/* Desktop Layout - Original */}
             {!isMobile && (
               <div
                 className="flex items-center space-x-2 text-sm"
@@ -253,7 +247,6 @@ function TopBar({
               </div>
             )}
 
-            {/* Mobile Layout - Button with Dropdown */}
             {isMobile && (
               <Dropdown
                 menu={{ items: userMenuItems }}
@@ -280,7 +273,7 @@ function TopBar({
             )}
           </>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
