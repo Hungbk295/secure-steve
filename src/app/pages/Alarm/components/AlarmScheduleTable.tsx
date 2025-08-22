@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Tag } from "antd";
+import React, { useState } from "react";
+import { Button, Tag, Modal, Input } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import Table from "@/app/components/common/Table";
 import type { ColumnsType, TableProps } from "antd/es/table";
@@ -12,6 +12,7 @@ import {
   actionUpdateFilePolicy,
   actionExportCSV,
 } from "@/store/alarmScheduleSlice";
+const { TextArea } = Input;
 
 interface AlarmScheduleItem {
   key: string;
@@ -33,6 +34,11 @@ interface AlarmScheduleTableProps {
 const AlarmScheduleTable: React.FC<AlarmScheduleTableProps> = ({ loading }) => {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectAlarmScheduleItems);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] =
+    useState<AlarmScheduleItem | null>(null);
+  const [selectedActionLabel, setSelectedActionLabel] = useState<string>("");
+  const [reason, setReason] = useState<string>("");
 
   const formatDateTime = (dateString: string) => {
     const date = new Date(dateString);
@@ -69,22 +75,54 @@ const AlarmScheduleTable: React.FC<AlarmScheduleTableProps> = ({ loading }) => {
     }
   };
 
-  const getActionTag = (action: string) => {
-    if (action.includes("승인")) {
-      return <Tag>{action}</Tag>;
-    } else if (action.includes("삭제")) {
-      return <Tag>{action}</Tag>;
-    } else if (action.includes("보류") || action.includes("중립")) {
-      return <Tag>{action}</Tag>;
-    }
-    return <Tag>{action}</Tag>;
-  };
+  // const getActionTag = (action: string) => {
+  //   if (action.includes("승인")) {
+  //     return <Tag>{action}</Tag>;
+  //   } else if (action.includes("삭제")) {
+  //     return <Tag>{action}</Tag>;
+  //   } else if (action.includes("보류") || action.includes("중립")) {
+  //     return <Tag>{action}</Tag>;
+  //   }
+  //   return <Tag>{action}</Tag>;
+  // };
 
   const handleProcessActionChange = (
     value: string,
     record: AlarmScheduleItem
   ) => {
     dispatch(actionUpdateFilePolicy({ id: record.id, policy: value }));
+  };
+  const handleProcessActionProcessChange = (
+    value: string,
+    record: AlarmScheduleItem
+  ) => {
+    setSelectedRecord(record);
+    setSelectedActionLabel(value);
+    setReason("");
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmAction = () => {
+    if (selectedRecord && selectedActionLabel) {
+      // Update policy (reason can be wired to API in the future)
+      dispatch(
+        actionUpdateFilePolicy({
+          id: selectedRecord.id,
+          policy: selectedActionLabel,
+        })
+      );
+    }
+    setIsModalOpen(false);
+    setSelectedRecord(null);
+    setSelectedActionLabel("");
+    setReason("");
+  };
+
+  const handleCancelModal = () => {
+    setIsModalOpen(false);
+    setSelectedRecord(null);
+    setSelectedActionLabel("");
+    setReason("");
   };
 
   const handleRowClick = (record: AlarmScheduleItem) => {
@@ -148,13 +186,6 @@ const AlarmScheduleTable: React.FC<AlarmScheduleTableProps> = ({ loading }) => {
       dataIndex: "action",
       key: "action",
       width: 130,
-      render: (action: string) => getActionTag(action),
-    },
-    {
-      title: "Process Action",
-      dataIndex: "processAction",
-      key: "processAction",
-      width: 150,
       render: (processAction: string, record: AlarmScheduleItem) => (
         <Select
           value={processAction}
@@ -164,9 +195,30 @@ const AlarmScheduleTable: React.FC<AlarmScheduleTableProps> = ({ loading }) => {
           size="small"
           disabled={loading}
           options={[
-            { label: "None", value: "none" },
-            { label: "Blacklist", value: "Blacklist" },
-            { label: "Whitelist", value: "Whitelist" },
+            { label: "사용자", value: "사용자" },
+            { label: "관리자", value: "관리자" },
+          ]}
+        />
+      ),
+    },
+    {
+      title: "Process Action",
+      dataIndex: "processAction",
+      key: "processAction",
+      width: 150,
+      render: (processAction: string, record: AlarmScheduleItem) => (
+        <Select
+          value={processAction}
+          onChange={(value) => handleProcessActionProcessChange(value, record)}
+          placeholder="Select Action"
+          className="w-full"
+          size="small"
+          disabled={loading}
+          options={[
+            { label: "승인", value: "승인" },
+            { label: "잠금", value: "잠금" },
+            { label: "잠금해제", value: "잠금해제" },
+            { label: "삭제", value: "삭제" },
           ]}
         />
       ),
@@ -232,6 +284,35 @@ const AlarmScheduleTable: React.FC<AlarmScheduleTableProps> = ({ loading }) => {
           })}
         />
       </div>
+      <Modal
+        title="Confirm Action"
+        open={isModalOpen}
+        onOk={handleConfirmAction}
+        onCancel={handleCancelModal}
+        okButtonProps={{ loading: loading, disabled: !selectedActionLabel }}
+        cancelButtonProps={{ disabled: loading }}
+      >
+        <div className="space-y-3 mb-8">
+          <div className="text-sm text-gray-800">
+            {selectedActionLabel
+              ? `${selectedActionLabel} 사유 입력 하십시오.`
+              : "사유를 입력 하십시오."}
+          </div>
+          <TextArea
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder={
+              selectedActionLabel
+                ? `${selectedActionLabel} 사유 입력 하십시오.`
+                : "사유 입력"
+            }
+            rows={4}
+            maxLength={500}
+            showCount
+            disabled={loading}
+          />
+        </div>
+      </Modal>
     </div>
   );
 };

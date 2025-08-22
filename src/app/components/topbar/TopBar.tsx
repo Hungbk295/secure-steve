@@ -13,6 +13,9 @@ import {
 } from "@/store/alertsSlice";
 import { EAlertProcessStatus } from "@/interfaces/app";
 import AlertsPopup from "./AlertsPopup";
+import { selectCurrentUser } from "@/store/authSlide";
+import useScreenWidth from "@/hooks/useScreenWidth";
+import { Button, Dropdown } from "antd";
 
 interface TopBarProps {
   verificationCount?: number;
@@ -28,11 +31,11 @@ interface TopBarProps {
 
 function TopBar({
   verificationCount = 0,
-  userInfo = {
-    name: "Administrator",
-    role: "Administrator",
-    department: "IT Security",
-  },
+  // userInfo = {
+  //   name: "Administrator",
+  //   role: "Administrator",
+  //   department: "IT Security",
+  // },
   userRole = CURRENT_USER_ROLE,
   onAlarmClick,
   onVerificationClick,
@@ -42,6 +45,10 @@ function TopBar({
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const alertsState = useAppSelector(selectAlertsState);
   const topBarFeatures = getTopBarFeatures(userRole);
+  const currentUser = useAppSelector(selectCurrentUser);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const { isMobile } = useScreenWidth();
+  console.log("isMobile", isMobile);
 
   useEffect(() => {
     dispatch(actionFetchLatestAlerts());
@@ -95,7 +102,7 @@ function TopBar({
             alertId,
             action,
             memo,
-            userId: userInfo.name,
+            userId: currentUser?.name || "",
           })
         ).unwrap();
 
@@ -104,7 +111,7 @@ function TopBar({
         console.error("Failed to update alert action:", error);
       }
     },
-    [dispatch, userInfo.name]
+    [dispatch, currentUser?.name]
   );
 
   const handleRefreshAlerts = useCallback(() => {
@@ -115,38 +122,38 @@ function TopBar({
     setShowAlarmDropdown(false);
   }, []);
 
-  // const userMenuItems: any["items"] = [
-  //   {
-  //     key: "role",
-  //     label: (
-  //       <div className="flex items-center space-x-2 py-2">
-  //         <i className="ri-user-line text-gray-500" />
-  //         <span className="font-medium">Role:</span>
-  //         <span>{userInfo.role}</span>
-  //       </div>
-  //     ),
-  //   },
-  //   {
-  //     key: "department",
-  //     label: (
-  //       <div className="flex items-center space-x-2 py-2">
-  //         <i className="ri-building-line text-gray-500" />
-  //         <span className="font-medium">Department:</span>
-  //         <span>{userInfo.department}</span>
-  //       </div>
-  //     ),
-  //   },
-  //   {
-  //     key: "name",
-  //     label: (
-  //       <div className="flex items-center space-x-2 py-2">
-  //         <i className="ri-account-circle-line text-gray-500" />
-  //         <span className="font-medium">Name:</span>
-  //         <span>{userInfo.name}</span>
-  //       </div>
-  //     ),
-  //   },
-  // ];
+  const userMenuItems: any["items"] = [
+    {
+      key: "role",
+      label: (
+        <div className="flex items-center space-x-2 py-2">
+          <i className="ri-user-line text-gray-500" />
+          <span className="font-medium">Role:</span>
+          <span>{currentUser?.role}</span>
+        </div>
+      ),
+    },
+    {
+      key: "department",
+      label: (
+        <div className="flex items-center space-x-2 py-2">
+          <i className="ri-building-line text-gray-500" />
+          <span className="font-medium">Department:</span>
+          <span>{currentUser?.department}</span>
+        </div>
+      ),
+    },
+    {
+      key: "name",
+      label: (
+        <div className="flex items-center space-x-2 py-2">
+          <i className="ri-account-circle-line text-gray-500" />
+          <span className="font-medium">Name:</span>
+          <span>{currentUser?.name}</span>
+        </div>
+      ),
+    },
+  ];
 
   useEffect(() => {
     return () => {
@@ -228,7 +235,7 @@ function TopBar({
           </button>
         )}
       </div>
-{/* 
+
       <div className="flex items-center space-x-6">
         {topBarFeatures.showUserMenu && (
           <>
@@ -238,12 +245,12 @@ function TopBar({
                 style={{ color: "var(--color-grey-80)" }}
               >
                 <span>
-                  {userInfo.role}/{userInfo.name}
+                  {currentUser?.role}/{currentUser?.name}
                 </span>
                 <span style={{ color: "var(--color-grey-40)" }}>|</span>
-                <span>{userInfo.department}</span>
+                <span>{currentUser?.department}</span>
                 <span style={{ color: "var(--color-grey-40)" }}>|</span>
-                <span>{userInfo.name}</span>
+                <span>{currentUser?.name}</span>
               </div>
             )}
 
@@ -262,7 +269,9 @@ function TopBar({
                   style={{ color: "var(--color-grey-80)" }}
                 >
                   <i className="ri-user-line text-lg" />
-                  <span className="text-sm font-medium">{userInfo.name}</span>
+                  <span className="text-sm font-medium">
+                    {currentUser?.name}
+                  </span>
                   <i
                     className={`ri-arrow-down-s-line text-sm transition-transform ${
                       showUserDropdown ? "rotate-180" : ""
@@ -273,7 +282,7 @@ function TopBar({
             )}
           </>
         )}
-      </div> */}
+      </div>
     </div>
   );
 }

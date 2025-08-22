@@ -46,8 +46,8 @@ const MOCK_ALARM_SCHEDULE: AlarmScheduleItem[] = [
     category: "사용자",
     status: "삭제(퇴사)",
     authorityGroup: "사용자",
-    action: "삭제",
-    processAction: "none",
+    action: "사용자",
+    processAction: "승인",
   },
   {
     key: "2",
@@ -58,8 +58,8 @@ const MOCK_ALARM_SCHEDULE: AlarmScheduleItem[] = [
     category: "사용자",
     status: "신규 승인",
     authorityGroup: "사용자",
-    action: "승인",
-    processAction: "none",
+    action: "사용자",
+    processAction: "승인",
   },
   {
     key: "3",
@@ -70,8 +70,8 @@ const MOCK_ALARM_SCHEDULE: AlarmScheduleItem[] = [
     category: "사용자",
     status: "신규 승인",
     authorityGroup: "사용자",
-    action: "승인",
-    processAction: "Whitelist",
+    action: "사용지",
+    processAction: "삭제",
   },
   {
     key: "4",
@@ -82,8 +82,8 @@ const MOCK_ALARM_SCHEDULE: AlarmScheduleItem[] = [
     category: "사용자",
     status: "보류",
     authorityGroup: "사용자",
-    action: "중립(보류)",
-    processAction: "none",
+    action: "사용지",
+    processAction: "잠금해제",
   },
   {
     key: "5",
@@ -94,69 +94,8 @@ const MOCK_ALARM_SCHEDULE: AlarmScheduleItem[] = [
     category: "관리자",
     status: "삭제",
     authorityGroup: "관리자",
-    action: "삭제",
-    processAction: "Blacklist",
-  },
-  // Additional mock data for pagination
-  {
-    key: "6",
-    id: "AS006",
-    time: "2025-06-14T15:30:00Z",
-    userName: "김철수",
-    department: "개발팀",
-    category: "사용자",
-    status: "신규 승인",
-    authorityGroup: "사용자",
-    action: "승인",
-    processAction: "none",
-  },
-  {
-    key: "7",
-    id: "AS007",
-    time: "2025-06-13T11:45:00Z",
-    userName: "이영희",
-    department: "시스템 운영팀",
-    category: "관리자",
-    status: "보류",
-    authorityGroup: "관리자",
-    action: "중립(보류)",
-    processAction: "none",
-  },
-  {
-    key: "8",
-    id: "AS008",
-    time: "2025-06-12T08:20:00Z",
-    userName: "박민수",
-    department: "보안",
-    category: "사용자",
-    status: "신규 승인",
-    authorityGroup: "사용자",
-    action: "승인",
-    processAction: "Whitelist",
-  },
-  {
-    key: "9",
-    id: "AS009",
-    time: "2025-06-11T14:15:00Z",
-    userName: "최지혜",
-    department: "개발팀",
-    category: "관리자",
-    status: "삭제(퇴사)",
-    authorityGroup: "관리자",
-    action: "삭제",
-    processAction: "Blacklist",
-  },
-  {
-    key: "10",
-    id: "AS010",
-    time: "2025-06-10T16:30:00Z",
-    userName: "정현우",
-    department: "시스템 운영팀",
-    category: "사용자",
-    status: "신규 승인",
-    authorityGroup: "사용자",
-    action: "승인",
-    processAction: "none",
+    action: "사용지",
+    processAction: "승인",
   },
 ];
 
@@ -203,8 +142,8 @@ export const actionGetAlarmScheduleList = createAsyncThunk(
 
       if (filters.triageVerdict && filters.triageVerdict !== "all") {
         // Note: Triage verdict filtering would be based on actual field in real data
-        filteredData = filteredData.filter(
-          (item) => item.action.includes(filters.triageVerdict)
+        filteredData = filteredData.filter((item) =>
+          item.action.includes(filters.triageVerdict)
         );
       }
 
@@ -232,11 +171,13 @@ export const actionGetAlarmScheduleList = createAsyncThunk(
       }
 
       // Sort by time descending (most recent first)
-      filteredData.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+      filteredData.sort(
+        (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+      );
 
       // Calculate pending alerts count
-      const pendingCount = filteredData.filter(item => 
-        item.status === "보류" || item.action === "중립(보류)"
+      const pendingCount = filteredData.filter(
+        (item) => item.status === "보류" || item.action === "중립(보류)"
       ).length;
 
       return {
@@ -248,7 +189,9 @@ export const actionGetAlarmScheduleList = createAsyncThunk(
       };
     } catch (error) {
       return rejectWithValue(
-        error instanceof Error ? error.message : "Failed to fetch alarm schedule list"
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch alarm schedule list"
       );
     }
   }
@@ -256,7 +199,10 @@ export const actionGetAlarmScheduleList = createAsyncThunk(
 
 export const actionUpdateFilePolicy = createAsyncThunk(
   "alarmSchedule/actionUpdateFilePolicy",
-  async ({ id, policy }: { id: string; policy: string }, { rejectWithValue }) => {
+  async (
+    { id, policy }: { id: string; policy: string },
+    { rejectWithValue }
+  ) => {
     try {
       // TODO: Replace with real API call to /file-policies
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -282,19 +228,30 @@ export const actionExportCSV = createAsyncThunk(
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       // Generate CSV content
-      const headers = ["Time", "User Name", "부서", "구분", "Status", "권한 구분", "처리", "Process Action"];
+      const headers = [
+        "Time",
+        "User Name",
+        "부서",
+        "구분",
+        "Status",
+        "권한 구분",
+        "처리",
+        "Process Action",
+      ];
       const csvContent = [
         headers.join(","),
-        ...data.map((item) => [
-          new Date(item.time).toLocaleString(),
-          item.userName,
-          item.department,
-          item.category,
-          item.status,
-          item.authorityGroup,
-          item.action,
-          item.processAction,
-        ].join(","))
+        ...data.map((item) =>
+          [
+            new Date(item.time).toLocaleString(),
+            item.userName,
+            item.department,
+            item.category,
+            item.status,
+            item.authorityGroup,
+            item.action,
+            item.processAction,
+          ].join(",")
+        ),
       ].join("\n");
 
       // Create and download file
@@ -302,7 +259,10 @@ export const actionExportCSV = createAsyncThunk(
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", `alarm_schedule_${new Date().toISOString().split('T')[0]}.csv`);
+      link.setAttribute(
+        "download",
+        `alarm_schedule_${new Date().toISOString().split("T")[0]}.csv`
+      );
       link.style.visibility = "hidden";
       document.body.appendChild(link);
       link.click();
@@ -331,7 +291,7 @@ export const alarmScheduleSlice = createSlice({
     },
     updateItemProcessAction: (state, action) => {
       const { id, policy } = action.payload;
-      const item = state.items.find(item => item.id === id);
+      const item = state.items.find((item) => item.id === id);
       if (item) {
         item.processAction = policy;
       }
@@ -373,7 +333,7 @@ export const alarmScheduleSlice = createSlice({
       .addCase(actionUpdateFilePolicy.fulfilled, (state, action) => {
         state.loading = false;
         const { id, policy } = action.payload;
-        const item = state.items.find(item => item.id === id);
+        const item = state.items.find((item) => item.id === id);
         if (item) {
           item.processAction = policy;
         }
@@ -409,13 +369,20 @@ export const {
 } = alarmScheduleSlice.actions;
 
 // Selectors
-export const selectAlarmScheduleState = (state: RootState) => state.alarmSchedule;
-export const selectAlarmScheduleItems = (state: RootState) => state.alarmSchedule.items;
-export const selectAlarmScheduleLoading = (state: RootState) => state.alarmSchedule.loading;
-export const selectAlarmScheduleError = (state: RootState) => state.alarmSchedule.error;
-export const selectAlarmScheduleFilters = (state: RootState) => state.alarmSchedule.filters;
-export const selectAlarmSchedulePagination = (state: RootState) => state.alarmSchedule.pagination;
-export const selectPendingAlertsCount = (state: RootState) => state.alarmSchedule.pendingAlertsCount;
+export const selectAlarmScheduleState = (state: RootState) =>
+  state.alarmSchedule;
+export const selectAlarmScheduleItems = (state: RootState) =>
+  state.alarmSchedule.items;
+export const selectAlarmScheduleLoading = (state: RootState) =>
+  state.alarmSchedule.loading;
+export const selectAlarmScheduleError = (state: RootState) =>
+  state.alarmSchedule.error;
+export const selectAlarmScheduleFilters = (state: RootState) =>
+  state.alarmSchedule.filters;
+export const selectAlarmSchedulePagination = (state: RootState) =>
+  state.alarmSchedule.pagination;
+export const selectPendingAlertsCount = (state: RootState) =>
+  state.alarmSchedule.pendingAlertsCount;
 
 // Combined selectors
 export const selectAlarmScheduleFullState = (state: RootState) => ({

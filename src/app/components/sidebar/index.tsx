@@ -153,7 +153,7 @@ function Sidebar() {
         })}
       </div>
 
-      <UserSection />
+      <UserSection isCollapsed={isCollapsed} />
     </div>
   );
 }
