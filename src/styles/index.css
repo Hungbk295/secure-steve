@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@import "remixicon/fonts/remixicon.css";
+@import "@/styles/reset.css";
+@import "@/styles/custom.css";
+@import "@/styles/account.css";
+
+body {
+  overflow-x: hidden;
+}
+
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@theme {
+  --color-primary-110: #0a7146;
+  --color-primary-105: #198356;
+  --color-primary-100: #1c925f;
+  --color-primary-80: #13b770;
+  --color-primary-20: #b9ddcd;
+  --color-primary-10: #ddefe7;
+  --color-primary-5: #effaf6;
+
+  --color-sub-primary-112: #cc7000;
+  --color-sub-primary-105: #e67e00;
+  --color-sub-primary-100: #ff8c00;
+  --color-sub-primary-20: #ffdbb0;
+  --color-sub-primary-10: #ffeed9;
+  --color-sub-primary-5: #fff4e6;
+
+  --color-grey-100: #17171b;
+  --color-grey-80: #4b4e59;
+  --color-grey-40: #82828a;
+  --color-grey-35: #a8a8ae;
+  --color-grey-10: #e3e3e8;
+  --color-grey-8: #edeff3;
+  --color-grey-5: #f5f6f8;
+  --color-grey-3: #fbfcfd;
+
+  --color-error-110: #e60000;
+  --color-error-100: #ff2f00;
+  --color-error-15: #ffb0b0;
+  --color-error-10: #ffcdcd;
+  --color-error-5: #ffe6e6;
+  --color-error-2: #fff2f2;
+
+  --color-border-100: #e2e4e8;
+
+  --color-charactor-title-85: #000000d9;
+
+  --spacing-sidebar-width: 256px;
+  --spacing-sidebar-collapsed-width: 80px;
+  --spacing-custom-normal: 150%;
+
+  /* Sidebar width utilities for Tailwind */
+  --sidebar-width: 256px;
+  --sidebar-collapsed-width: 80px;
+}

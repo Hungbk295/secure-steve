@@ -1,0 +1,11 @@
+.account-detail-general .child-column {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.account-detail-general.large .column {
+  gap: 16px !important;
+}
+.account-detail-general.large .column .child-column {
+  width: 50%;
+}
