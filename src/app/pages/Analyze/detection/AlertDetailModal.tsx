@@ -286,7 +286,6 @@ const AlertDetailModal: React.FC = () => {
         keyboard
       >
         <div className="flex flex-col h-[80vh]">
-          {/* Sticky Header */}
           <div className="sticky top-0 bg-white border-b border-gray-200 pb-4 mb-4 z-10">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-900">
@@ -305,7 +304,6 @@ const AlertDetailModal: React.FC = () => {
 
             {detail && (
               <div className="space-y-3">
-                {/* File Name and Time */}
                 <div>
                   <h3 className="text-base font-medium text-gray-900 break-all">
                     {detail.file_name}
@@ -326,7 +324,6 @@ const AlertDetailModal: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Status and Actions */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Tag

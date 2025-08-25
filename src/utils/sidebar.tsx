@@ -9,7 +9,7 @@ export interface MenuItem {
   icon?: ReactNode;
   children?: MenuItem[];
   permission?: string[];
-  roles?: UserRole[]; // Add role-based access
+  roles?: UserRole[];
 }
 
 export const getAllMenuItems = (): MenuItem[] => [
@@ -203,7 +203,6 @@ export const getAllMenuItems = (): MenuItem[] => [
   },
 ];
 
-// Filter menu items based on user role
 export function getMenuItems(role: UserRole = CURRENT_USER_ROLE): MenuItem[] {
   return getAllMenuItems()
     .map((item) => filterMenuByRole(item, role))
@@ -211,15 +210,12 @@ export function getMenuItems(role: UserRole = CURRENT_USER_ROLE): MenuItem[] {
 }
 
 function filterMenuByRole(item: MenuItem, role: UserRole): MenuItem | null {
-  // Check if user has access to this menu item
   if (item.roles && !item.roles.includes(role)) {
     return null;
   }
 
-  // Create a copy to avoid mutation
   const filteredItem = { ...item };
 
-  // Filter children if they exist
   if (item.children) {
     const filteredChildren = item.children
       .map((child) => filterMenuByRole(child, role))
@@ -227,7 +223,6 @@ function filterMenuByRole(item: MenuItem, role: UserRole): MenuItem | null {
 
     filteredItem.children = filteredChildren;
 
-    // If no children remain and this is a parent-only item, hide it
     if (filteredChildren.length === 0 && item.route.endsWith("/*")) {
       return null;
     }

@@ -73,7 +73,6 @@ function ForgotPasswordForm(props: IForgotPasswordFormProps) {
     }
   }, [emailResend]);
 
-  // continue countdown when reload page
   useEffect(() => {
     if (emailResend.remaining > 0) {
       setTimer(emailResend.remaining);

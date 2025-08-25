@@ -18,7 +18,7 @@ interface ReportRegularFilterBarProps {
 const getInitialFormData = () => {
   const endDate = new Date();
   const startDate = new Date();
-  startDate.setMonth(endDate.getMonth() - 1); // Default to 1 month
+  startDate.setMonth(endDate.getMonth() - 1);
 
   return {
     timeRange: [startDate, endDate],

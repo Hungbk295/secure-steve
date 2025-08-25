@@ -32,7 +32,6 @@ const OperationPolicy: React.FC<OperationPolicyProps> = ({ loading }) => {
   };
 
   const handleCheckboxChange = (key: string, checkedValues: any) => {
-    // Clear existing selections first
     const item = operationItems.find((item) => item.key === key);
     if (item?.selected_checkboxes) {
       item.selected_checkboxes.forEach((value) => {
@@ -40,7 +39,6 @@ const OperationPolicy: React.FC<OperationPolicyProps> = ({ loading }) => {
       });
     }
 
-    // Add new selections
     checkedValues.forEach((value: any) => {
       dispatch(
         updateOperationSelection({
@@ -65,7 +63,6 @@ const OperationPolicy: React.FC<OperationPolicyProps> = ({ loading }) => {
       key: "policy",
       render: (_, record: OperationItem) => {
         if (record.옵션) {
-          // Radio buttons for time period options
           return (
             <div className="space-y-2">
               <div className="flex items-center gap-2 mb-2">
@@ -102,7 +99,6 @@ const OperationPolicy: React.FC<OperationPolicyProps> = ({ loading }) => {
         }
 
         if (record.체크박스) {
-          // Checkboxes for report items
           return (
             <div className="space-y-2">
               <div className="text-sm mb-2">선택 가능한 항목:</div>

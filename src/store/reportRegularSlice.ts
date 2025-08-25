@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
 import { DynamicKeyObject } from "@/interfaces/app";
 
-// Report Regular State Types
 interface ReportRegularItem {
   key: string;
   id: string;
@@ -28,7 +27,6 @@ type IReportRegularState = {
   };
 };
 
-// Mock data based on specifications
 const MOCK_REPORT_REGULAR: ReportRegularItem[] = [
   {
     key: "1",
@@ -144,22 +142,18 @@ const initialReportRegularState: IReportRegularState = {
   },
 };
 
-// Async Actions
 export const actionGetReportRegularList = createAsyncThunk(
   "reportRegular/actionGetReportRegularList",
   async (filters: DynamicKeyObject = {}, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call to GET /reports
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
       }
 
-      // Apply filters
       const filteredData = MOCK_REPORT_REGULAR;
 
-      // Calculate unread count
       const unreadCount = filteredData.filter(
         (item) => item.status === "unread"
       ).length;
@@ -188,7 +182,6 @@ export const actionUpdateReportStatus = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call to PUT /reports/:id/status
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       if (Math.random() < 0.1) {
@@ -210,14 +203,12 @@ export const actionGetReportDetail = createAsyncThunk(
   "reportRegular/actionGetReportDetail",
   async (reportId: string, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call to GET /reports/:id
       await new Promise((resolve) => setTimeout(resolve, 300));
 
       if (Math.random() < 0.1) {
         throw new Error("Failed to fetch report detail");
       }
 
-      // Mock detail data
       const mockDetail = {
         id: reportId,
         time: "2025-06-16T23:23:00+09:00",
@@ -284,14 +275,13 @@ export const actionDownloadReport = createAsyncThunk(
   }
 );
 
-// Report Regular Slice
 export const reportRegularSlice = createSlice({
   name: "reportRegular",
   initialState: initialReportRegularState,
   reducers: {
     updateFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
-      state.pagination.current = 1; // Reset to first page when filters change
+      state.pagination.current = 1;
     },
     updatePagination: (state, action) => {
       state.pagination = { ...state.pagination, ...action.payload };
@@ -301,7 +291,6 @@ export const reportRegularSlice = createSlice({
       const item = state.items.find((item) => item.id === id);
       if (item) {
         item.status = status;
-        // Update unread count
         state.unreadCount = state.items.filter(
           (item) => item.status === "unread"
         ).length;
@@ -317,7 +306,7 @@ export const reportRegularSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get Report Regular List
+
       .addCase(actionGetReportRegularList.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -336,7 +325,6 @@ export const reportRegularSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Update Report Status
       .addCase(actionUpdateReportStatus.pending, (state) => {
         state.error = null;
       })
@@ -345,7 +333,6 @@ export const reportRegularSlice = createSlice({
         const item = state.items.find((item) => item.id === id);
         if (item) {
           item.status = status;
-          // Update unread count
           state.unreadCount = state.items.filter(
             (item) => item.status === "unread"
           ).length;
@@ -356,7 +343,6 @@ export const reportRegularSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Get Report Detail
       .addCase(actionGetReportDetail.pending, (state) => {
         state.error = null;
       })
@@ -367,7 +353,6 @@ export const reportRegularSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Download Report
       .addCase(actionDownloadReport.pending, (state) => {
         state.error = null;
       })
@@ -388,7 +373,6 @@ export const {
   resetFilters,
 } = reportRegularSlice.actions;
 
-// Selectors
 export const selectReportRegularState = (state: RootState) =>
   state.reportRegular;
 export const selectReportRegularItems = (state: RootState) =>
@@ -404,7 +388,6 @@ export const selectReportRegularPagination = (state: RootState) =>
 export const selectReportRegularUnreadCount = (state: RootState) =>
   state.reportRegular.unreadCount;
 
-// Combined selectors
 export const selectReportRegularFullState = (state: RootState) => ({
   items: state.reportRegular.items,
   loading: state.reportRegular.loading,

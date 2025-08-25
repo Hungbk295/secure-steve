@@ -59,7 +59,6 @@ const ProcessActionModal: React.FC<ProcessActionModalProps> = ({
       destroyOnClose
     >
       <div className="space-y-4">
-        {/* Action Icon and Message */}
         <div className="flex items-start space-x-3">
           <div className={`flex-shrink-0 ${actionColor}`}>
             <i className={`${actionIcon} text-2xl`} />
@@ -85,7 +84,6 @@ const ProcessActionModal: React.FC<ProcessActionModalProps> = ({
           </div>
         </div>
 
-        {/* Memo Input */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Memo (Optional)
@@ -100,7 +98,6 @@ const ProcessActionModal: React.FC<ProcessActionModalProps> = ({
           />
         </div>
 
-        {/* Actions */}
         <div className="flex justify-end space-x-3 pt-4">
           <Button onClick={handleCancel} disabled={loading}>
             Cancel

@@ -24,29 +24,9 @@ interface ReportListTableProps {
   loading: boolean;
 }
 
-// interface AlertDetail {
-//   id: string;
-//   time: string;
-//   status: string;
-//   alertName: string;
-//   actionedBy: string;
-//   description: string;
-//   severity: string;
-//   source: string;
-//   target: string;
-//   details: {
-//     sourceIP: string;
-//     targetIP: string;
-//     protocol: string;
-//     port: string;
-//     attempts: number;
-//   };
-// }
-
 const ReportListTable: React.FC<ReportListTableProps> = ({ loading }) => {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectReportListItems);
-  console.log("items", items);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const formatDateTime = (dateString: string) => {
@@ -68,14 +48,6 @@ const ReportListTable: React.FC<ReportListTableProps> = ({ loading }) => {
   };
 
   const getActionedByTag = (actionedBy: string) => {
-    // const colorMap: { [key: string]: string } = {
-    //   시스템: "blue",
-    //   "KISA DB": "purple",
-    //   관리자: "red",
-    //   보안팀: "orange",
-    //   운영팀: "cyan",
-    // };
-
     return <Tag>{actionedBy}</Tag>;
   };
 
@@ -176,73 +148,6 @@ const ReportListTable: React.FC<ReportListTableProps> = ({ loading }) => {
           scroll={{ x: 800 }}
         />
       </div>
-
-      {/* Alert Detail Modal */}
-      {/* <Modal
-        title="Alert Detail"
-        open={isDetailModalVisible}
-        onCancel={handleModalClose}
-        footer={[
-          <Button key="close" onClick={handleModalClose}>
-            Close
-          </Button>,
-        ]}
-        width={800}
-        loading={detailLoading}
-      >
-        {selectedAlert && (
-          <div className="space-y-4">
-            <Descriptions title="Alert Information" bordered column={2}>
-              <Descriptions.Item label="Alert ID" span={2}>
-                {selectedAlert.id}
-              </Descriptions.Item>
-              <Descriptions.Item label="Time">
-                {formatDateTime(selectedAlert.time)}
-              </Descriptions.Item>
-              <Descriptions.Item label="Status">
-                {getStatusTag(selectedAlert.status as "read" | "unread")}
-              </Descriptions.Item>
-              <Descriptions.Item label="Alert Name" span={2}>
-                {selectedAlert.alertName}
-              </Descriptions.Item>
-              <Descriptions.Item label="Actioned by">
-                {getActionedByTag(selectedAlert.actionedBy)}
-              </Descriptions.Item>
-              <Descriptions.Item label="Severity">
-                <Tag
-                  color={selectedAlert.severity === "high" ? "red" : "orange"}
-                >
-                  {selectedAlert.severity.toUpperCase()}
-                </Tag>
-              </Descriptions.Item>
-            </Descriptions>
-
-            <Descriptions title="Description" bordered>
-              <Descriptions.Item label="Details" span={3}>
-                {selectedAlert.description}
-              </Descriptions.Item>
-            </Descriptions>
-
-            <Descriptions title="Technical Details" bordered column={2}>
-              <Descriptions.Item label="Source IP">
-                {selectedAlert.details.sourceIP}
-              </Descriptions.Item>
-              <Descriptions.Item label="Target IP">
-                {selectedAlert.details.targetIP}
-              </Descriptions.Item>
-              <Descriptions.Item label="Protocol">
-                {selectedAlert.details.protocol}
-              </Descriptions.Item>
-              <Descriptions.Item label="Port">
-                {selectedAlert.details.port}
-              </Descriptions.Item>
-              <Descriptions.Item label="Attempts" span={2}>
-                {selectedAlert.details.attempts}
-              </Descriptions.Item>
-            </Descriptions>
-          </div>
-        )}
-      </Modal> */}
     </div>
   );
 };

@@ -27,7 +27,6 @@ const initialState: AlarmNotificationsState = {
 export const actionGetNotificationsList = createAsyncThunk(
   "alarmNotifications/getList",
   async () => {
-    // Mock data
     const mockData = [
       {
         id: "1",

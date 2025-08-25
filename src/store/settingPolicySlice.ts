@@ -3,7 +3,6 @@ import { RootState } from "@/store";
 import { DynamicKeyObject } from "@/interfaces/app";
 import { MOCK_SettingPolicy_1 } from "@/constants/mockAlert";
 
-// Setting Policy State Types
 interface ServerManager {
   id: string;
   name: string;
@@ -58,33 +57,27 @@ const initialSettingPolicyState: ISettingPolicyState = {
   selectedRowKeys: [],
 };
 
-// Async Actions
 export const actionGetServersList = createAsyncThunk(
   "settingPolicy/actionGetServersList",
   async (filters: DynamicKeyObject = {}, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/policy/servers",
       //   method: "GET",
       //   params: filters,
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // Simulate occasional errors
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
       }
 
-      // Transform mock data to include keys and IDs
       const transformedData = MOCK_SettingPolicy_1.map((item) => ({
         ...item,
         key: item.server_id,
       }));
 
-      // Apply filters
       let filteredData = transformedData;
 
       if (filters.clusterName) {
@@ -149,14 +142,12 @@ export const actionAssignCluster = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/policy/servers/assign-cluster",
       //   method: "PUT",
       //   data: { server_ids: selectedIds, cluster_name: clusterName, user_id: userId },
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       if (Math.random() < 0.1) {
@@ -192,14 +183,12 @@ export const actionAssignManager = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/policy/servers/assign-manager",
       //   method: "PUT",
       //   data: { server_ids: selectedIds, manager_id: managerId, user_id: userId },
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       if (Math.random() < 0.1) {
@@ -220,14 +209,13 @@ export const actionAssignManager = createAsyncThunk(
   }
 );
 
-// Setting Policy Slice
 export const settingPolicySlice = createSlice({
   name: "settingPolicy",
   initialState: initialSettingPolicyState,
   reducers: {
     updateFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
-      state.pagination.current = 1; // Reset to first page when filters change
+      state.pagination.current = 1;
     },
     updatePagination: (state, action) => {
       state.pagination = { ...state.pagination, ...action.payload };
@@ -248,7 +236,6 @@ export const settingPolicySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get Servers List
       .addCase(actionGetServersList.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -265,8 +252,6 @@ export const settingPolicySlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-
-      // Assign Cluster
       .addCase(actionAssignCluster.pending, (state) => {
         state.assignClusterLoading = true;
         state.error = null;
@@ -275,14 +260,12 @@ export const settingPolicySlice = createSlice({
         state.assignClusterLoading = false;
         const { assignedIds, clusterName } = action.payload;
 
-        // Update servers with new cluster assignment
         state.servers = state.servers.map((server) =>
           assignedIds.includes(server.server_id)
             ? { ...server, server_cluster: clusterName }
             : server
         );
 
-        // Clear selected rows
         state.selectedRowKeys = [];
         state.error = null;
       })
@@ -291,7 +274,6 @@ export const settingPolicySlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Assign Manager
       .addCase(actionAssignManager.pending, (state) => {
         state.assignManagerLoading = true;
         state.error = null;
@@ -300,13 +282,11 @@ export const settingPolicySlice = createSlice({
         state.assignManagerLoading = false;
         const { assignedIds, managerId } = action.payload;
 
-        // Find manager details from existing data (in real app, would come from API)
         const managerInfo = state.servers.find(
           (server) => server.manager.id === managerId
         )?.manager;
 
         if (managerInfo) {
-          // Update servers with new manager assignment
           state.servers = state.servers.map((server) =>
             assignedIds.includes(server.server_id)
               ? { ...server, manager: managerInfo }
@@ -314,7 +294,6 @@ export const settingPolicySlice = createSlice({
           );
         }
 
-        // Clear selected rows
         state.selectedRowKeys = [];
         state.error = null;
       })
@@ -334,7 +313,6 @@ export const {
   resetFilters,
 } = settingPolicySlice.actions;
 
-// Selectors
 export const selectSettingPolicyServers = (state: RootState) =>
   state.settingPolicy.servers;
 export const selectSettingPolicyLoading = (state: RootState) =>
@@ -352,7 +330,6 @@ export const selectSettingPolicyPagination = (state: RootState) =>
 export const selectSettingPolicySelectedRowKeys = (state: RootState) =>
   state.settingPolicy.selectedRowKeys;
 
-// Combined selectors
 export const selectSettingPolicyState = (state: RootState) => ({
   servers: state.settingPolicy.servers,
   loading: state.settingPolicy.loading,

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Breadcrumb, Tabs } from "antd";
 import type { TabsProps } from "antd";
-import PendingTab from "@/app/components/analyze/action/PendingTab";
-import CompletedTab from "@/app/components/analyze/action/CompletedTab";
+import PendingTab from "@/app/pages/Analyze/action/PendingTab";
+import CompletedTab from "@/app/pages/Analyze/action/CompletedTab";
 
 const Action: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("pending");
@@ -24,7 +24,6 @@ const Action: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header with Breadcrumb */}
       <div className="bg-white border-b border-gray-200 px-3 pb-4">
         <Breadcrumb className="text-sm">
           <Breadcrumb.Item>Analysis</Breadcrumb.Item>
@@ -37,7 +36,6 @@ const Action: React.FC = () => {
         </h1>
       </div>
 
-      {/* Tabs Content */}
       <div className="flex-1 py-4">
         <div className="bg-white rounded-lg border border-gray-200 !mb-0 overflow-x-auto">
           <Tabs

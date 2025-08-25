@@ -46,21 +46,18 @@ function ActionHistoryFilterBar({
   function onFinish(values: DynamicKeyObject) {
     const payload = getPayload(values);
     console.log("Action History Filter:", payload);
-    // TODO: Dispatch action to fetch action history data
   }
 
   function onReset() {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
     console.log("Reset Action History Filter:", payload);
-    // TODO: Dispatch action to fetch action history data
   }
 
   useEffect(() => {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
     console.log("Initialize Action History Filter:", payload);
-    // TODO: Dispatch action to fetch action history data
   }, []);
 
   const riskLevelOptions = [

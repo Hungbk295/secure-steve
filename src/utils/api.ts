@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Alert, AlertActionRequest, LatestAlertsResponse } from "@/interfaces/app";
 
-// Create axios instance
 const apiClient = axios.create({
   baseURL: "/api",
   timeout: 30000,
@@ -10,7 +9,6 @@ const apiClient = axios.create({
   },
 });
 
-// Request interceptor for auth token
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("authToken");
@@ -24,12 +22,10 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized - redirect to login
       localStorage.removeItem("authToken");
       window.location.href = "/login";
     }
@@ -37,11 +33,7 @@ apiClient.interceptors.response.use(
   }
 );
 
-// API endpoints
 export const alertsApi = {
-  /**
-   * Fetch latest alerts (API-DASH-01)
-   */
   getLatestAlerts: async (): Promise<LatestAlertsResponse> => {
     try {
       const response = await apiClient.get<LatestAlertsResponse>("/analysis/requests/latest");
@@ -56,9 +48,6 @@ export const alertsApi = {
     }
   },
 
-  /**
-   * Get alert details by ID
-   */
   getAlertById: async (alertId: string): Promise<Alert> => {
     try {
       const response = await apiClient.get<Alert>(`/analysis/requests/${alertId}`);
@@ -76,9 +65,6 @@ export const alertsApi = {
     }
   },
 
-  /**
-   * Update alert action status
-   */
   updateAlertAction: async (alertId: string, actionData: AlertActionRequest): Promise<Alert> => {
     try {
       const response = await apiClient.put<Alert>(
@@ -111,9 +97,6 @@ export const alertsApi = {
     }
   },
 
-  /**
-   * Add to blacklist (API-POL-01) - Future extension
-   */
   addToBlacklist: async (alertId: string, comments?: string): Promise<void> => {
     try {
       await apiClient.post("/policy/blacklist", {
@@ -130,9 +113,6 @@ export const alertsApi = {
     }
   },
 
-  /**
-   * Add to whitelist (API-POL-01) - Future extension
-   */
   addToWhitelist: async (alertId: string, comments?: string): Promise<void> => {
     try {
       await apiClient.post("/policy/whitelist", {

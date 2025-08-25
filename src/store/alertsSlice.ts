@@ -14,7 +14,6 @@ type IInitialState = {
   pollingEnabled: boolean;
 };
 
-// Use centralized mock data
 const mockAlerts = MOCK_LatestAlerts;
 
 const initialState: IInitialState = {
@@ -37,7 +36,6 @@ export const actionFetchLatestAlerts = createAsyncThunk(
       const now = Date.now();
       const lastFetched = state.alerts.lastFetched;
 
-      // Avoid spam requests - minimum 5 seconds between fetches
       if (lastFetched && now - lastFetched < 5000) {
         return {
           alerts: state.alerts.latestAlerts,
@@ -47,17 +45,14 @@ export const actionFetchLatestAlerts = createAsyncThunk(
         };
       }
 
-      // For development - simulate API call delay and use mock data
       await new Promise((resolve) =>
         setTimeout(resolve, 300 + Math.random() * 200)
       );
 
-      // Simulate occasional API errors for testing error handling
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
       }
 
-      // Use mock data for development
       return {
         alerts: mockAlerts,
         totalCount: mockAlerts.length,
@@ -67,7 +62,6 @@ export const actionFetchLatestAlerts = createAsyncThunk(
         cached: false,
       };
 
-      // TODO: Replace with real API call in production
       // const response = await alertsApi.getLatestAlerts();
       // return {
       //   alerts: response.data,
@@ -99,7 +93,6 @@ export const actionUpdateAlertAction = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Use actionData for real API call in production
       // const actionData: AlertActionRequest = {
       //   process_status: action,
       //   user_id: userId,
@@ -107,17 +100,14 @@ export const actionUpdateAlertAction = createAsyncThunk(
       //   action_type: actionType,
       // };
 
-      // For development - simulate API call delay
       await new Promise((resolve) =>
         setTimeout(resolve, 800 + Math.random() * 400)
       );
 
-      // Simulate occasional API errors for testing
       if (Math.random() < 0.08) {
         throw new Error("Failed to update alert status");
       }
 
-      // Create updated alert with new status and completion time
       const currentAlert = mockAlerts.find((alert) => alert.id == alertId);
       if (!currentAlert) {
         throw new Error("Alert not found");
@@ -126,14 +116,12 @@ export const actionUpdateAlertAction = createAsyncThunk(
       const updatedAlert: Alert = {
         ...currentAlert,
         process_status: action,
-        // Add completion timestamp for processed items
         ...(action !== "pending" && {
           malware_status:
             action === "delete" ? "deleted" : currentAlert.malware_status,
         }),
       };
 
-      // Update the mock data for consistency
       const alertIndex = mockAlerts.findIndex((alert) => alert.id == alertId);
       if (alertIndex !== -1) {
         mockAlerts[alertIndex] = updatedAlert;
@@ -141,7 +129,6 @@ export const actionUpdateAlertAction = createAsyncThunk(
 
       return { alertId, updatedAlert };
 
-      // TODO: Replace with real API call in production
       // const updatedAlert = await alertsApi.updateAlertAction(alertId, actionData);
       // return { alertId, updatedAlert };
     } catch (error) {
@@ -211,12 +198,10 @@ export const slice = createSlice({
       .addCase(actionUpdateAlertAction.fulfilled, (state, action) => {
         const { alertId, updatedAlert } = action.payload;
 
-        // Remove from updating list
         state.updatingAlerts = state.updatingAlerts.filter(
           (id) => id != alertId
         );
 
-        // Update alert in list
         const alertIndex = state.latestAlerts.findIndex(
           (alert) => alert.id == alertId
         );
@@ -224,7 +209,6 @@ export const slice = createSlice({
           state.latestAlerts[alertIndex] = updatedAlert;
         }
 
-        // Update counts
         const pendingAlerts = state.latestAlerts.filter(
           (alert) => alert.process_status === "pending"
         );
@@ -250,7 +234,6 @@ export const {
   removeUpdatingAlert,
 } = slice.actions;
 
-// Selectors
 export const selectLatestAlerts = (state: RootState) =>
   state.alerts.latestAlerts;
 export const selectAlertCount = (state: RootState) => state.alerts.alertCount;
@@ -264,7 +247,6 @@ export const selectPollingEnabled = (state: RootState) =>
   state.alerts.pollingEnabled;
 export const selectLastFetched = (state: RootState) => state.alerts.lastFetched;
 
-// Combined selectors
 export const selectAlertsState = (state: RootState) => ({
   alerts: state.alerts.latestAlerts,
   alertCount: state.alerts.alertCount,

@@ -21,36 +21,29 @@ const App: React.FC = () => {
   const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    // Initialize auth state
     const initializeAuth = async () => {
-      // Check if user manually logged out (flag in localStorage)
       const hasLoggedOut = localStorage.getItem("hasLoggedOut") === "true";
 
-      // Check if we have a valid token from persistence
       if (
         accessToken &&
         isTokenValid(accessToken) &&
         currentUser &&
         !hasLoggedOut
       ) {
-        // Token is valid and user data exists, keep logged in
         console.log("Valid token found, maintaining login state");
         setIsInitializing(false);
         return;
       }
 
-      // If token is invalid or no user data, clear state
       if (accessToken && !isTokenValid(accessToken)) {
         console.log("Token expired, clearing auth state");
         dispatch(actionLogoutLocal());
       }
 
-      // Auto-login as admin if no valid session AND user hasn't manually logged out
       if ((!isLogin || !currentUser) && !hasLoggedOut) {
         try {
           console.log("Auto-logging in as admin@company.com");
           await dispatch(actionAutoLogin()).unwrap();
-          // Clear the logout flag after successful auto-login
           localStorage.removeItem("hasLoggedOut");
         } catch (error) {
           console.log("error", error);
@@ -63,7 +56,6 @@ const App: React.FC = () => {
     initializeAuth();
   }, [dispatch, isLogin, currentUser, accessToken]);
 
-  // Show loading while initializing auth
   if (isInitializing) {
     return (
       <div className="min-h-screen flex items-center justify-center">

@@ -1,11 +1,5 @@
 import { EAlertProcessStatus } from "@/interfaces/app";
 
-/**
- * Alert Action Options for Select Components
- * Centralized place to manage alert action options used throughout the project
- */
-
-// For Ant Design Select components
 export const ALERT_ACTION_OPTIONS = [
   { value: EAlertProcessStatus.PENDING, label: "Pending" },
   { value: EAlertProcessStatus.NO_ACTION, label: "No Action" },
@@ -13,7 +7,6 @@ export const ALERT_ACTION_OPTIONS = [
   { value: EAlertProcessStatus.DELETE, label: "Delete" },
 ];
 
-// For HTML select elements
 export const ALERT_ACTION_HTML_OPTIONS = [
   { value: "pending", text: "Pending" },
   { value: "no_action", text: "No Action" },
@@ -21,13 +14,11 @@ export const ALERT_ACTION_HTML_OPTIONS = [
   { value: "delete", text: "Delete" },
 ];
 
-// Simple label mapping
 export const getActionLabel = (action: string): string => {
   const option = ALERT_ACTION_OPTIONS.find((opt) => opt.value === action);
   return option?.label || action;
 };
 
-// Action messages for confirmation dialogs
 export const getActionMessage = (action: string): string => {
   switch (action) {
     case EAlertProcessStatus.PENDING:
@@ -43,7 +34,6 @@ export const getActionMessage = (action: string): string => {
   }
 };
 
-// Action colors for styling
 export const getActionColor = (action: string): string => {
   switch (action) {
     case EAlertProcessStatus.PENDING:
@@ -59,7 +49,6 @@ export const getActionColor = (action: string): string => {
   }
 };
 
-// Action icons
 export const getActionIcon = (action: string): string => {
   switch (action) {
     case EAlertProcessStatus.PENDING:

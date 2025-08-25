@@ -22,8 +22,8 @@ import AlertDetailModal from "./AlertDetailModal";
 import ProcessActionModal from "./ProcessActionModal";
 import ExceptionModal from "./ExceptionModal";
 import useScreenWidth from "@/hooks/useScreenWidth";
-import Select from "../common/Select";
-import Table from "../common/Table";
+import Select from "../../../components/common/Select";
+import Table from "../../../components/common/Table";
 
 interface DetectionItem {
   id: number;
@@ -49,7 +49,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
   const data = useAppSelector(selectDetectionItems);
   const internalLoading = useAppSelector(selectDetectionLoading);
 
-  // Combine external and internal loading states
   const loading = externalLoading || internalLoading;
 
   const [selectedAlert, setSelectedAlert] = useState<DetectionItem | null>(
@@ -62,22 +61,18 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
     useState<string>("");
   const [updatingRows, setUpdatingRows] = useState<Set<number>>(new Set());
 
-  // Use the custom hook for screen width
   const { isDesktop } = useScreenWidth();
 
-  // Load initial data
   useEffect(() => {
     if (data.length === 0) {
       dispatch(actionGetDetectionList(filters));
     }
   }, [dispatch, data.length, filters]);
 
-  // Handle file name click -> open modal
   const handleFileNameClick = (record: DetectionItem) => {
     dispatch(openModal(record.id));
   };
 
-  // Handle process status change
   const handleProcessStatusChange = (
     record: DetectionItem,
     newStatus: string
@@ -92,13 +87,11 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
     setActionModalVisible(true);
   };
 
-  // Handle exception change
   const handleExceptionChange = (
     record: DetectionItem,
     exceptionType: string
   ) => {
     if (exceptionType === "none") {
-      // Reset to none immediately
       handleUpdateException(record, exceptionType);
       return;
     }
@@ -108,7 +101,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
     setExceptionModalVisible(true);
   };
 
-  // Process action confirm
   const handleProcessActionConfirm = async (
     alertId: number,
     action: string,
@@ -140,7 +132,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
     }
   };
 
-  // Exception update
   const handleUpdateException = async (
     record: DetectionItem,
     exceptionType: string,
@@ -151,7 +142,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
 
     try {
       if (exceptionType === "none") {
-        // Handle none case locally - no API call needed
         message.success("Exception cleared successfully");
         setExceptionModalVisible(false);
       } else {
@@ -306,12 +296,11 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
     },
   ];
 
-  // Get columns based on screen size
   const getColumns = () => {
     if (isDesktop) {
       return columns;
     }
-    // On mobile, hide Server IP (index 4) and Exception (index 6) columns
+
     return columns.filter(
       (_, index) => index !== 4 && index !== 5 && index !== 6
     );
@@ -379,7 +368,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
         }
       />
 
-      {/* Process Action Modal */}
       <ProcessActionModal
         visible={actionModalVisible}
         onCancel={() => setActionModalVisible(false)}
@@ -388,7 +376,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
         action={selectedAction}
       />
 
-      {/* Exception Modal */}
       <ExceptionModal
         visible={exceptionModalVisible}
         onCancel={() => setExceptionModalVisible(false)}
@@ -397,7 +384,6 @@ const DetectionTable: React.FC<DetectionTableProps> = ({
         exceptionType={selectedExceptionType}
       />
 
-      {/* Alert Detail Modal */}
       <AlertDetailModal />
     </div>
   );

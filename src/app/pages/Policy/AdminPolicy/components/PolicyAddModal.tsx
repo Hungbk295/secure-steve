@@ -32,7 +32,6 @@ const PolicyAddModal: React.FC<PolicyAddModalProps> = ({
   const loading = useAppSelector(selectAdminPolicyLoading);
   const error = useAppSelector(selectAdminPolicyError);
 
-  // Mock API options - in real implementation, this would come from backend
   const apiOptions = [
     { value: "malware-detection-v1", label: "Malware Detection API v1.0" },
     { value: "threat-analysis-v2", label: "Threat Analysis API v2.0" },
@@ -140,9 +139,6 @@ const PolicyAddModal: React.FC<PolicyAddModalProps> = ({
               onChange={handleApiChange}
               size="large"
               showSearch
-              // filterOption={(input, option) =>
-              //   option?.children?.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
-              // }
             >
               {apiOptions.map((option) => (
                 <Option key={option.value} value={option.value}>

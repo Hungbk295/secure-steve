@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Breadcrumb, Card } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
-import DetectionTable from "@/app/components/detection/DetectionTable";
-import DetectionFilterBar from "@/app/components/detection/DetectionFilterBar";
+import DetectionTable from "@/app/pages/Analyze/detection/DetectionTable";
+import DetectionFilterBar from "@/app/pages/Analyze/detection/DetectionFilterBar";
 
 const Detection: React.FC = () => {
   const loading = false;

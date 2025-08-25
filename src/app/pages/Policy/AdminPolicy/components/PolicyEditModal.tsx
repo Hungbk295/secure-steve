@@ -79,7 +79,6 @@ const PolicyEditModal: React.FC<PolicyEditModalProps> = ({
 
   const handleSave = async () => {
     try {
-      // Save category items to Redux store
       localCategoryItems.forEach((item) => {
         dispatch(
           updateCategoryItem({
@@ -104,7 +103,6 @@ const PolicyEditModal: React.FC<PolicyEditModalProps> = ({
         );
       });
 
-      // Add new category items if any
       if (localCategoryItems.length > categoryItems.length) {
         const newItems = localCategoryItems.slice(categoryItems.length);
         newItems.forEach((item) => {
@@ -112,7 +110,6 @@ const PolicyEditModal: React.FC<PolicyEditModalProps> = ({
         });
       }
 
-      // Save importance template
       const result = await dispatch(
         actionSaveImportanceTemplate({
           importanceItems,
@@ -220,7 +217,6 @@ const PolicyEditModal: React.FC<PolicyEditModalProps> = ({
           />
         )}
 
-        {/* Importance Selection Section */}
         <div className="border rounded-lg p-4">
           <h3 className="text-base font-semibold mb-3">중요도 선택</h3>
           <div className="grid grid-cols-2 gap-3">

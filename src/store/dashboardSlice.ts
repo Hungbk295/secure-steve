@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
 
-// Dashboard State Types
 interface LatestAlert {
   id: string;
   malware_status: string;
@@ -145,12 +144,10 @@ const initialDashboardState: IDashboardState = {
   error: null,
 };
 
-// Async Actions
 export const actionGetDashboardData = createAsyncThunk(
   "dashboard/actionGetDashboardData",
   async (_, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call to GET /analysis/requests/latest
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       if (Math.random() < 0.05) {
@@ -183,7 +180,6 @@ export const actionUpdateAnalysisAction = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // Just console.log - do nothing with the action
       console.log("Action selected:", {
         id,
         process_status,
@@ -191,7 +187,6 @@ export const actionUpdateAnalysisAction = createAsyncThunk(
         message: "No actual API call made - just for demo",
       });
 
-      // Simulate a quick response
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       return {
@@ -214,10 +209,8 @@ export const actionGetPeriodStats = createAsyncThunk(
   "dashboard/actionGetPeriodStats",
   async (timeRange: string, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Generate different stats based on time range
       const statsMap: Record<string, any> = {
         "30days": {
           timeRange: "30days",
@@ -257,7 +250,6 @@ export const actionGetPeriodStats = createAsyncThunk(
   }
 );
 
-// Dashboard Slice
 export const dashboardSlice = createSlice({
   name: "dashboard",
   initialState: initialDashboardState,
@@ -282,7 +274,6 @@ export const dashboardSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get Dashboard Data
       .addCase(actionGetDashboardData.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -301,7 +292,6 @@ export const dashboardSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Update Analysis Action
       .addCase(actionUpdateAnalysisAction.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -322,7 +312,6 @@ export const dashboardSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Get Period Stats
       .addCase(actionGetPeriodStats.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -342,7 +331,6 @@ export const dashboardSlice = createSlice({
 export const { updateTimeRange, clearError, updateLatestAlertStatus } =
   dashboardSlice.actions;
 
-// Selectors
 export const selectDashboardState = (state: RootState) => state.dashboard;
 export const selectDashboardLoading = (state: RootState) =>
   state.dashboard.loading;
@@ -357,7 +345,6 @@ export const selectServerStatus = (state: RootState) =>
   state.dashboard.serverStatus;
 export const selectReports = (state: RootState) => state.dashboard.reports;
 
-// Combined selectors
 export const selectDashboardFullState = (state: RootState) => ({
   latestAlerts: state.dashboard.latestAlerts,
   periodStats: state.dashboard.periodStats,

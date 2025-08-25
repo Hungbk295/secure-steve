@@ -10,7 +10,6 @@ const CompletedTab: React.FC = () => {
   const [csvDownloadButton, setCSVDownloadButton] =
     useState<React.ReactNode>(null);
 
-  // Handle CSV download button render
   const handleCSVDownloadRender = (csvButton: React.ReactNode) => {
     setCSVDownloadButton(csvButton);
   };
@@ -34,7 +33,6 @@ const CompletedTab: React.FC = () => {
           <div className="mb-1 flex justify-end mr-3">{csvDownloadButton}</div>
         )}
 
-        {/* Completed Table */}
         <Card size="small" className="completed-table-card">
           <CompletedTable
             loading={loading}

@@ -8,7 +8,7 @@ import {
   actionUpdateAnalysisAction,
 } from "@/store/dashboardSlice";
 import useScreenWidth from "@/hooks/useScreenWidth";
-import BulkActionModal from "@/app/components/analyze/action/BulkActionModal";
+import BulkActionModal from "@/app/pages/Analyze/action/BulkActionModal";
 
 interface LatestAlertCardProps {
   loading: boolean;
@@ -70,8 +70,6 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
 
   const handleAlertClick = () => {
     console.log("Navigate to Analysis Detection page");
-    // TODO: Navigate to ANALYSIS Detection list page
-    // navigate('/analysis/detection');
   };
 
   const getRiskIcon = (malwareStatus: string) => {
@@ -94,18 +92,6 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
     const color = status === "malware" ? "red" : "orange";
     return <Tag color={color}>{status}</Tag>;
   };
-
-  // const formatDateTime = (dateString: string) => {
-  //   const date = new Date(dateString);
-  //   return date.toLocaleString("ko-KR", {
-  //     year: "numeric",
-  //     month: "2-digit",
-  //     day: "2-digit",
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //   });
-  // };
-
   const isActionDisabled = (processStatus: string) => {
     return ["no_action", "quarantine", "delete"].includes(processStatus);
   };
@@ -159,15 +145,6 @@ const LatestAlertCard: React.FC<LatestAlertCardProps> = ({ loading }) => {
                     {getMalwareStatusTag(alert.malware_status)}
                   </Space>
                 </div>
-
-                {/* <div className="flex-shrink-0 text-right">
-                  <div className="text-xs text-gray-500">
-                    Created: {formatDateTime(alert.file_created_at)}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    Analyzed: {formatDateTime(alert.analysis_time)}
-                  </div>
-                </div> */}
 
                 <div className="flex-shrink-0 w-32">
                   <Select

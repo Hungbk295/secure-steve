@@ -7,7 +7,7 @@ export function getSelectedKeySidebar(pathName: string) {
   return {
     parentKey: result.parentId || "",
     childKey: result.childId || "",
-    breakcrumbs: [{ label: "Home", key: "/" }], // Simple breadcrumb
+    breakcrumbs: [{ label: "Home", key: "/" }],
   };
 }
 
@@ -29,15 +29,6 @@ export function nvl(str: string, defaultVal: string | number) {
 
   return str;
 }
-
-// export function getApiUrl(urlType: string, initRole?: EUserRole) {
-//   const userRole = store.getState().auth.infoLogin.role;
-//   const foundedUrl = API_URL[urlType][initRole ?? userRole];
-
-//   if (!foundedUrl) return Object.values(API_URL[urlType])[0];
-
-//   return foundedUrl;
-// }
 
 export function getTagType(status: string, list: DynamicKeyObject[]) {
   const tag = list.find((item) => item.value === status);

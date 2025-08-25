@@ -3,7 +3,6 @@ import { RootState } from "@/store";
 import { DynamicKeyObject } from "@/interfaces/app";
 import { MOCK_SettingPolicy_2 } from "@/constants/mockAlert";
 
-// Server Settings State Types
 interface ServerSettingsItem {
   server_id: string;
   server_ip: string;
@@ -59,33 +58,27 @@ const initialSettingServerPolicyState: ISettingServerPolicyState = {
   selectedRowKeys: [],
 };
 
-// Async Actions
 export const actionGetServerSettingsList = createAsyncThunk(
   "settingServerPolicy/actionGetServerSettingsList",
   async (filters: DynamicKeyObject = {}, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/server-settings",
       //   method: "GET",
       //   params: filters,
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // Simulate occasional errors
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
       }
 
-      // Transform mock data to include keys and IDs
       const transformedData = MOCK_SettingPolicy_2.map((item) => ({
         ...item,
         key: item.server_id,
       }));
 
-      // Apply filters
       let filteredData = transformedData;
 
       if (filters.clusterName) {
@@ -166,14 +159,12 @@ export const actionHoldServers = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/servers/hold",
       //   method: "PUT",
       //   data: { server_ids: serverIds, user_id: userId },
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       if (Math.random() < 0.1) {
@@ -212,14 +203,12 @@ export const actionUpdateScanSettings = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/servers/scan-settings",
       //   method: "PUT",
       //   data: { server_ids: serverIds, ...scanSettings, user_id: userId },
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       if (Math.random() < 0.1) {
@@ -256,14 +245,12 @@ export const actionUpdateQuarantineFolder = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/servers/quarantine-folder",
       //   method: "PUT",
       //   data: { server_ids: serverIds, folder_path: folderPath, user_id: userId },
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       if (Math.random() < 0.1) {
@@ -286,14 +273,13 @@ export const actionUpdateQuarantineFolder = createAsyncThunk(
   }
 );
 
-// Server Settings Slice
 export const settingServerPolicySlice = createSlice({
   name: "settingServerPolicy",
   initialState: initialSettingServerPolicyState,
   reducers: {
     updateFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
-      state.pagination.current = 1; // Reset to first page when filters change
+      state.pagination.current = 1;
     },
     updatePagination: (state, action) => {
       state.pagination = { ...state.pagination, ...action.payload };
@@ -314,7 +300,6 @@ export const settingServerPolicySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get Server Settings List
       .addCase(actionGetServerSettingsList.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -331,8 +316,6 @@ export const settingServerPolicySlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-
-      // Hold Servers
       .addCase(actionHoldServers.pending, (state) => {
         state.holdServersLoading = true;
         state.error = null;
@@ -341,14 +324,12 @@ export const settingServerPolicySlice = createSlice({
         state.holdServersLoading = false;
         const { heldIds } = action.payload;
 
-        // Update servers status to held/pending
         state.servers = state.servers.map((server) =>
           heldIds.includes(server.server_id)
             ? { ...server, comm_status: "Held" }
             : server
         );
 
-        // Clear selected rows
         state.selectedRowKeys = [];
         state.error = null;
       })
@@ -357,7 +338,6 @@ export const settingServerPolicySlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Update Scan Settings
       .addCase(actionUpdateScanSettings.pending, (state) => {
         state.scanSettingsLoading = true;
         state.error = null;
@@ -366,7 +346,6 @@ export const settingServerPolicySlice = createSlice({
         state.scanSettingsLoading = false;
         const { updatedIds, scanSettings } = action.payload;
 
-        // Update servers with new scan settings
         state.servers = state.servers.map((server) =>
           updatedIds.includes(server.server_id)
             ? {
@@ -377,7 +356,6 @@ export const settingServerPolicySlice = createSlice({
             : server
         );
 
-        // Clear selected rows
         state.selectedRowKeys = [];
         state.error = null;
       })
@@ -386,7 +364,6 @@ export const settingServerPolicySlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Update Quarantine Folder
       .addCase(actionUpdateQuarantineFolder.pending, (state) => {
         state.quarantineFolderLoading = true;
         state.error = null;
@@ -394,7 +371,6 @@ export const settingServerPolicySlice = createSlice({
       .addCase(actionUpdateQuarantineFolder.fulfilled, (state) => {
         state.quarantineFolderLoading = false;
 
-        // Clear selected rows
         state.selectedRowKeys = [];
         state.error = null;
       })
@@ -414,7 +390,6 @@ export const {
   resetFilters,
 } = settingServerPolicySlice.actions;
 
-// Selectors
 export const selectSettingServerPolicyServers = (state: RootState) =>
   state.settingServerPolicy.servers;
 export const selectSettingServerPolicyLoading = (state: RootState) =>
@@ -436,7 +411,6 @@ export const selectSettingServerPolicyPagination = (state: RootState) =>
 export const selectSettingServerPolicySelectedRowKeys = (state: RootState) =>
   state.settingServerPolicy.selectedRowKeys;
 
-// Combined selectors
 export const selectSettingServerPolicyState = (state: RootState) => ({
   servers: state.settingServerPolicy.servers,
   loading: state.settingServerPolicy.loading,

@@ -94,7 +94,6 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
       destroyOnClose
     >
       <div className="space-y-4">
-        {/* File Information */}
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="text-sm text-gray-600 space-y-1">
             <div className="flex">
@@ -112,7 +111,6 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
           </div>
         </div>
 
-        {/* Description */}
         <div className="flex items-start space-x-2">
           <InfoCircleOutlined className={`${getIconColor()} mt-1`} />
           <Text type="secondary" className="text-sm">
@@ -120,7 +118,6 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
           </Text>
         </div>
 
-        {/* Blacklist Action Type Selection */}
         {isBlacklist && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -132,13 +129,9 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
               options={BLACKLIST_ACTION_OPTIONS}
               className="w-full"
             />
-            {/* <Text type="secondary" className="text-xs mt-1 block">
-              Choose what action to take when this file is detected again
-            </Text> */}
           </div>
         )}
 
-        {/* Memo Input */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Memo {isWhitelist ? "(Optional)" : "(Required)"}
@@ -157,7 +150,6 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
           />
         </div>
 
-        {/* Warning for Blacklist */}
         {isBlacklist && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3 mt-4">
             <div className="flex items-start space-x-2">
@@ -175,7 +167,6 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
           </div>
         )}
 
-        {/* Actions */}
         <div className="flex justify-end space-x-3 pt-4">
           <Button onClick={handleCancel} disabled={loading}>
             Cancel
@@ -184,7 +175,7 @@ const ExceptionModal: React.FC<ExceptionModalProps> = ({
             type="primary"
             onClick={handleConfirm}
             loading={loading}
-            disabled={isBlacklist && !memo.trim()} // Require memo for blacklist
+            disabled={isBlacklist && !memo.trim()}
             className={
               isBlacklist
                 ? "bg-red-600 hover:bg-red-700 border-red-600"

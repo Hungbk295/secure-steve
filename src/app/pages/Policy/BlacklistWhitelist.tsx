@@ -30,17 +30,11 @@ const BlacklistWhitelist: React.FC = () => {
     dispatch(setActiveTab(key as "blacklist" | "whitelist"));
   };
 
-  const handleBulkMoveToBlacklist = () => {
-    // Will be handled by BulkActionsToolbar
-  };
+  const handleBulkMoveToBlacklist = () => {};
 
-  const handleBulkMoveToWhitelist = () => {
-    // Will be handled by BulkActionsToolbar
-  };
+  const handleBulkMoveToWhitelist = () => {};
 
-  const handleBulkRemove = () => {
-    // Will be handled by BulkActionsToolbar
-  };
+  const handleBulkRemove = () => {};
 
   const handleDeselectAll = () => {
     dispatch(clearSelectedRows());
@@ -74,9 +68,6 @@ const BlacklistWhitelist: React.FC = () => {
       </div>
 
       <div className="flex-1 py-4 flex flex-col gap-4">
-        {/* Filter Bar */}
-
-        {/* Tabs */}
         <div className="bg-white rounded-lg border border-gray-200 !mb-0 overflow-x-auto">
           <Tabs
             activeKey={activeTab}
@@ -89,7 +80,6 @@ const BlacklistWhitelist: React.FC = () => {
           <BlacklistFilterBar loading={loading} />
         </div>
 
-        {/* Bulk Actions Toolbar */}
         <div>
           <BulkActionsToolbar
             selectedCount={selectedRowKeys.length}
@@ -100,7 +90,6 @@ const BlacklistWhitelist: React.FC = () => {
             onDeselectAll={handleDeselectAll}
             disable={selectedRowKeys.length === 0}
           />
-          {/* Tables */}
           <div className="bg-white rounded-lg border border-gray-200">
             {activeTab === "blacklist" && <BlacklistTable loading={loading} />}
             {activeTab === "whitelist" && <WhitelistTable loading={loading} />}
@@ -108,7 +97,6 @@ const BlacklistWhitelist: React.FC = () => {
         </div>
       </div>
 
-      {/* Modals */}
       <AddToBlacklistModal
         visible={addToBlacklistModalVisible}
         onCancel={() => setAddToBlacklistModalVisible(false)}

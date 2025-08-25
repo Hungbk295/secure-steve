@@ -1,10 +1,5 @@
 import { EAlertProcessStatus } from "@/interfaces/app";
 
-/**
- * Detection Page Constants - Centralized select options and enums
- */
-
-// Triage Verdict Options
 export const TRIAGE_VERDICT_OPTIONS = [
   { value: "Malware", label: "Malware" },
   { value: "Benign", label: "Benign" },
@@ -12,14 +7,12 @@ export const TRIAGE_VERDICT_OPTIONS = [
   { value: "Unknown", label: "Unknown" },
 ];
 
-// Risk Level Options (for multi-select)
 export const RISK_LEVEL_OPTIONS = [
   { value: "high", label: "High (80-100%)" },
   { value: "medium", label: "Medium (50-79%)" },
   { value: "low", label: "Low (0-49%)" },
 ];
 
-// Process Status Options (reusing from alertActions but with different format)
 export const PROCESS_STATUS_OPTIONS = [
   { value: EAlertProcessStatus.PENDING, label: "Pending" },
   { value: EAlertProcessStatus.NO_ACTION, label: "No Action" },
@@ -27,27 +20,23 @@ export const PROCESS_STATUS_OPTIONS = [
   { value: EAlertProcessStatus.DELETE, label: "Delete" },
 ];
 
-// Exception Policy Options
 export const EXCEPTION_OPTIONS = [
   { value: "none", label: "None" },
   { value: "blacklist", label: "Blacklist" },
   { value: "whitelist", label: "Whitelist" },
 ];
 
-// Blacklist Action Type Options (for blacklist exception modal)
 export const BLACKLIST_ACTION_OPTIONS = [
   { value: "delete", label: "Delete" },
   { value: "quarantine", label: "Quarantine" },
 ];
 
-// Time Range Presets
 export const TIME_RANGE_PRESETS = [
   { value: "24h", label: "Last 24 hours" },
   { value: "7d", label: "Last 7 days" },
   { value: "30d", label: "Last 30 days" },
 ];
 
-// Page Size Options
 export const PAGE_SIZE_OPTIONS = [
   { value: 10, label: "10" },
   { value: 30, label: "30" },
@@ -55,7 +44,6 @@ export const PAGE_SIZE_OPTIONS = [
   { value: 100, label: "100" },
 ];
 
-// Table Sort Options
 export const SORT_OPTIONS = [
   { value: "time_desc", label: "Time (Newest)" },
   { value: "time_asc", label: "Time (Oldest)" },
@@ -65,11 +53,6 @@ export const SORT_OPTIONS = [
   { value: "file_name_desc", label: "File Name (Z-A)" },
 ];
 
-/**
- * Helper Functions
- */
-
-// Get verdict badge color
 export const getVerdictColor = (verdict: string): string => {
   switch (verdict) {
     case "Malware":
@@ -85,7 +68,6 @@ export const getVerdictColor = (verdict: string): string => {
   }
 };
 
-// Get risk level from percentage
 export const getRiskLevel = (
   risk: string | number
 ): "high" | "medium" | "low" => {
@@ -96,7 +78,6 @@ export const getRiskLevel = (
   return "low";
 };
 
-// Get risk badge color
 export const getRiskBadgeColor = (risk: string | number): string => {
   const level = getRiskLevel(risk);
   switch (level) {
@@ -111,13 +92,11 @@ export const getRiskBadgeColor = (risk: string | number): string => {
   }
 };
 
-// Format time for display
 export const formatTime = (timeString: string): string => {
   const date = new Date(timeString);
   return date.toLocaleString();
 };
 
-// Get local time with ISO tooltip
 export const getTimeDisplay = (timeString: string) => {
   const date = new Date(timeString);
   return {
@@ -126,18 +105,15 @@ export const getTimeDisplay = (timeString: string) => {
   };
 };
 
-// Check if process status can be changed (only pending can be changed)
 export const canChangeProcessStatus = (currentStatus: string): boolean => {
   return currentStatus === EAlertProcessStatus.PENDING;
 };
 
-// Get exception display text
 export const getExceptionLabel = (exception: string): string => {
   const option = EXCEPTION_OPTIONS.find((opt) => opt.value === exception);
   return option?.label || exception;
 };
 
-// Get triage verdict label
 export const getVerdictLabel = (verdict: string): string => {
   const option = TRIAGE_VERDICT_OPTIONS.find((opt) => opt.value === verdict);
   return option?.label || verdict;

@@ -3,7 +3,6 @@ import { RootState } from "@/store";
 import { DynamicKeyObject, EAlertProcessStatus } from "@/interfaces/app";
 import { MOCK_AnalysisDetectionList } from "@/constants/mockAlert";
 
-// Detection List State
 type IDetectionListState = {
   items: any[];
   loading: boolean;
@@ -52,22 +51,18 @@ const initialDetectionListState: IDetectionListState = {
   },
 };
 
-// Async Actions for Detection List
 export const actionGetDetectionList = createAsyncThunk(
   "detection/actionGetDetectionList",
   async (query: DynamicKeyObject = {}, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/analysis/requests",
       //   method: "GET",
       //   params: query,
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // Simulate occasional errors
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
       }
@@ -103,14 +98,12 @@ export const actionUpdateProcessStatus = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: `/analysis/requests/${id}/action`,
       //   method: "PUT",
       //   data: { process_status: processStatus, user_id: userId, comments },
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       if (Math.random() < 0.1) {
@@ -148,14 +141,12 @@ export const actionUpdateFilePolicy = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/file-policies",
       //   method: "POST",
       //   data: { analysis_request_id: analysisRequestId, file_policy: filePolicy, action_type: actionType, comments },
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       if (Math.random() < 0.1) {
@@ -176,7 +167,6 @@ export const actionUpdateFilePolicy = createAsyncThunk(
   }
 );
 
-// Detection List Slice
 export const detectionListSlice = createSlice({
   name: "detectionList",
   initialState: initialDetectionListState,
@@ -243,7 +233,6 @@ export const {
   resetFilters,
 } = detectionListSlice.actions;
 
-// Selectors
 export const selectDetectionItems = (state: RootState) =>
   state.detectionList.items;
 export const selectDetectionLoading = (state: RootState) =>

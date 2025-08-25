@@ -13,7 +13,6 @@ const ReportList: React.FC = () => {
   const loading = useAppSelector(selectReportListLoading);
 
   useEffect(() => {
-    // Set default time range to 1 week
     const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - 7);
@@ -41,14 +40,6 @@ const ReportList: React.FC = () => {
               알림 및 리포트 관리
             </h1>
           </div>
-
-          {/* <div className="flex items-center space-x-4 mt-2">
-            <Badge count={unreadCount} showZero={false}>
-              <span className="text-sm text-gray-600">
-                확인 필요 알림: {unreadCount.toString().padStart(2, "0")}건
-              </span>
-            </Badge>
-          </div> */}
         </div>
       </div>
 

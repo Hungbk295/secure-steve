@@ -54,36 +54,6 @@ const mockActionHistoryData: ActionHistoryItem[] = [
   },
 ];
 
-// const getVerdictColor = (verdict: string) => {
-//   switch (verdict) {
-//     case "Malware":
-//       return "red";
-//     case "Suspicious":
-//       return "orange";
-//     case "Benign":
-//       return "green";
-//     case "Unknown":
-//       return "default";
-//     default:
-//       return "default";
-//   }
-// };
-
-// const getProcessStatusColor = (status: string) => {
-//   switch (status) {
-//     case "delete":
-//       return "red";
-//     case "quarantine":
-//       return "orange";
-//     case "no_action":
-//       return "green";
-//     case "pending":
-//       return "blue";
-//     default:
-//       return "default";
-//   }
-// };
-
 const getProcessStatusText = (status: string) => {
   switch (status) {
     case "delete":
@@ -163,31 +133,8 @@ function ActionHistoryTable({ loading }: ActionHistoryTableProps) {
     onChange: (keys: any[]) => setSelectedRowKeys(keys),
   };
 
-  // const csvData = useMemo(() => {
-  //   return selectedRowKeys.length > 0
-  //     ? data.filter((item) => selectedRowKeys.includes(item.id))
-  //     : data;
-  // }, [data, selectedRowKeys]);
-
-  // useEffect(() => {
-  //   const csvButton = (
-  //     <CustomExcelExport
-  //       data={csvData}
-  //       columns={columns}
-  //       fileName="action_history"
-  //     >
-  //       <Button type="primary" icon={<DownloadOutlined />} disabled={loading}>
-  //         CSV 다운로드
-  //       </Button>
-  //     </CustomExcelExport>
-  //   );
-
-  //   onCSVDownloadRender?.(csvButton);
-  // }, [csvData, columns, loading, onCSVDownloadRender]);
-
   const handleFileClick = (record: DynamicKeyObject) => {
     console.log("File clicked:", record);
-    // TODO: Navigate to alert detail page (GET /analysis/requests/:id)
   };
 
   const handleRowClick = (record: DynamicKeyObject) => {

@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
 import { DynamicKeyObject } from "@/interfaces/app";
 
-// Alarm Schedule State Types
 interface AlarmScheduleItem {
   key: string;
   id: string;
@@ -35,7 +34,6 @@ type IAlarmScheduleState = {
   };
 };
 
-// Mock data based on your specifications
 const MOCK_ALARM_SCHEDULE: AlarmScheduleItem[] = [
   {
     key: "1",
@@ -118,30 +116,25 @@ const initialAlarmScheduleState: IAlarmScheduleState = {
   },
 };
 
-// Async Actions
 export const actionGetAlarmScheduleList = createAsyncThunk(
   "alarmSchedule/actionGetAlarmScheduleList",
   async (filters: DynamicKeyObject = {}, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
       }
 
-      // Apply filters
       let filteredData = MOCK_ALARM_SCHEDULE;
 
       if (filters.risk && filters.risk !== "all") {
-        // Note: Risk filtering would be based on actual risk field in real data
         filteredData = filteredData.filter(
           (item) => item.category === filters.risk
         );
       }
 
       if (filters.triageVerdict && filters.triageVerdict !== "all") {
-        // Note: Triage verdict filtering would be based on actual field in real data
         filteredData = filteredData.filter((item) =>
           item.action.includes(filters.triageVerdict)
         );
@@ -154,7 +147,6 @@ export const actionGetAlarmScheduleList = createAsyncThunk(
       }
 
       if (filters.serverIP && filters.serverIP !== "all") {
-        // Note: Server IP filtering would be based on actual field in real data
         filteredData = filteredData.filter(
           (item) => item.department === filters.serverIP
         );
@@ -170,12 +162,10 @@ export const actionGetAlarmScheduleList = createAsyncThunk(
         });
       }
 
-      // Sort by time descending (most recent first)
       filteredData.sort(
         (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
       );
 
-      // Calculate pending alerts count
       const pendingCount = filteredData.filter(
         (item) => item.status === "보류" || item.action === "중립(보류)"
       ).length;
@@ -204,7 +194,6 @@ export const actionUpdateFilePolicy = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call to /file-policies
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       if (Math.random() < 0.1) {
@@ -224,10 +213,8 @@ export const actionExportCSV = createAsyncThunk(
   "alarmSchedule/actionExportCSV",
   async (data: AlarmScheduleItem[], { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Generate CSV content
       const headers = [
         "Time",
         "User Name",
@@ -277,14 +264,13 @@ export const actionExportCSV = createAsyncThunk(
   }
 );
 
-// Alarm Schedule Slice
 export const alarmScheduleSlice = createSlice({
   name: "alarmSchedule",
   initialState: initialAlarmScheduleState,
   reducers: {
     updateFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
-      state.pagination.current = 1; // Reset to first page when filters change
+      state.pagination.current = 1;
     },
     updatePagination: (state, action) => {
       state.pagination = { ...state.pagination, ...action.payload };
@@ -306,7 +292,6 @@ export const alarmScheduleSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get Alarm Schedule List
       .addCase(actionGetAlarmScheduleList.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -325,7 +310,6 @@ export const alarmScheduleSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Update File Policy
       .addCase(actionUpdateFilePolicy.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -344,7 +328,6 @@ export const alarmScheduleSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Export CSV
       .addCase(actionExportCSV.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -368,7 +351,6 @@ export const {
   resetFilters,
 } = alarmScheduleSlice.actions;
 
-// Selectors
 export const selectAlarmScheduleState = (state: RootState) =>
   state.alarmSchedule;
 export const selectAlarmScheduleItems = (state: RootState) =>
@@ -384,7 +366,6 @@ export const selectAlarmSchedulePagination = (state: RootState) =>
 export const selectPendingAlertsCount = (state: RootState) =>
   state.alarmSchedule.pendingAlertsCount;
 
-// Combined selectors
 export const selectAlarmScheduleFullState = (state: RootState) => ({
   items: state.alarmSchedule.items,
   loading: state.alarmSchedule.loading,

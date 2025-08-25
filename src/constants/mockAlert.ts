@@ -1,9 +1,3 @@
-// mock/analysis.mock.ts
-// ============================================================
-// 1) LIST (Analysis > Detection List)
-// API: GET /analysis/requests   (API-ANSI-02)
-// Bảng: Time | File name | Risk | Verdict | Server IP | Process status | Exception
-// ============================================================
 export const MOCK_AnalysisDetectionList = [
   {
     id: 1011,
@@ -36,12 +30,6 @@ export const MOCK_AnalysisDetectionList = [
     exception: "blacklist",
   },
 ];
-
-// ============================================================
-// 2) DETAIL (Alert Detail / Popup nửa trang)
-// API: GET /analysis/requests/:id   (API-ANSI-03)
-// Trả chi tiết: file info, hashes, prediction, flags…
-// ============================================================
 export const MOCK_AlertDetail = {
   id: 1011,
   file_name: "test.elf",
@@ -65,7 +53,6 @@ export const MOCK_AlertDetail = {
   updated_at: "2025-06-19T23:24:30Z",
 };
 
-// Thêm vài item để test luân chuyển detail:
 export const MOCK_AlertDetail_AltItems = [
   {
     id: 1012,
@@ -113,11 +100,6 @@ export const MOCK_AlertDetail_AltItems = [
   },
 ];
 
-// ============================================================
-// 3) ACTION (Process status)
-// API: PUT /analysis/requests/:id/action   (API-ANSI-04)
-// Body: { process_status, user_id, comments }
-// ============================================================
 export const MOCK_ActionRequest_Sample = {
   id: 1011,
   body: {
@@ -134,11 +116,6 @@ export const MOCK_ActionResponse_Sample = {
   updated_at: "2025-06-19T23:25:00Z",
 };
 
-// ============================================================
-// 4) PENDING / COMPLETED (Tasks)
-// API: GET /analysis/requests/pending   (API-ANSI-05)
-// API: GET /analysis/requests/completed (API-ANSI-07)
-// ============================================================
 export const MOCK_TasksPending = [
   {
     id: 1014,
@@ -183,12 +160,6 @@ export const MOCK_TasksCompleted = [
   },
 ];
 
-// ============================================================
-// 5) LATEST / TOP / STATS (Topbar & Dashboard)
-// API: GET /analysis/requests/latest   (API-DASH-01)
-// API: GET /analysis/requests/top      (API-DASH-02)
-// API: GET /analysis/requests/stats/scans (API-DASH-03)
-// ============================================================
 export const MOCK_LatestAlerts = [
   {
     id: 2011,
@@ -236,24 +207,16 @@ export const MOCK_TopAlerts = [
 ];
 
 export const MOCK_ScanStats_30d = {
-  // Time Range (30 days) widget
-  // scanned / suspicious / no_threat / action_completed
   scanned: 312,
   suspicious: 211,
   no_threat: 101,
   action_completed: 200,
 };
 
-// ============================================================
-// 6) FILE POLICIES (Exception: Blacklist/Whitelist)
-// API: POST /file-policies   (API-POL-01)
-// - Blacklist cần chọn action_type: delete | quarantine
-// - Whitelist không cần action_type, implicitly no_action
-// ============================================================
 export const MOCK_FilePolicyRequest_Blacklist = {
   analysis_request_id: 1013,
   file_policy: "blacklist",
-  action_type: "quarantine", // hoặc "delete"
+  action_type: "quarantine",
   comments: "Skip future analysis and quarantine on detection.",
 };
 
@@ -645,7 +608,7 @@ export const MOCK_FilePolicy_Blacklist = [
     list_status: "Re-check",
     actioned_by: "홍길동",
     process_status: "delete",
-    comments: "IOC confirmed - auto delete"
+    comments: "IOC confirmed - auto delete",
   },
   {
     id: "fp_1002",
@@ -659,7 +622,7 @@ export const MOCK_FilePolicy_Blacklist = [
     list_status: "None",
     actioned_by: "김철수",
     process_status: "quarantine",
-    comments: "Suspicious behavior detected"
+    comments: "Suspicious behavior detected",
   },
   {
     id: "fp_1003",
@@ -673,7 +636,7 @@ export const MOCK_FilePolicy_Blacklist = [
     list_status: "Active",
     actioned_by: "박영수",
     process_status: "delete",
-    comments: "Known trojan variant"
+    comments: "Known trojan variant",
   },
   {
     id: "fp_1004",
@@ -687,8 +650,8 @@ export const MOCK_FilePolicy_Blacklist = [
     list_status: "Re-check",
     actioned_by: "이민수",
     process_status: "quarantine",
-    comments: "DLL injection detected"
-  }
+    comments: "DLL injection detected",
+  },
 ];
 
 export const MOCK_FilePolicy_Whitelist = [
@@ -704,7 +667,7 @@ export const MOCK_FilePolicy_Whitelist = [
     list_status: "Active",
     actioned_by: "관리자",
     process_status: "no_action",
-    comments: "System file - trusted"
+    comments: "System file - trusted",
   },
   {
     id: "fp_2002",
@@ -718,7 +681,7 @@ export const MOCK_FilePolicy_Whitelist = [
     list_status: "Active",
     actioned_by: "보안팀",
     process_status: "no_action",
-    comments: "Corporate antivirus software"
+    comments: "Corporate antivirus software",
   },
   {
     id: "fp_2003",
@@ -732,8 +695,8 @@ export const MOCK_FilePolicy_Whitelist = [
     list_status: "Active",
     actioned_by: "시스템관리자",
     process_status: "no_action",
-    comments: "Authorized backup utility"
-  }
+    comments: "Authorized backup utility",
+  },
 ];
 
 export const MOCK_AnalysisRequests_WithException = [
@@ -745,7 +708,7 @@ export const MOCK_AnalysisRequests_WithException = [
     verdict: "Malware",
     server_ip: "66.211.75.1",
     process_status: "pending",
-    exception: "none"
+    exception: "none",
   },
   {
     id: "req_54321",
@@ -755,7 +718,7 @@ export const MOCK_AnalysisRequests_WithException = [
     verdict: "Malware",
     server_ip: "66.211.75.2",
     process_status: "pending",
-    exception: "whitelist"
+    exception: "whitelist",
   },
   {
     id: "req_67890",
@@ -765,7 +728,7 @@ export const MOCK_AnalysisRequests_WithException = [
     verdict: "Suspicious",
     server_ip: "66.211.75.3",
     process_status: "pending",
-    exception: "none"
+    exception: "none",
   },
   {
     id: "req_11111",
@@ -775,7 +738,7 @@ export const MOCK_AnalysisRequests_WithException = [
     verdict: "Benign",
     server_ip: "66.211.75.1",
     process_status: "completed",
-    exception: "blacklist"
+    exception: "blacklist",
   },
   {
     id: "req_22222",
@@ -785,6 +748,6 @@ export const MOCK_AnalysisRequests_WithException = [
     verdict: "Suspicious",
     server_ip: "66.211.75.4",
     process_status: "pending",
-    exception: "none"
-  }
+    exception: "none",
+  },
 ];

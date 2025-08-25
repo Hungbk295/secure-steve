@@ -7,7 +7,6 @@ import {
   MOCK_AnalysisRequests_WithException,
 } from "@/constants/mockAlert";
 
-// Blacklist/Whitelist State Types
 interface FilePolicyItem {
   id: string;
   time: string;
@@ -84,7 +83,6 @@ const initialBlacklistState: IBlacklistState = {
   activeTab: "blacklist",
 };
 
-// Async Actions
 export const actionGetFilePolicies = createAsyncThunk(
   "blacklist/actionGetFilePolicies",
   async (
@@ -95,22 +93,18 @@ export const actionGetFilePolicies = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: `/file-policies?type=${type}`,
       //   method: "GET",
       //   params: filters,
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // Simulate occasional errors
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
       }
 
-      // Use mock data from constants
       const mockData =
         type === "blacklist"
           ? MOCK_FilePolicy_Blacklist.map((item) => ({
@@ -122,7 +116,6 @@ export const actionGetFilePolicies = createAsyncThunk(
               key: item.id,
             }));
 
-      // Apply filters
       let filteredData = mockData;
 
       if (filters.risk && filters.risk !== "all") {
@@ -178,14 +171,12 @@ export const actionGetAnalysisRequests = createAsyncThunk(
   "blacklist/actionGetAnalysisRequests",
   async (_, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/analysis/requests",
       //   method: "GET",
       //   params: filters,
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 600));
 
       const mockData = MOCK_AnalysisRequests_WithException;
@@ -221,7 +212,6 @@ export const actionAddToFilePolicy = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/file-policies",
       //   method: "POST",
@@ -233,7 +223,6 @@ export const actionAddToFilePolicy = createAsyncThunk(
       //   },
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       if (Math.random() < 0.1) {
@@ -270,7 +259,6 @@ export const actionBulkMoveFilePolicy = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/file-policies/bulk-move",
       //   method: "POST",
@@ -281,7 +269,6 @@ export const actionBulkMoveFilePolicy = createAsyncThunk(
       //   },
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       if (Math.random() < 0.1) {
@@ -318,7 +305,6 @@ export const actionBulkRemoveFilePolicy = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/file-policies/bulk-remove",
       //   method: "POST",
@@ -328,7 +314,6 @@ export const actionBulkRemoveFilePolicy = createAsyncThunk(
       //   },
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       if (Math.random() < 0.1) {
@@ -351,14 +336,13 @@ export const actionBulkRemoveFilePolicy = createAsyncThunk(
   }
 );
 
-// Blacklist Slice
 export const blacklistSlice = createSlice({
   name: "blacklist",
   initialState: initialBlacklistState,
   reducers: {
     updateFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
-      state.pagination.current = 1; // Reset to first page when filters change
+      state.pagination.current = 1;
     },
     updatePagination: (state, action) => {
       state.pagination = { ...state.pagination, ...action.payload };
@@ -383,7 +367,6 @@ export const blacklistSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get File Policies
       .addCase(actionGetFilePolicies.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -413,7 +396,6 @@ export const blacklistSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Get Analysis Requests
       .addCase(actionGetAnalysisRequests.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -428,7 +410,6 @@ export const blacklistSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Add to File Policy
       .addCase(actionAddToFilePolicy.pending, (state) => {
         state.addPolicyLoading = true;
         state.error = null;
@@ -436,7 +417,6 @@ export const blacklistSlice = createSlice({
       .addCase(actionAddToFilePolicy.fulfilled, (state, action) => {
         state.addPolicyLoading = false;
 
-        // Update analysis requests to reflect the new exception status
         const { analysisRequestId, filePolicy } = action.payload;
         state.analysisRequests = state.analysisRequests.map((item) =>
           item.id === analysisRequestId
@@ -451,7 +431,6 @@ export const blacklistSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Bulk Move File Policy
       .addCase(actionBulkMoveFilePolicy.pending, (state) => {
         state.bulkMoveLoading = true;
         state.error = null;
@@ -460,9 +439,7 @@ export const blacklistSlice = createSlice({
         state.bulkMoveLoading = false;
         const { movedIds, targetPolicy } = action.payload;
 
-        // Remove items from current list and add to target list
         if (targetPolicy === "blacklist") {
-          // Move from whitelist to blacklist
           const itemsToMove = state.whitelistItems.filter((item) =>
             movedIds.includes(item.id)
           );
@@ -477,7 +454,6 @@ export const blacklistSlice = createSlice({
             })),
           ];
         } else {
-          // Move from blacklist to whitelist
           const itemsToMove = state.blacklistItems.filter((item) =>
             movedIds.includes(item.id)
           );
@@ -493,7 +469,6 @@ export const blacklistSlice = createSlice({
           ];
         }
 
-        // Clear selected rows
         state.selectedRowKeys = [];
         state.error = null;
       })
@@ -502,7 +477,6 @@ export const blacklistSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Bulk Remove File Policy
       .addCase(actionBulkRemoveFilePolicy.pending, (state) => {
         state.bulkRemoveLoading = true;
         state.error = null;
@@ -511,7 +485,6 @@ export const blacklistSlice = createSlice({
         state.bulkRemoveLoading = false;
         const { removedIds } = action.payload;
 
-        // Remove items from both lists
         state.blacklistItems = state.blacklistItems.filter(
           (item) => !removedIds.includes(item.id)
         );
@@ -519,7 +492,6 @@ export const blacklistSlice = createSlice({
           (item) => !removedIds.includes(item.id)
         );
 
-        // Clear selected rows
         state.selectedRowKeys = [];
         state.error = null;
       })
@@ -540,7 +512,6 @@ export const {
   setActiveTab,
 } = blacklistSlice.actions;
 
-// Selectors
 export const selectBlacklistItems = (state: RootState) =>
   state.blacklist.blacklistItems;
 export const selectWhitelistItems = (state: RootState) =>
@@ -564,7 +535,6 @@ export const selectBlacklistSelectedRowKeys = (state: RootState) =>
   state.blacklist.selectedRowKeys;
 export const selectActiveTab = (state: RootState) => state.blacklist.activeTab;
 
-// Combined selectors
 export const selectBlacklistState = (state: RootState) => ({
   blacklistItems: state.blacklist.blacklistItems,
   whitelistItems: state.blacklist.whitelistItems,

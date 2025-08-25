@@ -60,16 +60,14 @@ export const actionLogin = createAsyncThunk(
     const { username, password } = data;
 
     try {
-      // Use mock authentication for development
       const mockUser = authenticateUser(username, password);
 
       if (mockUser) {
-        // Simulate successful login response
         const mockToken = btoa(
           JSON.stringify({
             username: mockUser.username,
             role: mockUser.role,
-            exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours
+            exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
             "cognito:groups": [`system:${mockUser.role}`],
           })
         );
@@ -90,7 +88,6 @@ export const actionLogin = createAsyncThunk(
         throw new Error("Invalid credentials");
       }
 
-      // Original API call (commented for mock usage)
       // return await request({
       //   url: `/auth/signin/${userRole}`,
       //   method: "POST",
@@ -107,7 +104,6 @@ export const actionLogout = createAsyncThunk(
   async (data: DynamicKeyObject, { rejectWithValue }) => {
     const { userRole, accessToken } = data;
     try {
-      // Clear localStorage
       localStorage.removeItem("persist:auth");
       return await request({
         url: `/api/${userRole}/signout`,
@@ -120,23 +116,20 @@ export const actionLogout = createAsyncThunk(
   }
 );
 
-// Auto login action for default admin user
 export const actionAutoLogin = createAsyncThunk(
   "auth/actionAutoLogin",
   async (_, { rejectWithValue }) => {
     try {
-      // Get default admin user
       const adminUser = MOCK_USERS.find(
         (user) => user.username === "admin@company.com"
       );
 
       if (adminUser) {
-        // Simulate successful login response
         const mockToken = btoa(
           JSON.stringify({
             username: adminUser.username,
             role: adminUser.role,
-            exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours
+            exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
             "cognito:groups": [`system:${adminUser.role}`],
           })
         );
@@ -193,7 +186,7 @@ export const slice = createSlice({
             decodedToken["cognito:groups"]?.[0]?.split(":").pop() || data.role,
           email: decodedToken.username || data.email,
           expiresTime: decodedToken.exp,
-          userRole: data.role as UserRole, // Store our UserRole enum
+          userRole: data.role as UserRole,
           username: data.email || data.username,
           id: data.id,
           name: data.name,
@@ -202,11 +195,10 @@ export const slice = createSlice({
           avatar: data.avatar,
         };
 
-        // Store current user data
         state.currentUser = {
           id: data.id || 0,
           username: data.email || data.username || "",
-          password: "", // Don't store password
+          password: "",
           role: data.role as UserRole,
           name: data.name || "",
           department: data.department || "",
@@ -262,7 +254,6 @@ export const slice = createSlice({
         state.isLogin = true;
       })
       .addCase(actionAutoLogin.rejected, (state) => {
-        // Auto-login failed, keep logged out state
         state.infoLogin = initialState.infoLogin;
         state.isLogin = false;
         state.currentUser = undefined;
@@ -286,7 +277,6 @@ export const slice = createSlice({
 export const { actionUpdateRemainingEmailResend, actionLogoutLocal } =
   slice.actions;
 
-// Helper function to check if token is valid
 export const isTokenValid = (token: string): boolean => {
   if (!token) return false;
 
@@ -305,14 +295,12 @@ export const isTokenValid = (token: string): boolean => {
   }
 };
 
-// Existing selectors
 export const selectAccessToken = (state: RootState) =>
   state.auth.infoLogin.accessToken;
 export const selectInfoLogin = (state: RootState) => state.auth.infoLogin;
 export const selectIsLogin = (state: RootState) => state.auth.isLogin;
 export const selectEmailResend = (state: RootState) => state.auth.emailResend;
 
-// New role-based selectors
 export const selectCurrentUser = (state: RootState) => state.auth.currentUser;
 export const selectUserRole = (state: RootState) =>
   state.auth.currentUser?.role || UserRole.USER;

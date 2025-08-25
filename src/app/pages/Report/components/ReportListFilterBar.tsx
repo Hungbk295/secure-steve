@@ -15,7 +15,7 @@ interface ReportListFilterBarProps {
 const getInitialFormData = () => {
   const endDate = new Date();
   const startDate = new Date();
-  startDate.setDate(endDate.getDate() - 7); // Default to 1 week
+    startDate.setDate(endDate.getDate() - 7);
 
   return {
     timeRange: [startDate, endDate],

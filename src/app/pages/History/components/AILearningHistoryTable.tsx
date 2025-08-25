@@ -74,21 +74,7 @@ const columns = [
   },
 ];
 
-// const getAgentReleaseColor = (status: string) => {
-//   switch (status) {
-//     case "Completed":
-//       return "green";
-//     case "Fail(Error)":
-//       return "red";
-//     default:
-//       return "default";
-//   }
-// };
-
-function AILearningHistoryTable({
-  loading,
-}: // onCSVDownloadRender,
-AILearningHistoryTableProps) {
+function AILearningHistoryTable({ loading }: AILearningHistoryTableProps) {
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
   const [data] = useState(mockAILearningHistoryData);
 
@@ -97,31 +83,8 @@ AILearningHistoryTableProps) {
     onChange: (keys: any[]) => setSelectedRowKeys(keys),
   };
 
-  // const csvData = useMemo(() => {
-  //   return selectedRowKeys.length > 0
-  //     ? data.filter((item) => selectedRowKeys.includes(item.id))
-  //     : data;
-  // }, [data, selectedRowKeys]);
-
-  // useEffect(() => {
-  //   const csvButton = (
-  //     <CustomExcelExport
-  //       data={csvData}
-  //       columns={columns}
-  //       fileName="ai_learning_history"
-  //     >
-  //       <Button type="primary" icon={<DownloadOutlined />} disabled={loading}>
-  //         CSV 다운로드
-  //       </Button>
-  //     </CustomExcelExport>
-  //   );
-
-  //   onCSVDownloadRender?.(csvButton);
-  // }, [csvData, loading, onCSVDownloadRender]);
-
   const handleRowClick = (record: DynamicKeyObject) => {
     console.log("AI Learning history clicked:", record);
-    // Read-only screen - no action needed
   };
 
   return (

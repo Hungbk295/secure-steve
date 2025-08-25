@@ -45,7 +45,6 @@ const BulkActionModal: React.FC<BulkActionModalProps> = ({
     onCancel();
   };
 
-  // Get action details
   const getActionConfig = (actionType: string) => {
     switch (actionType) {
       case "delete":
@@ -138,7 +137,6 @@ const BulkActionModal: React.FC<BulkActionModalProps> = ({
       maskClosable={false}
     >
       <div className="space-y-4 flex flex-col gap-4 pt-4">
-        {/* Action Description */}
         <Alert
           message={config.description}
           type={config.danger ? "error" : "info"}
@@ -146,7 +144,6 @@ const BulkActionModal: React.FC<BulkActionModalProps> = ({
           className="mb-4"
         />
 
-        {/* Selected Files Preview */}
         {selectedCount > 1 && (
           <div className="bg-gray-50 p-3 rounded border">
             <div className="text-sm font-medium text-gray-700 mb-2">
@@ -167,7 +164,6 @@ const BulkActionModal: React.FC<BulkActionModalProps> = ({
           </div>
         )}
 
-        {/* Memo Field */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Memo (Optional)
@@ -182,7 +178,6 @@ const BulkActionModal: React.FC<BulkActionModalProps> = ({
           />
         </div>
 
-        {/* Warning for Delete Action */}
         {action === "delete" && (
           <Alert
             message="Warning: This action cannot be undone!"

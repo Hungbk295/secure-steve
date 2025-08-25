@@ -75,17 +75,6 @@ const AlarmScheduleTable: React.FC<AlarmScheduleTableProps> = ({ loading }) => {
     }
   };
 
-  // const getActionTag = (action: string) => {
-  //   if (action.includes("승인")) {
-  //     return <Tag>{action}</Tag>;
-  //   } else if (action.includes("삭제")) {
-  //     return <Tag>{action}</Tag>;
-  //   } else if (action.includes("보류") || action.includes("중립")) {
-  //     return <Tag>{action}</Tag>;
-  //   }
-  //   return <Tag>{action}</Tag>;
-  // };
-
   const handleProcessActionChange = (
     value: string,
     record: AlarmScheduleItem
@@ -104,7 +93,6 @@ const AlarmScheduleTable: React.FC<AlarmScheduleTableProps> = ({ loading }) => {
 
   const handleConfirmAction = () => {
     if (selectedRecord && selectedActionLabel) {
-      // Update policy (reason can be wired to API in the future)
       dispatch(
         actionUpdateFilePolicy({
           id: selectedRecord.id,
@@ -127,8 +115,6 @@ const AlarmScheduleTable: React.FC<AlarmScheduleTableProps> = ({ loading }) => {
 
   const handleRowClick = (record: AlarmScheduleItem) => {
     console.log("Row clicked - Open detail view for:", record.id);
-    // TODO: Navigate to detail page
-    // window.open(`/alarm/schedule/${record.id}`, '_blank');
   };
 
   const columns: ColumnsType<AlarmScheduleItem> = [
@@ -251,7 +237,6 @@ const AlarmScheduleTable: React.FC<AlarmScheduleTableProps> = ({ loading }) => {
 
   return (
     <div className="flex flex-col gap-1">
-      {/* Header Info */}
       <div className="flex justify-between items-center">
         <div className="flex items-center mx-auto mr-3">
           <Button
@@ -265,7 +250,6 @@ const AlarmScheduleTable: React.FC<AlarmScheduleTableProps> = ({ loading }) => {
         </div>
       </div>
 
-      {/* Main Table */}
       <div className="alarm-schedule-table-container">
         <Table
           columns={columns}

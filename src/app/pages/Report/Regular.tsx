@@ -13,7 +13,6 @@ const ReportRegular: React.FC = () => {
   const loading = useAppSelector(selectReportRegularLoading);
 
   useEffect(() => {
-    // Set default time range to 1 month
     const endDate = new Date();
     const startDate = new Date();
     startDate.setMonth(endDate.getMonth() - 1);

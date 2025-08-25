@@ -2,10 +2,7 @@ import React from "react";
 import { Card, Space, Progress } from "antd";
 import Select from "@/app/components/common/Select";
 import { useAppSelector, useAppDispatch } from "@/store";
-import {
-  selectPeriodStats,
-  updateTimeRange,
-} from "@/store/dashboardSlice";
+import { selectPeriodStats, updateTimeRange } from "@/store/dashboardSlice";
 
 interface PeriodStatsCardProps {
   loading: boolean;
@@ -61,7 +58,6 @@ const PeriodStatsCard: React.FC<PeriodStatsCardProps> = ({ loading }) => {
       className="period-stats-card h-full"
     >
       <div className="space-y-6">
-        {/* Main Total */}
         <div className="text-center">
           <div className="text-4xl font-bold text-gray-900">
             {periodStats?.totalScans || 0}
@@ -69,7 +65,6 @@ const PeriodStatsCard: React.FC<PeriodStatsCardProps> = ({ loading }) => {
           <div className="text-lg text-gray-600 mt-1">Scans</div>
         </div>
 
-        {/* KPI Bars */}
         <div className="space-y-4">
           {periodStats?.kpis?.map((kpi, index) => (
             <div key={index} className="space-y-2">
@@ -82,7 +77,10 @@ const PeriodStatsCard: React.FC<PeriodStatsCardProps> = ({ loading }) => {
                 </span>
               </div>
               <Progress
-                percent={calculatePercentage(kpi.value, periodStats?.totalScans || 0)}
+                percent={calculatePercentage(
+                  kpi.value,
+                  periodStats?.totalScans || 0
+                )}
                 strokeColor={getProgressColor(kpi.label)}
                 showInfo={false}
                 size="small"
@@ -91,14 +89,14 @@ const PeriodStatsCard: React.FC<PeriodStatsCardProps> = ({ loading }) => {
           )) || []}
         </div>
 
-        {/* Additional Info */}
         <div className="pt-4 border-t border-gray-200">
           <div className="grid grid-cols-3 gap-4 text-center">
             {periodStats?.kpis?.map((kpi, index) => (
               <div key={index} className="space-y-1">
                 <div className="text-xs text-gray-500">{kpi.label}</div>
                 <div className="text-sm font-semibold text-gray-900">
-                  {calculatePercentage(kpi.value, periodStats?.totalScans || 0)}%
+                  {calculatePercentage(kpi.value, periodStats?.totalScans || 0)}
+                  %
                 </div>
               </div>
             )) || []}

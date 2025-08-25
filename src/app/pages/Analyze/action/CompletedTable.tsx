@@ -14,7 +14,7 @@ import {
   actionExportCompletedCSV,
 } from "@/store/completeSlice";
 import { openModal } from "@/store/alertDetailSlice";
-import Table from "../../common/Table";
+import Table from "../../../components/common/Table";
 
 interface CompletedItem {
   key: string;
@@ -61,7 +61,6 @@ const CompletedTable: React.FC<CompletedTableProps> = ({
     }
   };
 
-  // Get process status color
   const getProcessStatusColor = (status: string) => {
     switch (status) {
       case "delete":

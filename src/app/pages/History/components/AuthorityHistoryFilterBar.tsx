@@ -47,21 +47,18 @@ function AuthorityHistoryFilterBar({
   function onFinish(values: DynamicKeyObject) {
     const payload = getPayload(values);
     console.log("Authority History Filter:", payload);
-    // TODO: Dispatch action to fetch authority history data
   }
 
   function onReset() {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
     console.log("Reset Authority History Filter:", payload);
-    // TODO: Dispatch action to fetch authority history data
   }
 
   useEffect(() => {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
     console.log("Initialize Authority History Filter:", payload);
-    // TODO: Dispatch action to fetch authority history data
   }, []);
 
   const departmentOptions = [

@@ -3,7 +3,7 @@ import { Row, Col, Button, Form } from "antd";
 import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
 import Select from "@/app/components/common/Select";
 import { DynamicKeyObject } from "@/interfaces/app";
-import CustomDatePicker from "../common/CustomDatePicker";
+import CustomDatePicker from "../../../components/common/CustomDatePicker";
 import { useAppDispatch } from "@/store";
 import { actionGetDetectionList } from "@/store/detectionSlice";
 

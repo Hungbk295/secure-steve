@@ -114,7 +114,6 @@ function CompletedFilterBar({
           </Form.Item>
         </Col>
 
-        {/* Risk Level Filter */}
         <Col xs={24} sm={8} md={6} lg={4}>
           <Form.Item label="Risk" name="risk">
             <Select
@@ -128,7 +127,6 @@ function CompletedFilterBar({
           </Form.Item>
         </Col>
 
-        {/* Triage Verdict Filter */}
         <Col xs={24} sm={8} md={6} lg={4}>
           <Form.Item label="Triage Verdict" name="triageVerdict">
             <Select
@@ -142,7 +140,6 @@ function CompletedFilterBar({
           </Form.Item>
         </Col>
 
-        {/* Process Status Filter */}
         <Col xs={24} sm={8} md={6} lg={4}>
           <Form.Item label="Process Status" name="processStatus">
             <Select
@@ -156,7 +153,6 @@ function CompletedFilterBar({
           </Form.Item>
         </Col>
 
-        {/* Server IP Filter */}
         <Col xs={24} sm={8} md={6} lg={4}>
           <Form.Item label="Server IP" name="serverIP">
             <Select
@@ -170,7 +166,6 @@ function CompletedFilterBar({
           </Form.Item>
         </Col>
 
-        {/* Action Buttons */}
         <Col xs={24} sm={24} md={6} lg={4}>
           <div className="filter-actions flex justify-end space-x-2 flex-1">
             <Button

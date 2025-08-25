@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
 import { DynamicKeyObject } from "@/interfaces/app";
 
-// Report List State Types
 interface ReportListItem {
   key: string;
   id: string;
@@ -29,7 +28,6 @@ type IReportListState = {
   };
 };
 
-// Mock data based on specifications
 const MOCK_REPORT_LIST: ReportListItem[] = [
   {
     key: "1",
@@ -63,7 +61,6 @@ const MOCK_REPORT_LIST: ReportListItem[] = [
     alertName: "사용자 계정 승인",
     actionedBy: "관리자",
   },
-  // Additional mock data for testing
   {
     key: "5",
     id: "alrt_20250615_1530",
@@ -147,19 +144,16 @@ const initialReportListState: IReportListState = {
   },
 };
 
-// Async Actions
 export const actionGetReportList = createAsyncThunk(
   "reportList/actionGetReportList",
   async (filters: DynamicKeyObject = {}, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call to GET /alerts
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
       }
 
-      // Apply filters
       const filteredData = MOCK_REPORT_LIST;
 
       //   if (filters.status && filters.status !== "all") {
@@ -217,7 +211,6 @@ export const actionUpdateAlertStatus = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call to PUT /alerts/:id/status
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       if (Math.random() < 0.1) {
@@ -237,14 +230,12 @@ export const actionGetAlertDetail = createAsyncThunk(
   "reportList/actionGetAlertDetail",
   async (alertId: string, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call to GET /alerts/:id
       await new Promise((resolve) => setTimeout(resolve, 300));
 
       if (Math.random() < 0.1) {
         throw new Error("Failed to fetch alert detail");
       }
 
-      // Mock detail data
       const mockDetail = {
         id: alertId,
         time: "2025-06-16T23:23:00+09:00",
@@ -273,14 +264,13 @@ export const actionGetAlertDetail = createAsyncThunk(
   }
 );
 
-// Report List Slice
 export const reportListSlice = createSlice({
   name: "reportList",
   initialState: initialReportListState,
   reducers: {
     updateFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
-      state.pagination.current = 1; // Reset to first page when filters change
+      state.pagination.current = 1;
     },
     updatePagination: (state, action) => {
       state.pagination = { ...state.pagination, ...action.payload };
@@ -290,7 +280,7 @@ export const reportListSlice = createSlice({
       const item = state.items.find((item) => item.id === id);
       if (item) {
         item.status = status;
-        // Update unread count
+
         state.unreadCount = state.items.filter(
           (item) => item.status === "unread"
         ).length;
@@ -306,7 +296,6 @@ export const reportListSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get Report List
       .addCase(actionGetReportList.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -325,7 +314,6 @@ export const reportListSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Update Alert Status
       .addCase(actionUpdateAlertStatus.pending, (state) => {
         state.error = null;
       })
@@ -334,7 +322,6 @@ export const reportListSlice = createSlice({
         const item = state.items.find((item) => item.id === id);
         if (item) {
           item.status = status;
-          // Update unread count
           state.unreadCount = state.items.filter(
             (item) => item.status === "unread"
           ).length;
@@ -345,7 +332,6 @@ export const reportListSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Get Alert Detail
       .addCase(actionGetAlertDetail.pending, (state) => {
         state.error = null;
       })
@@ -366,7 +352,6 @@ export const {
   resetFilters,
 } = reportListSlice.actions;
 
-// Selectors
 export const selectReportListState = (state: RootState) => state.reportList;
 export const selectReportListItems = (state: RootState) =>
   state.reportList.items;
@@ -381,7 +366,6 @@ export const selectReportListPagination = (state: RootState) =>
 export const selectUnreadCount = (state: RootState) =>
   state.reportList.unreadCount;
 
-// Combined selectors
 export const selectReportListFullState = (state: RootState) => ({
   items: state.reportList.items,
   loading: state.reportList.loading,

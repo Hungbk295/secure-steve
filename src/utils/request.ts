@@ -11,7 +11,6 @@ instanceAxios.defaults.headers.common["Content-Type"] = "application/json";
 
 instanceAxios.interceptors.response.use(
   (response) => {
-    // TODO: Backend not complete return statusCode -> fake one (0 - zero)
     if (
       response.data.code &&
       response.data.code != 200 &&
@@ -26,12 +25,6 @@ instanceAxios.interceptors.response.use(
     if (!axios.isCancel(error)) {
       console.error("Request was not canceled:", error);
     }
-
-    // const { url } = error.config;
-    // const isUrlLogin = url.includes("/signin");
-    // if (error.response.status === 401 && !isUrlLogin) {
-    // store.dispatch(actionLogout());
-    // }
     return Promise.reject(error);
   }
 );

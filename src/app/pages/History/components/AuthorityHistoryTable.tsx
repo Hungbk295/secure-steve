@@ -130,7 +130,6 @@ const AuthorityHistoryTable: React.FC<AuthorityHistoryTableProps> = ({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Action Bar */}
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">
@@ -140,7 +139,6 @@ const AuthorityHistoryTable: React.FC<AuthorityHistoryTableProps> = ({
         <div className="flex items-center gap-2">
           <Button
             icon={<DownloadOutlined />}
-            // onClick={handleCSVDownload}
             loading={loading}
             disabled={items.length === 0}
           >
@@ -149,7 +147,6 @@ const AuthorityHistoryTable: React.FC<AuthorityHistoryTableProps> = ({
         </div>
       </div>
 
-      {/* Main Table */}
       <div className="authority-history-table-container">
         <Table
           columns={columns}

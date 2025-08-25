@@ -46,21 +46,18 @@ function AlarmScheduleFilterBar({
   function onFinish(values: DynamicKeyObject) {
     const payload = getPayload(values);
     console.log("Alarm Schedule Filter:", payload);
-    // TODO: Dispatch action to fetch alarm schedule data
   }
 
   function onReset() {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
     console.log("Reset Alarm Schedule Filter:", payload);
-    // TODO: Dispatch action to fetch alarm schedule data
   }
 
   useEffect(() => {
     form.setFieldsValue(initialFormData);
     const payload = getPayload(initialFormData);
     console.log("Initialize Alarm Schedule Filter:", payload);
-    // TODO: Dispatch action to fetch alarm schedule data
   }, []);
 
   const riskOptions = [

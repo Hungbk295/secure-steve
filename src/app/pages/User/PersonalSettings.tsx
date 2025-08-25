@@ -13,7 +13,6 @@ function PersonalSettings() {
   const dispatch = useAppDispatch();
   const infoLogin = useAppSelector(selectInfoLogin);
   const [form] = Form.useForm();
-  // const personalInfo = useAppSelector(selectPersonalInfo);
 
   const handleOpenChangePasswordModal = () => {
     dispatch(
@@ -25,23 +24,6 @@ function PersonalSettings() {
       })
     );
   };
-
-  // useEffect(() => {
-  //   form.setFieldsValue({
-  //     email: personalInfo.username,
-  //     status: personalInfo.status,
-  //     firstName: personalInfo.firstName,
-  //     lastName: personalInfo.lastName,
-  //     countryCallingCode: {
-  //       label: `+${personalInfo.countryCallingCode?.slice(1)}`,
-  //       value: personalInfo.countryCallingCode,
-  //     },
-  //     phoneNumber: personalInfo.phoneNumber,
-  //     jobTitle: personalInfo.jobTitle,
-  //     department: personalInfo.department,
-  //   });
-  // }, [personalInfo]);
-  console.log("login");
 
   return (
     <div className="w-[945px]">

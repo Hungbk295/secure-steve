@@ -6,7 +6,6 @@ import {
   MOCK_TasksCompleted,
 } from "@/constants/mockAlert";
 
-// Action State Types
 type IActionState = {
   pendingItems: any[];
   completedItems: any[];
@@ -57,15 +56,12 @@ export const actionGetPendingList = createAsyncThunk(
       //   params: filters,
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // Simulate occasional errors
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
       }
 
-      // Transform mock data to include keys and IDs
       const transformedData = MOCK_ActionPending_Analysis.map(
         (item, index) => ({
           id: `pending-${index}`,
@@ -79,7 +75,6 @@ export const actionGetPendingList = createAsyncThunk(
         })
       );
 
-      // Apply filters
       let filteredData = transformedData;
 
       if (filters.risk && filters.risk.length > 0) {
@@ -149,7 +144,6 @@ export const actionBulkProcess = createAsyncThunk(
       //   data: { ids: selectedIds, process_status: action, user_id: userId, comments: memo },
       // });
 
-      // Mock implementation
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       if (Math.random() < 0.1) {
@@ -175,7 +169,6 @@ export const actionGetCompletedList = createAsyncThunk(
   "action/actionGetCompletedList",
   async (filters: DynamicKeyObject = {}, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call
       // return await request({
       //   url: "/analysis/requests/completed",
       //   method: "GET",
@@ -201,7 +194,6 @@ export const actionGetCompletedList = createAsyncThunk(
   }
 );
 
-// Action Slice
 export const actionSlice = createSlice({
   name: "action",
   initialState: initialActionState,
@@ -229,7 +221,6 @@ export const actionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get Pending List
       .addCase(actionGetPendingList.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -247,7 +238,6 @@ export const actionSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Bulk Process
       .addCase(actionBulkProcess.pending, (state) => {
         state.bulkActionLoading = true;
         state.error = null;
@@ -264,7 +254,6 @@ export const actionSlice = createSlice({
           state.pagination.total = state.pendingItems.length;
         }
 
-        // Clear selected rows
         state.selectedRowKeys = [];
         state.error = null;
       })
@@ -273,7 +262,6 @@ export const actionSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Get Completed List
       .addCase(actionGetCompletedList.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -299,7 +287,6 @@ export const {
   resetFilters,
 } = actionSlice.actions;
 
-// Selectors
 export const selectActionPendingItems = (state: RootState) =>
   state.action.pendingItems;
 export const selectActionCompletedItems = (state: RootState) =>
@@ -314,7 +301,6 @@ export const selectActionPagination = (state: RootState) =>
 export const selectActionSelectedRowKeys = (state: RootState) =>
   state.action.selectedRowKeys;
 
-// Combined selectors
 export const selectActionState = (state: RootState) => ({
   pendingItems: state.action.pendingItems,
   completedItems: state.action.completedItems,

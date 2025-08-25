@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
 import { DynamicKeyObject } from "@/interfaces/app";
 
-// Authority History State Types
 interface AuthorityHistoryItem {
   key: string;
   id: string;
@@ -31,7 +30,6 @@ type IAuthorityHistoryState = {
   };
 };
 
-// Mock data based on your specifications
 const MOCK_AUTHORITY_HISTORY: AuthorityHistoryItem[] = [
   {
     key: "1",
@@ -162,19 +160,16 @@ const initialAuthorityHistoryState: IAuthorityHistoryState = {
   },
 };
 
-// Async Actions
 export const actionGetAuthorityHistoryList = createAsyncThunk(
   "authorityHistory/actionGetAuthorityHistoryList",
   async (filters: DynamicKeyObject = {}, { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       if (Math.random() < 0.05) {
         throw new Error("Network connection failed");
       }
 
-      // Apply filters
       let filteredData = MOCK_AUTHORITY_HISTORY;
 
       if (filters.department && filters.department !== "All") {
@@ -216,8 +211,9 @@ export const actionGetAuthorityHistoryList = createAsyncThunk(
         });
       }
 
-      // Sort by time descending (most recent first)
-      filteredData.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+      filteredData.sort(
+        (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+      );
 
       return {
         data: filteredData,
@@ -227,7 +223,9 @@ export const actionGetAuthorityHistoryList = createAsyncThunk(
       };
     } catch (error) {
       return rejectWithValue(
-        error instanceof Error ? error.message : "Failed to fetch authority history list"
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch authority history list"
       );
     }
   }
@@ -237,28 +235,30 @@ export const actionExportCSV = createAsyncThunk(
   "authorityHistory/actionExportCSV",
   async (data: AuthorityHistoryItem[], { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Generate CSV content
       const headers = ["Time", "사용자", "부서", "사용자 구분", "Status"];
       const csvContent = [
         headers.join(","),
-        ...data.map((item) => [
-          new Date(item.time).toLocaleString(),
-          item.user_name,
-          item.department,
-          item.user_type,
-          item.status,
-        ].join(","))
+        ...data.map((item) =>
+          [
+            new Date(item.time).toLocaleString(),
+            item.user_name,
+            item.department,
+            item.user_type,
+            item.status,
+          ].join(",")
+        ),
       ].join("\n");
 
-      // Create and download file
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", `authority_history_${new Date().toISOString().split('T')[0]}.csv`);
+      link.setAttribute(
+        "download",
+        `authority_history_${new Date().toISOString().split("T")[0]}.csv`
+      );
       link.style.visibility = "hidden";
       document.body.appendChild(link);
       link.click();
@@ -273,14 +273,13 @@ export const actionExportCSV = createAsyncThunk(
   }
 );
 
-// Authority History Slice
 export const authorityHistorySlice = createSlice({
   name: "authorityHistory",
   initialState: initialAuthorityHistoryState,
   reducers: {
     updateFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
-      state.pagination.current = 1; // Reset to first page when filters change
+      state.pagination.current = 1;
     },
     updatePagination: (state, action) => {
       state.pagination = { ...state.pagination, ...action.payload };
@@ -295,7 +294,6 @@ export const authorityHistorySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get Authority History List
       .addCase(actionGetAuthorityHistoryList.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -313,7 +311,6 @@ export const authorityHistorySlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Export CSV
       .addCase(actionExportCSV.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -329,22 +326,22 @@ export const authorityHistorySlice = createSlice({
   },
 });
 
-export const {
-  updateFilters,
-  updatePagination,
-  clearError,
-  resetFilters,
-} = authorityHistorySlice.actions;
+export const { updateFilters, updatePagination, clearError, resetFilters } =
+  authorityHistorySlice.actions;
 
-// Selectors
-export const selectAuthorityHistoryState = (state: RootState) => state.authorityHistory;
-export const selectAuthorityHistoryItems = (state: RootState) => state.authorityHistory.items;
-export const selectAuthorityHistoryLoading = (state: RootState) => state.authorityHistory.loading;
-export const selectAuthorityHistoryError = (state: RootState) => state.authorityHistory.error;
-export const selectAuthorityHistoryFilters = (state: RootState) => state.authorityHistory.filters;
-export const selectAuthorityHistoryPagination = (state: RootState) => state.authorityHistory.pagination;
+export const selectAuthorityHistoryState = (state: RootState) =>
+  state.authorityHistory;
+export const selectAuthorityHistoryItems = (state: RootState) =>
+  state.authorityHistory.items;
+export const selectAuthorityHistoryLoading = (state: RootState) =>
+  state.authorityHistory.loading;
+export const selectAuthorityHistoryError = (state: RootState) =>
+  state.authorityHistory.error;
+export const selectAuthorityHistoryFilters = (state: RootState) =>
+  state.authorityHistory.filters;
+export const selectAuthorityHistoryPagination = (state: RootState) =>
+  state.authorityHistory.pagination;
 
-// Combined selectors
 export const selectAuthorityHistoryFullState = (state: RootState) => ({
   items: state.authorityHistory.items,
   loading: state.authorityHistory.loading,

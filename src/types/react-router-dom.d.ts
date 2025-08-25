@@ -1,12 +1,12 @@
-declare module 'react-router-dom' {
-  import { FC, ReactNode, ComponentType } from 'react';
-  
+declare module "react-router-dom" {
+  import { FC, ReactNode } from "react";
+
   export interface BrowserRouterProps {
     basename?: string;
     children?: ReactNode;
     window?: Window;
   }
-  
+
   export const BrowserRouter: FC<BrowserRouterProps>;
   export const Routes: FC<{ children?: ReactNode }>;
   export const Route: FC<any>;

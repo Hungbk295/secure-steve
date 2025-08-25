@@ -1,6 +1,5 @@
 import authSlide from "@/store/authSlide";
 import appSlice from "@/store/appSlide";
-// import personalSlice from "@/store/personalSlice";
 import alertsSlice from "@/store/alertsSlice";
 import detectionSlice from "@/store/detectionSlice";
 import alertDetailSlice from "@/store/alertDetailSlice";
@@ -32,7 +31,6 @@ const authPersistConfig = {
 const reducers = {
   auth: persistReducer(authPersistConfig, authSlide),
   app: appSlice,
-  // personal: personalSlice,
   alerts: alertsSlice,
   detectionList: detectionSlice,
   alertDetail: alertDetailSlice,

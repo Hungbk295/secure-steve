@@ -79,15 +79,6 @@ const ReportRegularTable: React.FC<ReportRegularTableProps> = ({ loading }) => {
   };
 
   const getPublishByTag = (publishBy: string) => {
-    // const colorMap: { [key: string]: string } = {
-    //   "정기 생성": "blue",
-    //   "사용자 요청": "purple",
-    //   시스템: "cyan",
-    //   보안팀: "orange",
-    //   운영팀: "green",
-    //   "KISA DB": "red",
-    // };
-
     return <Tag>{publishBy}</Tag>;
   };
 
@@ -185,22 +176,6 @@ const ReportRegularTable: React.FC<ReportRegularTableProps> = ({ loading }) => {
       width: 120,
       render: (publishBy: string) => getPublishByTag(publishBy),
     },
-    // {
-    //   title: "Actions",
-    //   key: "actions",
-    //   width: 100,
-    //   render: (_, record: ReportRegularItem) => (
-    //     <Button
-    //       type="primary"
-    //       size="small"
-    //       icon={<DownloadOutlined />}
-    //       loading={downloadLoading === record.id}
-    //       onClick={() => handleDownload(record.id)}
-    //     >
-    //       Download
-    //     </Button>
-    //   ),
-    // },
   ];
 
   const handleTableChange: TableProps<ReportRegularItem>["onChange"] = (
@@ -241,7 +216,6 @@ const ReportRegularTable: React.FC<ReportRegularTableProps> = ({ loading }) => {
         />
       </div>
 
-      {/* Report Detail Modal */}
       <Modal
         title="Report Detail"
         open={isDetailModalVisible}

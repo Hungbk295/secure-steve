@@ -22,7 +22,7 @@ import {
   actionBulkProcess,
 } from "@/store/actionSlice";
 import BulkActionModal from "./BulkActionModal";
-import Table from "../../common/Table";
+import Table from "../../../components/common/Table";
 
 interface PendingItem {
   key: string;

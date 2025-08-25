@@ -30,7 +30,6 @@ function SignInForm(props: ISignInFormProps) {
     const { userRole, ...rest } = values;
     pageLoading.on();
 
-    // Clear logout flag when user manually logs in
     localStorage.removeItem("hasLoggedOut");
 
     dispatch(actionLogin({ ...rest, userRole: userRole }))
@@ -62,7 +61,6 @@ function SignInForm(props: ISignInFormProps) {
           rules={[
             { type: "email", message: "Please enter a valid email address." },
           ]}
-          // validateTrigger={["onSubmit"]}
         >
           <Input placeholder="input 박스" />
         </Form.Item>
@@ -110,7 +108,6 @@ function SignInForm(props: ISignInFormProps) {
           </button>
         </div>
 
-        {/* Debug info for testing */}
         <div className="text-xs text-gray-500 mt-4 p-2 bg-gray-100 rounded">
           <div>Test Accounts:</div>
           <div>Admin: admin@company.com / admin123!@#</div>

@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
 
-// Admin Policy State Types
 interface SensitivityItem {
   key: string;
   항목: string;
@@ -34,7 +33,6 @@ interface CategoryItem {
 }
 
 type IAdminPolicyState = {
-  // Sensitivity Settings
   sensitivityItems: SensitivityItem[];
   sensitivityValues: {
     멀웨어정의: number;
@@ -43,15 +41,12 @@ type IAdminPolicyState = {
     정기리포트: number;
   };
 
-  // Importance Template
   importanceItems: ImportanceItem[];
   selectedImportance: string[];
   categoryItems: CategoryItem[];
 
-  // Operation Policy
   operationItems: OperationItem[];
 
-  // UI State
   loading: boolean;
   error: string | null;
   policyAddModalVisible: boolean;
@@ -171,7 +166,6 @@ const initialAdminPolicyState: IAdminPolicyState = {
   apiDescription: "우리는 API 선택 시 API에 대한 설명을 넣는 API를 개발할 것",
 };
 
-// Async Actions
 export const actionSaveSensitivitySettings = createAsyncThunk(
   "adminPolicy/actionSaveSensitivitySettings",
   async (
@@ -210,7 +204,6 @@ export const actionSaveImportanceTemplate = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // TODO: Replace with real API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       if (Math.random() < 0.1) {
@@ -232,7 +225,6 @@ export const actionSaveOperationPolicy = createAsyncThunk(
   "adminPolicy/actionSaveOperationPolicy",
   async (operationItems: OperationItem[], { rejectWithValue }) => {
     try {
-      // TODO: Replace with real API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       if (Math.random() < 0.1) {
@@ -273,7 +265,6 @@ export const actionAddPolicy = createAsyncThunk(
   }
 );
 
-// Admin Policy Slice
 export const adminPolicySlice = createSlice({
   name: "adminPolicy",
   initialState: initialAdminPolicyState,
@@ -283,7 +274,6 @@ export const adminPolicySlice = createSlice({
       state.sensitivityValues[key as keyof typeof state.sensitivityValues] =
         value;
 
-      // Update corresponding sensitivity item
       const item = state.sensitivityItems.find(
         (item) => item.항목.replace(/[\s()]/g, "") === key
       );
@@ -358,7 +348,6 @@ export const adminPolicySlice = createSlice({
 
     setSelectedApi: (state, action) => {
       state.selectedApi = action.payload;
-      // TODO: In real implementation, fetch API description from backend
       state.apiDescription = `Description for ${action.payload}`;
     },
 
@@ -373,7 +362,6 @@ export const adminPolicySlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      // Save Sensitivity Settings
       .addCase(actionSaveSensitivitySettings.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -388,7 +376,6 @@ export const adminPolicySlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Save Importance Template
       .addCase(actionSaveImportanceTemplate.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -404,7 +391,6 @@ export const adminPolicySlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Save Operation Policy
       .addCase(actionSaveOperationPolicy.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -419,7 +405,6 @@ export const adminPolicySlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Add Policy
       .addCase(actionAddPolicy.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -451,7 +436,6 @@ export const {
   resetToDefaults,
 } = adminPolicySlice.actions;
 
-// Selectors
 export const selectAdminPolicyState = (state: RootState) => state.adminPolicy;
 export const selectAdminPolicyLoading = (state: RootState) =>
   state.adminPolicy.loading;

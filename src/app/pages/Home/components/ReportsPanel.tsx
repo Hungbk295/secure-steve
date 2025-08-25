@@ -15,8 +15,6 @@ const ReportsPanel: React.FC<ReportsPanelProps> = ({ loading }) => {
 
   const handleReportClick = (report: any) => {
     console.log("Navigate to report detail:", report);
-    // TODO: Navigate to report detail page
-    // navigate(`/report/${report.id}`);
   };
 
   return (
@@ -31,22 +29,6 @@ const ReportsPanel: React.FC<ReportsPanelProps> = ({ loading }) => {
       className="reports-panel-card h-full"
     >
       <div className="space-y-4">
-        {/* {reports?.whitelistNotice && (
-          <Alert
-            message="화이트 리스트 중 멀웨어 등록 파일 존재"
-            type="warning"
-            icon={<WarningOutlined />}
-            showIcon
-            className="mb-4"
-            action={
-              <Text className="text-sm text-orange-600 underline cursor-pointer">
-                자세히 보기
-              </Text>
-            }
-          />
-        )} */}
-
-        {/* Regular Reports */}
         <div className="space-y-3">
           <h4 className="text-sm font-semibold text-gray-700 flex items-center">
             <CalendarOutlined className="mr-2" />

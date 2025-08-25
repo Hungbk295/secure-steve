@@ -44,19 +44,6 @@ const mockScanHistoryData: ScanHistoryItem[] = [
   },
 ];
 
-// const getStatusColor = (status: string) => {
-//   switch (status) {
-//     case "Completed":
-//       return "green";
-//     case "Fail(Error)":
-//       return "red";
-//     case "Fail(None exe)":
-//       return "orange";
-//     default:
-//       return "default";
-//   }
-// };
-
 function ScanHistoryTable({ loading }: ScanHistoryTableProps) {
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
   const [data] = useState(mockScanHistoryData);
@@ -111,35 +98,9 @@ function ScanHistoryTable({ loading }: ScanHistoryTableProps) {
     onChange: (keys: any[]) => setSelectedRowKeys(keys),
   };
 
-  // const csvData = useMemo(() => {
-  //   return selectedRowKeys.length > 0
-  //     ? data.filter((item) => selectedRowKeys.includes(item.id))
-  //     : data;
-  // }, [data, selectedRowKeys]);
-
-  // useEffect(() => {
-  //   const csvButton = (
-  //     <CustomExcelExport
-  //       data={csvData}
-  //       columns={columns}
-  //       fileName="scan_history"
-  //     >
-  //       <Button
-  //         type="primary"
-  //         icon={<DownloadOutlined />}
-  //         disabled={loading}
-  //       >
-  //         CSV 다운로드
-  //       </Button>
-  //     </CustomExcelExport>
-  //   );
-
-  //   onCSVDownloadRender?.(csvButton);
-  // }, [csvData, columns, loading, onCSVDownloadRender]);
 
   const handleRowClick = (record: DynamicKeyObject) => {
     console.log("Scan job clicked:", record);
-    // TODO: Open scan job detail modal or navigate to detail page
   };
 
   return (
